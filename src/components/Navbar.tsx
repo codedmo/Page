@@ -3,8 +3,32 @@ import { useState } from "react"
 
 import { Menu, X, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useEffect } from "react"
 
 export default function Navbar() {
+  // Detectar si el dispositivo es touch
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  useEffect(() => {
+    const checkTouch = () => {
+      setIsTouchDevice(('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
+    };
+    checkTouch();
+    window.addEventListener('resize', checkTouch);
+    return () => window.removeEventListener('resize', checkTouch);
+  }, []);
+  const [showShadow, setShowShadow] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setShowShadow(true);
+      } else {
+        setShowShadow(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
 
@@ -28,7 +52,9 @@ export default function Navbar() {
 
 
 
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-800/50 shadow-sm">
+  <header
+    className={`fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-md border-b border-gray-200/30 dark:border-gray-800/30 transition-shadow duration-300 ${showShadow ? "shadow-lg" : "shadow-none"}`}
+  >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -53,26 +79,41 @@ export default function Navbar() {
             {navItems.map((item) => (
               <div key={item.name} className="relative">
                 {item.hasDropdown ? (
-                  <div 
+                  <div
                     className="relative"
-                    onMouseEnter={() => setIsServicesOpen(true)}
-                    onMouseLeave={() => setIsServicesOpen(false)}
+                    onMouseEnter={() => !isTouchDevice && setIsServicesOpen(true)}
+                    onMouseLeave={() => !isTouchDevice && setIsServicesOpen(false)}
                   >
-                    <Link
-                      to={item.to}
-                      className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-800/50 rounded-lg transition-all duration-200 font-medium"
-                    >
-                      {item.name}
-                      <ChevronDown className="ml-1 h-4 w-4" />
-                    </Link>
+                    {isTouchDevice ? (
+                      <button
+                        type="button"
+                        className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-800/50 rounded-lg transition-all duration-200 font-medium focus:outline-none"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsServicesOpen((open) => !open);
+                        }}
+                      >
+                        {item.name}
+                        <ChevronDown className="ml-1 h-4 w-4" />
+                      </button>
+                    ) : (
+                      <Link
+                        to={item.to}
+                        className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-800/50 rounded-lg transition-all duration-200 font-medium"
+                      >
+                        {item.name}
+                        <ChevronDown className="ml-1 h-4 w-4" />
+                      </Link>
+                    )}
                     {/* Dropdown Menu */}
                     {isServicesOpen && (
-                      <div className="absolute top-full left-0 mt-1 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2">
+                      <div className="absolute top-full left-0 mt-1 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 animate-fade-in">
                         {serviceRoutes.map((service) => (
                           <Link
                             key={service.name}
                             to={service.to}
                             className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700/50 transition-colors duration-200"
+                            onClick={() => setIsServicesOpen(false)}
                           >
                             {service.name}
                           </Link>

@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Server, Globe, Layout, Shield, Settings, Hexagon } from "lucide-react"
+import { ArrowRight, Server, Globe, Layout, Mail, Shield, Settings } from "lucide-react"
 // import Image from "next/image"
 
 export default function HeroSection() {
@@ -25,73 +25,79 @@ export default function HeroSection() {
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
               <span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Innovación.<br />Desarrollo.<br />Tecnología.
+                Seguridad.<br />Soporte.<br />Velocidad.
               </span>
             </h1>
 
             {/* Subtitle */}
             <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-              En <span className="font-semibold text-blue-600 dark:text-blue-400">CODEDMO</span> somos una empresa de desarrollo de software y soluciones digitales. Creamos productos a la medida, aplicaciones web y sistemas empresariales para impulsar tu negocio.
+              En <span className="font-semibold text-blue-600 dark:text-blue-400">CODEDMO</span> Somos la solución perfecta para poner tu proyecto en línea, con respaldo técnico.
             </p>
 
             {/* Value Propositions */}
             <div className="grid md:grid-cols-4 gap-4 mb-8">
               <div className="flex flex-col items-center lg:items-start p-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center mb-3">
-                  <Layout className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Desarrollo Web</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">Aplicaciones web modernas, seguras y escalables</p>
+              <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center mb-3">
+                <Server className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Hosting Premium</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">Alojamiento rápido, seguro y confiable para tu sitio</p>
               </div>
               <div className="flex flex-col items-center lg:items-start p-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mb-3">
-                  <Server className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Software a Medida</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">Soluciones personalizadas para tu empresa</p>
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mb-3">
+                <Globe className="w-6 h-6 text-white" />
               </div>
-              {/* <div className="flex flex-col items-center lg:items-start p-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mb-3">
-                  <Globe className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Apps Móviles</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">Desarrollo de apps para iOS y Android</p>
-              </div> */}
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Dominios</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">Paquetes completos de dominio con certificado SSL</p>
+              </div>
               <div className="flex flex-col items-center lg:items-start p-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-cyan-500 rounded-lg flex items-center justify-center mb-3">
-                  <Shield className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Integraciones & API</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">Conectamos sistemas y plataformas para tu negocio</p>
+              <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mb-3">
+                <Layout className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Plantillas & Webs</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">Diseños profesionales y desarrollo personalizado</p>
+              </div>
+              <div className="flex flex-col items-center lg:items-start p-4">
+              <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-cyan-500 rounded-lg flex items-center justify-center mb-3">
+                <Mail className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Email Empresarial</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">Integración Google Workspace y Microsoft Exchange</p>
               </div>
             </div>
 
             {/* Partners & Technologies */}
             <div className="mb-8">
               <p className="text-sm text-gray-500 dark:text-gray-400 text-center lg:text-left mb-4 font-medium">
-                Utilizamos tecnologías líderes:
+                Trabajamos con las mejores tecnologías:
               </p>
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6">
-                {/* React */}
+                {/* Google Workspace */}
                 <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 rounded-lg px-4 py-2 shadow-md border border-gray-200 dark:border-gray-700">
-                  {/* <img src="/assets/react.svg" alt="React" className="w-5 h-5" /> */}
-                  <Settings className="w-5 h-5 text-sky-600" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">React</span>
+                  <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-green-500 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">G</span>
+                  </div>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Google Workspace</span>
                 </div>
-                {/* Node.js */}
+                
+                {/* Microsoft Exchange */}
                 <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 rounded-lg px-4 py-2 shadow-md border border-gray-200 dark:border-gray-700">
-                  <Hexagon className="w-5 h-5 text-green-600" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Node.js</span>
+                  <div className="w-6 h-6 bg-gradient-to-r from-blue-600 to-blue-800 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">M</span>
+                  </div>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Microsoft 365</span>
                 </div>
-                {/* PostgreSQL */}
+                
+                {/* cPanel */}
                 <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 rounded-lg px-4 py-2 shadow-md border border-gray-200 dark:border-gray-700">
-                  <Server className="w-5 h-5 text-blue-600" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">PostgreSQL</span>
+                  <Settings className="w-5 h-5 text-orange-600" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">cPanel</span>
                 </div>
-                {/* API REST */}
+                
+                {/* SSL Certificate */}
                 <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 rounded-lg px-4 py-2 shadow-md border border-gray-200 dark:border-gray-700">
-                  <Globe className="w-5 h-5 text-purple-600" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">API REST</span>
+                  <Shield className="w-5 h-5 text-green-600" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">SSL Incluido</span>
                 </div>
               </div>
             </div>
