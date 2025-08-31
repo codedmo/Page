@@ -119,3 +119,117 @@
   }
 }
 
+/* Animaciones personalizadas para el Hero */
+@keyframes gradient-x {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 15s ease infinite;
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+/* Animación marquee para el banner de tecnologías */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Estilos para el triángulo de hierro */
+.iron-triangle-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 12px;
+  border-radius: 6px;
+  background: #d1d5db;
+  outline: none;
+}
+
+.iron-triangle-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.iron-triangle-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.iron-triangle-quality-bar {
+  background: linear-gradient(to right, #ef4444 0%, #eab308 40%, #22c55e 70%, #22c55e 100%);
+}
+
+.iron-triangle-time-bar {
+  background: linear-gradient(to right, #22c55e 0%, #eab308 30%, #ef4444 70%, #ef4444 100%);
+}
+
+.iron-triangle-cost-bar {
+  background: linear-gradient(to right, #22c55e 0%, #eab308 40%, #ef4444 70%, #ef4444 100%);
+}
+
+.iron-triangle-progress-bar {
+  transition: width 0.3s ease;
+  pointer-events: none;
+}
+
+.iron-triangle-dynamic-width {
+  width: var(--progress-width);
+}
+
