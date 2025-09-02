@@ -1,4 +1,78 @@
-# React + TypeScript + Vite
+# CodedMo Routes - Empresa de Desarrollo de Software
+
+## 🚀 Tecnologías Utilizadas
+
+- **Frontend**: React + TypeScript + Vite
+- **Estilos**: Tailwind CSS
+- **Animaciones**: CSS 3D y animaciones personalizadas
+- **Cubo 3D**: Implementación CSS pura del Cubo de Rubik
+
+## 🎨 Sistema de Colores Centralizado
+
+Este proyecto implementa un sistema de colores centralizado que permite:
+
+- ✅ **Mantenimiento fácil** de esquemas de colores
+- ✅ **Cambios globales** con un solo archivo
+- ✅ **Consistencia visual** en toda la aplicación
+- ✅ **Type Safety** con TypeScript
+
+### Configuración de Colores
+📍 **Archivo**: `src/config/theme-colors.ts`
+
+```typescript
+// Colores principales: Azul, Cian, Teal
+import { themeColors, gradients, hoverColors, borders } from '../config/theme-colors';
+```
+
+**[📖 Ver documentación completa del sistema de colores](./docs/SISTEMA_COLORES.md)**
+
+## 🧩 Características Principales
+
+### Hero Section Interactivo
+- **Cubo de Rubik 3D** completamente funcional en CSS
+- **Animaciones fluidas** y rotación continua
+- **Interactividad**: Click para resolver/desarmar el cubo
+- **Responsive Design** optimizado para móviles
+- **Esquema de colores azul** moderno y profesional
+
+### Efectos Visuales
+- Gradientes dinámicos
+- Elementos flotantes animados
+- Bordes rotativos
+- Partículas de fondo
+- Código flotante animado
+
+## 📱 Características Responsive
+
+- ✅ **Mobile-first design**
+- ✅ **Breakpoints adaptativos** (480px, 768px, 1024px)
+- ✅ **Cubo escalable** según dispositivo
+- ✅ **Elementos ocultos/visibles** por tamaño de pantalla
+- ✅ **Touch-friendly** para dispositivos móviles
+
+## 🛠️ Desarrollo
+
+### Instalación
+```bash
+npm install
+```
+
+### Servidor de Desarrollo
+```bash
+npm run dev
+```
+
+### Build para Producción
+```bash
+npm run build
+```
+
+### Preview de Producción
+```bash
+npm run preview
+```
+
+## React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
