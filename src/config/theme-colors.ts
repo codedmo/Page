@@ -125,13 +125,7 @@ export const gradients = {
   // Gradientes de elementos decorativos
   border: `from-${themeColors.primary[500]} via-${themeColors.secondary[500]} to-${themeColors.accent[500]}`,
   borderReverse: `from-${themeColors.accent[500]} via-${themeColors.secondary[500]} to-${themeColors.primary[500]}`,
-  
-  // Gradientes adicionales para servicios
-  service1: `from-blue-600 to-cyan-600`,
-  service2: `from-purple-600 to-pink-600`,
-  service3: `from-emerald-600 to-teal-600`,
-  service4: `from-orange-600 to-emerald-600`,
-  service5: `from-pink-600 to-purple-600`,
+
 } as const;
 
 // Utilidades para generar clases con opacidad

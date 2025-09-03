@@ -105,7 +105,7 @@ export default function HeroSection() {
 
   return (
     <>
-      <section className={`relative min-h-screen md:h-screen lg:min-h-[calc(100vh-4rem)] xl:min-h-[calc(95vh-4rem)] bg-gradient-to-br ${gradients.backgroundMain} overflow-hidden pt-16`}>
+      <section className={`relative min-h-screen md:h-screen lg:min-h-[calc(100vh-4rem)] xl:min-h-[calc(95vh-4rem)] bg-gradient-to-br ${gradients.backgroundMain} overflow-hidden pt-30 sm:pt-34 md:pt-36 xl:pt-0`}>
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <div className={`absolute top-1/4 left-1/4 w-96 h-96 bg-${themeColors.primary[500]}/10 rounded-full blur-3xl animate-pulse`}></div>
@@ -174,10 +174,10 @@ export default function HeroSection() {
             {/* CTA Buttons - Optimizados para SEO */}
             <div className="flex flex-col sm:flex-row gap-3 pt-4">
               <Link 
-                to="/cotizacion"
+                to="/contacto"
                 className={`px-6 py-3 bg-gradient-to-r ${gradients.primary} rounded-lg font-semibold text-white transform hover:scale-105 transition-all duration-300 ${hoverColors.primaryButton} relative overflow-hidden group inline-block text-center`}
               >
-                <span className="relative z-10">Solicitar Cotización Web</span>
+                <span className="relative z-10">Contáctanos</span>
                 <div className={`absolute inset-0 bg-gradient-to-r ${hoverColors.primaryButtonHover} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`}></div>
               </Link>
               
@@ -191,7 +191,7 @@ export default function HeroSection() {
           </div>
 
           {/* Right Content - 3D Rubik's Cube - Aparece primero en móviles */}
-          <div className={`mt-8 lg:mt-0 lg:w-1/2 flex justify-center lg:justify-end order-1 lg:order-2 mb-4 lg:mb-0 transition-opacity duration-700 ${
+          <div className={`flex justify-center lg:justify-end order-1 lg:order-2 mb-4 lg:mb-0 transition-opacity duration-700 ${
             isScrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'
           }`}>
             <div className="relative">
@@ -245,7 +245,7 @@ export default function HeroSection() {
               <div className={`relative transition-all duration-500 ${
                 isScrolled 
                   ? 'p-4' 
-                  : 'p-12 sm:p-16 md:p-18 lg:p-20 xl:p-24'
+                  : 'p-20 sm:p-22 md:p-26 xl:p-28'
               }`}>
                 {!isScrolled && (
                   <div className={`absolute inset-0 bg-gradient-to-br ${gradients.backgroundGlow} rounded-full blur-2xl md:blur-3xl animate-pulse`}></div>

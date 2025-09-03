@@ -1,7 +1,8 @@
 import { useSEO, usePageSEO } from "@/hooks/useSEO"
 import HeroSection from "@/components/hero-section"
 import ServicesSection from "@/components/ServicesSection"
-// import Quotation from "@/components/quotation"
+import About from "@/components/About"
+import Contact from "@/components/contact"
 
 export default function Home() {
   // SEO optimizado para la página completa HOME
@@ -54,14 +55,6 @@ export default function Home() {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
         
-        {/* Preload de imagen hero crítica */}
-        <link 
-          rel="preload" 
-          href="/images/Hero.png" 
-          as="image" 
-          type="image/png"
-        />
-        
         {/* Meta tags adicionales para mejor indexación */}
         <meta name="geo.region" content="GT" />
         <meta name="geo.placename" content="Guatemala" />
@@ -80,10 +73,24 @@ export default function Home() {
 
       <HeroSection />
       <ServicesSection />
-      {/* <div className="flex p-5 gap-3">
-        <IronStone />
-        <Quotation />
-      </div> */}
+      <About />
+
+      {/* Sección de Contacto con fondo */}
+      <section className="relative py-20 bg-slate-900 overflow-hidden">
+        {/* Elementos de fondo animados */}
+        <div className="absolute inset-0" aria-hidden="true">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-teal-500/5 rounded-full blur-2xl animate-ping"></div>
+        </div>
+
+        {/* Patrón de grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+
+        <div className="relative z-10">
+          <Contact />
+        </div>
+      </section>
     </>
   );
 }
