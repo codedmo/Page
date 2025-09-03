@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { themeColors, gradients, hoverColors, borders } from '../config/theme-colors';
 
 interface CubeColors {
@@ -104,7 +105,7 @@ export default function HeroSection() {
 
   return (
     <>
-      <section className={`relative min-h-screen bg-gradient-to-br ${gradients.backgroundMain} overflow-hidden`}>
+      <section className={`relative min-h-screen md:h-screen lg:min-h-[calc(100vh-4rem)] xl:min-h-[calc(95vh-4rem)] bg-gradient-to-br ${gradients.backgroundMain} overflow-hidden pt-16`}>
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <div className={`absolute top-1/4 left-1/4 w-96 h-96 bg-${themeColors.primary[500]}/10 rounded-full blur-3xl animate-pulse`}></div>
@@ -115,11 +116,11 @@ export default function HeroSection() {
       {/* Grid pattern overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
 
-      <div className="relative z-10 container mx-auto px-6 py-20">
-        <div className="flex flex-col lg:flex-row items-center justify-between min-h-[80vh]">
+      <div className="relative z-10 container mx-auto px-6 py-4 md:py-6 lg:py-4">
+        <div className="flex flex-col lg:flex-row items-center justify-between min-h-[calc(100vh-12rem)] lg:min-h-[calc(100vh-10rem)]">
           
           {/* Left Content - Aparece segundo en móviles */}
-          <div className="lg:w-1/2 text-white space-y-8 lg:pr-12 order-2 lg:order-1">
+          <div className="lg:w-1/2 text-white space-y-4 lg:space-y-6 lg:pr-12 order-2 lg:order-1">
             
             {/* Badge */}
             <div className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${gradients.primaryLight}/20 rounded-full border ${borders.primary} backdrop-blur-sm`}>
@@ -129,8 +130,8 @@ export default function HeroSection() {
             </div>
 
             {/* Main Heading - Optimizado para SEO */}
-            <div className="space-y-4">
-              <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
+            <div className="space-y-2">
+              <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
                 <span className={`bg-gradient-to-r ${gradients.textSecondary} bg-clip-text text-transparent animate-pulse`}>
                   Desarrollo Web
                 </span>
@@ -148,68 +149,49 @@ export default function HeroSection() {
             </div>
 
             {/* Subtitle - Optimizado para palabras clave */}
-            <p className="text-xl lg:text-2xl text-gray-300 leading-relaxed max-w-lg">
+            <p className="text-lg lg:text-xl text-gray-300 leading-relaxed max-w-lg">
               <span className={`font-semibold ${themeColors.text['emphasis']}`}>Empresa de desarrollo web</span> especializada en 
               <span className={`font-semibold ${themeColors.text['emphasis']}`}> diseño web responsivo</span> y 
               <span className={`font-semibold ${themeColors.text['emphasis']}`}> soluciones de software a medida</span> para empresas.
             </p>
 
             {/* Features - Optimizadas para SEO */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
               <div className="flex items-center space-x-3">
                 <div className={`w-3 h-3 bg-${themeColors.success[400]} rounded-full animate-pulse`}></div>
-                <span className="text-gray-300">Desarrollo Web Personalizado</span>
+                <span className="text-gray-300 text-sm">Desarrollo Web Personalizado</span>
               </div>
               <div className="flex items-center space-x-3">
                 <div className={`w-3 h-3 bg-${themeColors.primary[400]} rounded-full animate-pulse delay-300`}></div>
-                <span className="text-gray-300">Apps Móviles & React</span>
+                <span className="text-gray-300 text-sm">Apps Móviles & React</span>
               </div>
               <div className="flex items-center space-x-3">
                 <div className={`w-3 h-3 bg-${themeColors.secondary[400]} rounded-full animate-pulse delay-700`}></div>
-                <span className="text-gray-300">SEO & Posicionamiento</span>
+                <span className="text-gray-300 text-sm">SEO & Posicionamiento</span>
               </div>
             </div>
 
             {/* CTA Buttons - Optimizados para SEO */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-8">
-              <button className={`px-8 py-4 bg-gradient-to-r ${gradients.primary} rounded-lg font-semibold text-white transform hover:scale-105 transition-all duration-300 ${hoverColors.primaryButton} relative overflow-hidden group`}>
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <Link 
+                to="/cotizacion"
+                className={`px-6 py-3 bg-gradient-to-r ${gradients.primary} rounded-lg font-semibold text-white transform hover:scale-105 transition-all duration-300 ${hoverColors.primaryButton} relative overflow-hidden group inline-block text-center`}
+              >
                 <span className="relative z-10">Solicitar Cotización Web</span>
                 <div className={`absolute inset-0 bg-gradient-to-r ${hoverColors.primaryButtonHover} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`}></div>
-              </button>
+              </Link>
               
-              <button 
-                onClick={() => setIsSolved(!isSolved)}
-                className={`px-8 py-4 border ${borders.primaryStrong} rounded-lg font-semibold text-white ${hoverColors.primary} transition-all duration-300 backdrop-blur-sm`}
+              <Link 
+                to="/servicios"
+                className={`px-6 py-3 border ${borders.primaryStrong} rounded-lg font-semibold text-white ${hoverColors.primary} transition-all duration-300 backdrop-blur-sm inline-block text-center`}
               >
-                Ver Portafolio de Proyectos
-              </button>
-            </div>
-
-            {/* Stats - Optimizados para credibilidad SEO */}
-            <div className={`grid grid-cols-3 gap-8 pt-12 border-t ${borders.neutral} mb-12`}>
-              <div className="text-center">
-                <div className={`text-3xl font-bold bg-gradient-to-r ${gradients.textPrimary} bg-clip-text text-transparent`}>
-                  100+
-                </div>
-                <div className="text-sm text-gray-400">Webs Desarrolladas</div>
-              </div>
-              <div className="text-center">
-                <div className={`text-3xl font-bold bg-gradient-to-r ${gradients.textPrimary} bg-clip-text text-transparent`}>
-                  50+
-                </div>
-                <div className="text-sm text-gray-400">Clientes Satisfechos</div>
-              </div>
-              <div className="text-center">
-                <div className={`text-3xl font-bold bg-gradient-to-r ${gradients.textPrimary} bg-clip-text text-transparent`}>
-                  98%
-                </div>
-                <div className="text-sm text-gray-400">Éxito en Proyectos</div>
-              </div>
+                Ver Servicios
+              </Link>
             </div>
           </div>
 
           {/* Right Content - 3D Rubik's Cube - Aparece primero en móviles */}
-          <div className={`mt-20 lg:mt-0 lg:w-1/2 flex justify-center lg:justify-end order-1 lg:order-2 mb-8 lg:mb-0 transition-opacity duration-700 ${
+          <div className={`mt-8 lg:mt-0 lg:w-1/2 flex justify-center lg:justify-end order-1 lg:order-2 mb-4 lg:mb-0 transition-opacity duration-700 ${
             isScrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'
           }`}>
             <div className="relative">
@@ -250,11 +232,20 @@ export default function HeroSection() {
                 </div>
               )}
 
+              {/* Click me indicator - Hidden when scrolled */}
+              {!isScrolled && (
+                <div className="absolute -bottom-8 sm:-bottom-12 md:-bottom-24 left-1/2 transform -translate-x-1/2">
+                  <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-3 py-2 text-xs sm:text-sm text-white font-medium animate-bounce">
+                    <span className="mr-1">👆</span> ¡Presióname!
+                  </div>
+                </div>
+              )}
+
               {/* Main cube container - responsive padding */}
               <div className={`relative transition-all duration-500 ${
                 isScrolled 
                   ? 'p-4' 
-                  : 'p-20 sm:p-22 md:p-24 lg:p-26 xl:p-30'
+                  : 'p-12 sm:p-16 md:p-18 lg:p-20 xl:p-24'
               }`}>
                 {!isScrolled && (
                   <div className={`absolute inset-0 bg-gradient-to-br ${gradients.backgroundGlow} rounded-full blur-2xl md:blur-3xl animate-pulse`}></div>

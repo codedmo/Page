@@ -19,6 +19,7 @@ export default function ServicesSection({ activeTab = 'web', onTabChange }: Serv
     web: {
       title: "Desarrollo Web",
       icon: Layout,
+      image: "/Services/Web-Design.svg",
       description: "Aplicaciones web modernas, responsivas y optimizadas para SEO",
       features: ["React & Next.js", "TypeScript", "Responsive Design", "SEO Optimizado"],
       color: gradients.service1,
@@ -27,6 +28,7 @@ export default function ServicesSection({ activeTab = 'web', onTabChange }: Serv
     software: {
       title: "Software a Medida",
       icon: Server,
+      image: "/Services/Software.svg", // Placeholder para futura imagen
       description: "Soluciones personalizadas que se adaptan a tu negocio",
       features: ["Arquitectura Escalable", "Base de Datos", "APIs REST", "Seguridad"],
       color: gradients.service2,
@@ -35,6 +37,7 @@ export default function ServicesSection({ activeTab = 'web', onTabChange }: Serv
     hosting: {
       title: "Hosting & Cloud",
       icon: Database,
+      image: "/Services/Hosting.svg", // Placeholder para futura imagen
       description: "Servicios de hosting confiables y seguros",
       features: ["Hosting Premium", "SSL Gratuito", "Soporte 24/7", "Backups"],
       color: gradients.service4,
@@ -43,6 +46,7 @@ export default function ServicesSection({ activeTab = 'web', onTabChange }: Serv
     integracion: {
       title: "Integraciones & API",
       icon: Shield,
+      image: "/Services/Integration.svg", // Placeholder para futura imagen
       description: "Conectamos sistemas y automatizamos procesos",
       features: ["APIs REST", "GraphQL", "Webhooks", "Automatización"],
       color: gradients.service5,
@@ -57,7 +61,7 @@ export default function ServicesSection({ activeTab = 'web', onTabChange }: Serv
   }
 
   return (
-    <section id="servicios" className={`relative py-20 bg-${themeColors.neutral[900]} overflow-hidden`}>
+    <section id="servicios" className={`relative py-20 bg-${themeColors.neutral[900]} overflow-hidden h-screen`}>
       {/* Elementos de fondo diferentes al Hero */}
       <div className="absolute inset-0">
         <div className={`absolute top-20 right-1/4 w-64 h-64 bg-${themeColors.purple[500]}/10 rounded-full blur-2xl animate-pulse delay-300`}></div>
@@ -140,19 +144,24 @@ export default function ServicesSection({ activeTab = 'web', onTabChange }: Serv
                       </Button>
                     </div>
 
-                    <div className="relative">
-                      {/* Animated background */}
-                      <div className={`absolute inset-0 bg-gradient-to-r ${service.color} opacity-10 rounded-3xl animate-pulse`}></div>
+                    <div className="relative flex items-center justify-center">
+                      {service.image ? (
+                        // Imagen del servicio más grande y directa
+                        <img 
+                          src={service.image} 
+                          alt={service.title} 
+                          className="w-96 h-96 object-contain drop-shadow-2xl transform hover:scale-105 transition-transform duration-300"
+                          loading={key === 'web' ? 'eager' : 'lazy'}
+                          decoding="async"
+                        />
+                      ) : (
+                        // Fallback al ícono si no hay imagen
+                        <IconComponent className={`w-48 h-48 text-transparent bg-gradient-to-r ${service.color} bg-clip-text drop-shadow-lg`} />
+                      )}
                       
-                      {/* Icon container */}
-                      <div className="relative bg-white/10 backdrop-blur-lg rounded-3xl p-12 h-80 flex items-center justify-center border border-white/20 group-hover:border-white/30 transition-all duration-300">
-                        <div className="relative">
-                          <IconComponent className={`w-32 h-32 text-transparent bg-gradient-to-r ${service.color} bg-clip-text drop-shadow-lg`} />
-                          {/* Floating icons effect */}
-                          <div className={`absolute -top-4 -right-4 w-6 h-6 bg-gradient-to-r ${service.color} rounded-full opacity-60 animate-bounce`}></div>
-                          <div className={`absolute -bottom-4 -left-4 w-4 h-4 bg-gradient-to-r ${service.color} rounded-full opacity-40 animate-bounce delay-300`}></div>
-                        </div>
-                      </div>
+                      {/* Efectos flotantes sutiles */}
+                      <div className={`absolute -top-4 -right-4 w-6 h-6 bg-gradient-to-r ${service.color} rounded-full opacity-40 animate-bounce`}></div>
+                      <div className={`absolute -bottom-4 -left-4 w-4 h-4 bg-gradient-to-r ${service.color} rounded-full opacity-30 animate-bounce delay-500`}></div>
                     </div>
                   </div>
                 </div>
