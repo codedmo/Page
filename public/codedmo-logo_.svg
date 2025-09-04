@@ -1,0 +1,17 @@
+<svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Fondo del logo -->
+  <rect x="2" y="2" width="36" height="36" rx="8" fill="url(#gradient)"/>
+  
+  <!-- Símbolo C -->
+  <path d="M20 12 C24 12 26 14 26 18 L24 18 C24 15 22 14 20 14 C16 14 14 16 14 20 C14 24 16 26 20 26 C22 26 24 25 24 22 L26 22 C26 26 24 28 20 28 C15 28 12 25 12 20 C12 15 15 12 20 12 Z" fill="white"/>
+  
+  <!-- Texto CODEDMO -->
+  <text x="44" y="25" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="url(#gradient)">CODEDMO</text>
+</svg>

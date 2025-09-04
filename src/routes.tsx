@@ -9,6 +9,7 @@ import Servicios from './pages/Servicios/Index';
 import Hosting from './pages/Servicios/Hosting';
 import Cotizacion from './pages/Servicios/Cotizacion';
 import Google_Microsoft from './pages/Servicios/google&microsoft';
+import NotFound from './pages/NotFound';
 
 import Desarrollo from './pages/Servicios/Desarrollo/Index';
 import Api_Dev from './pages/Servicios/Desarrollo/Api_Dev';
@@ -33,6 +34,9 @@ export default function AppRoutes() {
       <Route path="/about" element={<About />} />
       <Route path="/politicas" element={<Politicas />} />
       <Route path="/cotizacion" element={<Cotizacion />} />
+
+      {/* Ruta comodín para 404 */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

@@ -179,7 +179,8 @@ export default function ServicesSection({ activeTab = 'web', onTabChange }: Serv
         </div>
       
         {/* Patrón de puntos */}
-        <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:30px_30px]" aria-hidden="true"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.09)_1px,transparent_1px)] bg-[size:30px_30px]" aria-hidden="true"></div>
+        {/* <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:30px_30px]" aria-hidden="true"></div> */}
 
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
           <header className="text-center mb-16">

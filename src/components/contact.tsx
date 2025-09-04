@@ -699,8 +699,8 @@ export default function Contact() {
       <div className="mt-12 text-center">
         <p className="text-gray-400 text-sm">
           También puedes escribirnos directamente a{' '}
-          <a href="mailto:hola@codedmo.com" className="text-blue-400 hover:text-blue-300 transition-colors">
-            hola@codedmo.com
+          <a href="mailto:info@codedmo.com" className="text-blue-400 hover:text-blue-300 transition-colors">
+            info@codedmo.com
           </a>
         </p>
       </div>
