@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Mail, Phone, MapPin, Github, Linkedin, Twitter, Instagram, ArrowUp } from 'lucide-react'
+import { Mail, Phone, MapPin, Github, Facebook, MessageCircle, Instagram, ArrowUp } from 'lucide-react'
 import { themeColors, gradients } from '../config/theme-colors'
 
 export default function Footer() {
@@ -13,22 +13,22 @@ export default function Footer() {
       color: 'hover:text-gray-300'
     },
     {
-      name: 'LinkedIn',
-      icon: Linkedin,
-      href: 'https://linkedin.com/company/codedmo',
+      name: 'Facebook',
+      icon: Facebook,
+      href: 'https://www.facebook.com/profile.php?id=61578671524932',
       color: 'hover:text-blue-400'
-    },
-    {
-      name: 'Twitter',
-      icon: Twitter,
-      href: 'https://twitter.com/codedmo',
-      color: 'hover:text-cyan-400'
     },
     {
       name: 'Instagram',
       icon: Instagram,
-      href: 'https://instagram.com/codedmo',
+      href: 'https://instagram.com/codedmo.dev',
       color: 'hover:text-pink-400'
+    },
+    {
+      name: 'WhatsApp',
+      icon: MessageCircle, // Usar un ícono alternativo de 'lucide-react'
+      href: 'https://wa.me/50237923612',
+      color: 'hover:text-cyan-400'
     }
   ]
 

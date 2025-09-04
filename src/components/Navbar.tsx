@@ -190,6 +190,7 @@ export default function Navbar() {
       //   { name: "Consultoría", to: "/servicios/consultoria" }
       // ]
     },
+    { name: "Portafolio", to: "/portafolio" },
     { name: "Contacto", to: "/contacto" },
   ];
 

@@ -342,7 +342,7 @@ export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' |
   
   const pageConfigs = {
     home: {
-      title: 'CODEDMO | Desarrollo de Software',
+      title: 'Inicio | CODEDMO',
       description: 'CODEDMO es tu partner ideal para desarrollo web, aplicaciones móviles, software a medida e integraciones. +50 proyectos exitosos, 98% satisfacción del cliente. Consulta gratuita.',
       keywords: [
         'desarrollo de software Guatemala',
@@ -577,7 +577,7 @@ export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' |
 export const useSectionSEO = (sectionType: string, parentPage?: string) => {
   const sectionData: Record<string, { title: string; description: string; keywords: string[] }> = {
     hero: {
-      title: 'CODEDMO | Desarrollo de Software',
+      title: 'Inicio | CODEDMO',
       description: 'Empresa líder en desarrollo de software, aplicaciones web y móviles. +50 proyectos exitosos, 98% satisfacción del cliente.',
       keywords: ['desarrollo de software', 'aplicaciones web', 'desarrollo móvil', 'React', 'Node.js', 'TypeScript']
     },

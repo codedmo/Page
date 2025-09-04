@@ -37,6 +37,16 @@ const CubePiece = ({ color, faceKey, index }: CubePieceProps) => {
 export default function HeroSection() {
   const [isSolved, setIsSolved] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Effect para activar las animaciones
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Effect para manejar el scroll
   useEffect(() => {
@@ -123,14 +133,14 @@ export default function HeroSection() {
           <div className="lg:w-1/2 text-white space-y-4 lg:space-y-6 lg:pr-12 order-2 lg:order-1">
             
             {/* Badge */}
-            <div className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${gradients.primaryLight}/20 rounded-full border ${borders.primary} backdrop-blur-sm`}>
+            <div className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${gradients.primaryLight}/20 rounded-full border ${borders.primary} backdrop-blur-sm transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <span className={`text-sm font-medium bg-gradient-to-r ${gradients.primaryToSecondary} bg-clip-text text-transparent`}>
                 🚀 Desarrollo Web Profesional & Innovación
               </span>
             </div>
 
             {/* Main Heading - Optimizado para SEO */}
-            <div className="space-y-2">
+            <div className={`space-y-2 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
                 <span className={`bg-gradient-to-r ${gradients.textSecondary} bg-clip-text text-transparent animate-pulse`}>
                   Desarrollo Web
@@ -149,30 +159,30 @@ export default function HeroSection() {
             </div>
 
             {/* Subtitle - Optimizado para palabras clave */}
-            <p className="text-lg lg:text-xl text-gray-300 leading-relaxed max-w-lg">
+            <p className={`text-lg lg:text-xl text-gray-300 leading-relaxed max-w-lg transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <span className={`font-semibold ${themeColors.text['emphasis']}`}>Empresa de desarrollo web</span> especializada en 
               <span className={`font-semibold ${themeColors.text['emphasis']}`}> diseño web responsivo</span> y 
               <span className={`font-semibold ${themeColors.text['emphasis']}`}> soluciones de software a medida</span> para empresas.
             </p>
 
             {/* Features - Optimizadas para SEO */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-              <div className="flex items-center space-x-3">
+            <div className={`grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+              <div className={`flex items-center space-x-3 transition-all duration-700 delay-700 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'}`}>
                 <div className={`w-3 h-3 bg-${themeColors.success[400]} rounded-full animate-pulse`}></div>
                 <span className="text-gray-300 text-sm">Desarrollo Web Personalizado</span>
               </div>
-              <div className="flex items-center space-x-3">
+              <div className={`flex items-center space-x-3 transition-all duration-700 delay-800 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'}`}>
                 <div className={`w-3 h-3 bg-${themeColors.primary[400]} rounded-full animate-pulse delay-300`}></div>
                 <span className="text-gray-300 text-sm">Apps Móviles & React</span>
               </div>
-              <div className="flex items-center space-x-3">
+              <div className={`flex items-center space-x-3 transition-all duration-700 delay-900 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'}`}>
                 <div className={`w-3 h-3 bg-${themeColors.secondary[400]} rounded-full animate-pulse delay-700`}></div>
                 <span className="text-gray-300 text-sm">SEO & Posicionamiento</span>
               </div>
             </div>
 
             {/* CTA Buttons - Optimizados para SEO */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <div className={`flex flex-col sm:flex-row gap-3 pt-4 transition-all duration-1000 delay-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <Link 
                 to="/contacto"
                 className={`px-6 py-3 bg-gradient-to-r ${gradients.primary} rounded-lg font-semibold text-white transform hover:scale-105 transition-all duration-300 ${hoverColors.primaryButton} relative overflow-hidden group inline-block text-center`}
@@ -191,8 +201,8 @@ export default function HeroSection() {
           </div>
 
           {/* Right Content - 3D Rubik's Cube - Aparece primero en móviles */}
-          <div className={`flex justify-center lg:justify-end order-1 lg:order-2 mb-4 lg:mb-0 transition-opacity duration-700 ${
-            isScrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          <div className={`flex justify-center lg:justify-end order-1 lg:order-2 mb-4 lg:mb-0 transition-all duration-1000 delay-300 ${
+            isScrolled ? 'opacity-0 pointer-events-none' : `opacity-100 ${isVisible ? 'translate-x-0 scale-100' : 'translate-x-10 scale-75'}`
           }`}>
             <div className="relative">
               
@@ -289,25 +299,25 @@ export default function HeroSection() {
               {/* Skill badges around the cube - Optimizadas para SEO */}
               {!isScrolled && (
                 <>
-                  <div className="absolute -top-2 sm:-top-4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <div className={`absolute -top-2 sm:-top-4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-1000 delay-1200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
                     <div className={`bg-gradient-to-r ${gradients.primary} text-white px-3 py-1 sm:px-4 sm:py-2 md:px-6 md:py-3 rounded-full text-xs sm:text-sm font-medium animate-float shadow-lg shadow-${themeColors.primary[500]}/25`}>
                       React & Next.js
                     </div>
                   </div>
                   
-                  <div className="absolute right-2 sm:right-4 top-1/2 transform translate-x-1/2 -translate-y-1/2">
+                  <div className={`absolute right-2 sm:right-4 top-1/2 transform translate-x-1/2 -translate-y-1/2 transition-all duration-1000 delay-1400 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
                     <div className={`bg-gradient-to-r ${gradients.primaryLight} text-white px-3 py-1 sm:px-4 sm:py-2 md:px-6 md:py-3 rounded-full text-xs sm:text-sm font-medium animate-float delay-300 shadow-lg shadow-${themeColors.primary[500]}/25`}>
                       WordPress & PHP
                     </div>
                   </div>
                   
-                  <div className="absolute -bottom-2 sm:-bottom-4 left-1/2 transform -translate-x-1/2 translate-y-1/2">
+                  <div className={`absolute -bottom-2 sm:-bottom-4 left-1/2 transform -translate-x-1/2 translate-y-1/2 transition-all duration-1000 delay-1600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     <div className={`bg-gradient-to-r from-${themeColors.secondary[600]} to-${themeColors.accent[600]} text-white px-3 py-1 sm:px-4 sm:py-2 md:px-6 md:py-3 rounded-full text-xs sm:text-sm font-medium animate-float delay-700 shadow-lg shadow-${themeColors.secondary[500]}/25`}>
                       SEO & Analytics
                     </div>
                   </div>
                   
-                  <div className="absolute left-2 sm:left-4 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <div className={`absolute -left-12 sm:-left-16 md:-left-20 top-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-1000 delay-1800 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
                     <div className={`bg-gradient-to-r from-${themeColors.accent[600]} to-${themeColors.primary[600]} text-white px-3 py-1 sm:px-4 sm:py-2 md:px-6 md:py-3 rounded-full text-xs sm:text-sm font-medium animate-float delay-1000 shadow-lg shadow-${themeColors.accent[500]}/25`}>
                       E-commerce
                     </div>
