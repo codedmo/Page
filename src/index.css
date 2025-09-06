@@ -512,8 +512,8 @@
 /* Panel lateral con efecto glassmorphism mejorado */
 .services-sidebar {
   background: rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   border-right: 1px solid rgba(59, 130, 246, 0.2);
   position: relative;
 }
@@ -533,6 +533,24 @@
   );
   pointer-events: none;
   z-index: -1;
+}
+
+/* Scrollbar personalizado para servicios */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 2px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.5);
 }
 
 /* Efectos de hover mejorados para elementos del menú */
@@ -682,4 +700,25 @@
   opacity: 1;
   pointer-events: auto;
   transition: opacity 0.3s ease;
+}
+
+/* Estilos para sliders personalizados */
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: linear-gradient(to right, #8b5cf6, #a855f7);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+}
+
+.slider::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: linear-gradient(to right, #8b5cf6, #a855f7);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
 }
