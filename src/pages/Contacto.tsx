@@ -1,5 +1,5 @@
 import Contact from "@/components/contact"
-import { Mail, Phone, MapPin, Clock, Github, Linkedin } from 'lucide-react'
+import { Mail, Phone, MapPin, Clock, Github, MessageCircle, Facebook, Instagram } from 'lucide-react'
 import { gradients } from '@/config/theme-colors'
 import { useSEO, usePageSEO } from "@/hooks/useSEO"
 import { useState, useEffect } from 'react'
@@ -141,6 +141,11 @@ export default function Contacto() {
                   <a href="tel:+50237923612" className="hover:underline">+502 3792-3612</a>
                 </li>
 
+                <li className={`flex items-start space-x-3 transition-all duration-700 delay-800 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'}`}>
+                  <MessageCircle className="w-5 h-5 text-white/90 mt-1" />
+                  <a href="https://wa.me/+50237923612" className="hover:underline">WhatsApp</a>
+                </li>
+
                 <li className={`flex items-start space-x-3 transition-all duration-700 delay-900 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'}`}>
                   <MapPin className="w-5 h-5 text-white/90 mt-1" />
                   <span>Guatemala, Guatemala</span>
@@ -165,13 +170,31 @@ export default function Contacto() {
                     <Github className="w-5 h-5 text-white/90" />
                   </a>
                   <a 
-                    href="https://linkedin.com/company/codedmo" 
+                    href="https://github.com/codedmo" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    title="LinkedIn - codedmo" 
-                    className={`p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-700 delay-1300 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}
+                    title="Facebook - codedmo" 
+                    className={`p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-700 delay-1200 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}
                   >
-                    <Linkedin className="w-5 h-5 text-white/90" />
+                    <Facebook className="w-5 h-5 text-white/90" />
+                  </a>
+                  <a 
+                    href="https://github.com/codedmo" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    title="Instagram - codedmo" 
+                    className={`p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-700 delay-1200 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}
+                  >
+                    <Instagram className="w-5 h-5 text-white/90" />
+                  </a>
+                  <a 
+                    href="https://github.com/codedmo" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    title="WhatsApp - codedmo" 
+                    className={`p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-700 delay-1200 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}
+                  >
+                    <MessageCircle className="w-5 h-5 text-white/90" />
                   </a>
                 </div>
               </div>
@@ -185,7 +208,7 @@ export default function Contacto() {
                 </a>
               </div>
 
-              {/* Paper corner accent */}
+              {/* Pape</svg>r corner accent */}
               <div className="absolute -bottom-6 left-6 w-20 h-12 rotate-[-12deg] bg-[linear-gradient(90deg,rgba(255,255,255,0.06),transparent)] blur-sm opacity-40 pointer-events-none"></div>
             </aside>
 

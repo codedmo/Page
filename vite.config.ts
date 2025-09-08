@@ -11,6 +11,28 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Separar React y librerías principales
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          // Separar librerías de UI
+          'ui-vendor': ['lucide-react', '@radix-ui/react-checkbox', '@radix-ui/react-label', '@radix-ui/react-select', '@radix-ui/react-separator', '@radix-ui/react-slider', '@radix-ui/react-slot'],
+          // Separar librerías de PDF y utils
+          'pdf-vendor': ['jspdf', 'html2canvas', 'svg2pdf.js'],
+          // Separar librerías de estilo
+          'style-vendor': ['clsx', 'tailwind-merge', 'class-variance-authority'],
+          // Componentes grandes del cotizador
+          'quotation': ['./src/components/QuotationModern.tsx', './src/components/quotation.tsx']
+        }
+      }
+    },
+    // Aumentar el límite de advertencia a 1MB
+    chunkSizeWarningLimit: 1000,
+    // Optimizar la compilación
+    minify: 'terser'
+  },
   server: {
     proxy: {
       '/api': {

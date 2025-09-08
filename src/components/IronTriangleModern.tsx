@@ -459,20 +459,20 @@ export default function IronTriangleModern() {
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
             <h3 className="text-lg font-bold text-white mb-4 flex items-center">
               <TrendingUp className="w-5 h-5 mr-2 text-blue-400" />
-              Control Independiente
+              Repercuciones
             </h3>
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between p-2 bg-white/5 rounded-lg">
                 <span className="text-gray-300">Calidad →</span>
-                <span className="text-blue-400">Control manual independiente</span>
+                <span className="text-blue-400"> Más tiempo o más costo </span>
               </div>
               <div className="flex items-center justify-between p-2 bg-white/5 rounded-lg">
                 <span className="text-gray-300">Tiempo →</span>
-                <span className="text-yellow-400">Control manual independiente</span>
+                <span className="text-yellow-400"> Menos calidad o más costo </span>
               </div>
               <div className="flex items-center justify-between p-2 bg-white/5 rounded-lg">
                 <span className="text-gray-300">Costo →</span>
-                <span className="text-red-400">Control manual independiente</span>
+                <span className="text-red-400"> Menos calidad o más tiempo </span>
               </div>
             </div>
             <p className="text-xs text-gray-400 mt-3 italic">

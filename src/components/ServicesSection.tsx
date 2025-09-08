@@ -66,7 +66,7 @@ export default function ServicesSection({ activeTab = 'web', onTabChange }: Serv
       description: "Servicios de hosting premium confiables y seguros con SSL gratuito y soporte técnico 24/7",
       features: ["Hosting Premium", "SSL Gratuito", "Soporte 24/7", "Backups"],
       color: 'from-emerald-600 to-teal-600',
-      route: "/servicios/hosting",
+      route: "/servicios/hosting&cloud",
       buttonText: "Ver Hosting",
       keywords: "hosting web, cloud hosting, SSL, soporte técnico, backups",
       schema: {
@@ -86,7 +86,7 @@ export default function ServicesSection({ activeTab = 'web', onTabChange }: Serv
       description: "Conectamos sistemas empresariales y automatizamos procesos mediante APIs REST, GraphQL y webhooks",
       features: ["APIs REST", "GraphQL", "Webhooks", "Automatización"],
       color: 'from-orange-600 to-yellow-600',
-      route: "/servicios/desarrollo/integracion&api",
+      route: "/servicios/desarrollo/api",
       buttonText: "Ver Integraciones",
       keywords: "integraciones, APIs REST, GraphQL, webhooks, automatización",
       schema: {

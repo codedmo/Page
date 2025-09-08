@@ -43,8 +43,8 @@ export default function Footer() {
   const services = [
     { name: 'Desarrollo Web', href: '/servicios/desarrollo/web' },
     { name: 'Software a Medida', href: '/servicios/desarrollo/software' },
-    { name: 'Hosting & Cloud', href: '/servicios/hosting' },
-    { name: 'Integraciones & API', href: '/servicios/desarrollo/integracion&api' },
+    { name: 'Hosting & Cloud', href: '/servicios/hosting&cloud' },
+    { name: 'Integraciones & API', href: '/servicios/desarrollo/api' },
     { name: 'Google & Microsoft', href: '/servicios/google&microsoft' }
   ]
 
@@ -106,7 +106,18 @@ export default function Footer() {
                 <div className="flex items-center space-x-3 text-gray-300">
                   <Phone className="w-4 h-4 text-cyan-400" />
                   <a href="tel:+50237923612" className="hover:text-white transition-colors">
-                    +502 3792-3612
+                  +502 3792-3612
+                  </a>
+                </div>
+                <div className="flex items-center space-x-3 text-gray-300">
+                  <MessageCircle className="w-4 h-4 text-green-400" />
+                  <a
+                  href="https://wa.me/50237923612"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                  >
+                  WhatsApp
                   </a>
                 </div>
                 <div className="flex items-center space-x-3 text-gray-300">

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calculator, CheckCircle, Clock, DollarSign, FileText, Download, Phone } from 'lucide-react';
+import { Calculator, CheckCircle, Clock, DollarSign, FileText, Download, Phone, Settings, Eye, EyeOff, X, Save } from 'lucide-react';
 import { gradients } from '@/config/theme-colors';
 import jsPDF from 'jspdf';
 import { useSEO } from '@/hooks/useSEO';
@@ -17,345 +17,882 @@ interface SelectedItem extends QuotationItem {
   selected: boolean;
 }
 
-// Tarifa por hora fija
-const HOURLY_RATE = 35; // Q35 por hora
+interface AdminSettings {
+  hourlyRate: number;
+  currency: string;
+  hoursPerDay: number;
+  isAuthenticated: boolean;
+}
+
+// Configuración de administración temporal
+const ADMIN_PASSWORD = 'CODEDMO2025';
+const DEFAULT_SETTINGS: AdminSettings = {
+  hourlyRate: 25,
+  currency: 'Q',
+  hoursPerDay: 5,
+  isAuthenticated: false
+};
 
 // Datos expandidos para la cotización con componentes técnicos específicos
 const systemElements: QuotationItem[] = [
-  // UI/UX Components
   {
     id: '1',
     name: 'Diseño UI/UX',
     category: 'UI/UX',
-    hours: 24,
-    complexity: 'Intermedio',
+    hours: 20,
+    complexity: 'Media',
     description: 'Wireframes, mockups y prototipo interactivo'
   },
   {
     id: '2',
     name: 'Sistema de Componentes',
     category: 'UI/UX',
-    hours: 20, // Q875
-    complexity: 'Intermedio',
+    hours: 25,
+    complexity: 'Media',
     description: 'Design System con componentes reutilizables'
   },
   {
     id: '3',
     name: 'Responsive Design',
     category: 'UI/UX',
-    hours: 20, // Q700
-    complexity: 'Básico',
+    hours: 20,
+    complexity: 'Baja',
     description: 'Adaptación móvil, tablet y desktop'
   },
   {
     id: '4',
     name: 'Animaciones y Transiciones',
     category: 'UI/UX',
-    hours: 3, // Q1050
-    complexity: 'Avanzado',
+    hours: 25,
+    complexity: 'Media',
     description: 'Micro-interacciones y animaciones CSS/JS'
   },
   {
     id: '5',
     name: 'Testing de Usabilidad',
     category: 'UI/UX',
-    hours: 18, // Q630
-    complexity: 'Intermedio',
+    hours: 10,
+    complexity: 'Media',
     description: 'Pruebas de usuario y optimización UX'
   },
-  
-  // Frontend Development
+  {
+    id: '89',
+    name: 'Ícono/Branding de la App',
+    category: 'UI/UX',
+    hours: 8,
+    complexity: 'Baja',
+    description: 'Ícono, splash y adaptativos por plataforma'
+  },
+
   {
     id: '6',
     name: 'Estructuración Frontend',
     category: 'Frontend',
-    hours: 35, // Q1225
-    complexity: 'Intermedio',
+    hours: 10,
+    complexity: 'Baja',
     description: 'Arquitectura de carpetas y componentes React/Vue'
   },
   {
     id: '7',
     name: 'State Management',
     category: 'Frontend',
-    hours: 28, // Q980
-    complexity: 'Avanzado',
+    hours: 25,
+    complexity: 'Media',
     description: 'Redux, Zustand o Context API'
   },
   {
     id: '8',
     name: 'Formularios Avanzados',
     category: 'Frontend',
-    hours: 22, // Q770
-    complexity: 'Intermedio',
+    hours: 25,
+    complexity: 'Media',
     description: 'Validaciones, campos dinámicos y file uploads'
   },
   {
     id: '9',
     name: 'Routing y Navegación',
     category: 'Frontend',
-    hours: 15, // Q525
-    complexity: 'Básico',
+    hours: 25,
+    complexity: 'Baja',
     description: 'React Router o Vue Router con guards'
   },
   {
     id: '10',
     name: 'Optimización Performance',
     category: 'Frontend',
-    hours: 25, // Q875
-    complexity: 'Avanzado',
+    hours: 20,
+    complexity: 'Media',
     description: 'Lazy loading, code splitting, bundle optimization'
   },
 
-  // Backend Architecture
   {
     id: '11',
     name: 'Arquitectura MVC',
     category: 'Backend',
-    hours: 30, // Q1050
-    complexity: 'Intermedio',
+    hours: 25,
+    complexity: 'Media',
     description: 'Estructura Model-View-Controller'
   },
   {
     id: '12',
     name: 'Creación de API REST',
     category: 'Backend',
-    hours: 45, // Q1575
-    complexity: 'Avanzado',
+    hours: 35,
+    complexity: 'Alta',
     description: 'Endpoints RESTful con documentación OpenAPI'
   },
   {
     id: '13',
     name: 'Integración de APIs',
     category: 'Backend',
-    hours: 25, // Q875
-    complexity: 'Intermedio',
+    hours: 20,
+    complexity: 'Media',
     description: 'Consumo de APIs externas y webhooks'
   },
   {
     id: '14',
     name: 'Middleware y Guards',
     category: 'Backend',
-    hours: 20, // Q700
-    complexity: 'Intermedio',
+    hours: 15,
+    complexity: 'Media',
     description: 'Interceptores, validaciones y protección de rutas'
   },
   {
     id: '15',
     name: 'Manejo de Errores',
     category: 'Backend',
-    hours: 18, // Q630
-    complexity: 'Básico',
+    hours: 15,
+    complexity: 'Baja',
     description: 'Try-catch, logs y respuestas de error estándar'
   },
 
-  // Database Design
   {
     id: '16',
     name: 'Diseño de Base de Datos',
     category: 'Database',
-    hours: 35, // Q1225
-    complexity: 'Avanzado',
+    hours: 10,
+    complexity: 'Media',
     description: 'ERD, normalización y optimización'
   },
   {
     id: '17',
     name: 'Estructuración de DB',
     category: 'Database',
-    hours: 25, // Q875
-    complexity: 'Intermedio',
+    hours: 15,
+    complexity: 'Baja',
     description: 'Tablas, relaciones y constraints'
   },
   {
     id: '18',
     name: 'Migrations y Seeds',
     category: 'Database',
-    hours: 20, // Q700
-    complexity: 'Intermedio',
+    hours: 15,
+    complexity: 'Baja',
     description: 'Versionado de DB y datos de prueba'
   },
   {
     id: '19',
     name: 'Índices y Optimización',
     category: 'Database',
-    hours: 22, // Q770
-    complexity: 'Avanzado',
+    hours: 20,
+    complexity: 'Media',
     description: 'Performance queries y indexación'
   },
   {
     id: '20',
     name: 'Backup y Recuperación',
     category: 'Database',
-    hours: 15, // Q525
-    complexity: 'Intermedio',
+    hours: 15,
+    complexity: 'Baja',
     description: 'Estrategias de respaldo automatizado'
   },
 
-  // User Management
   {
     id: '21',
     name: 'CRUD de Usuarios',
     category: 'Users',
-    hours: 30, // Q1050
-    complexity: 'Intermedio',
+    hours: 20,
+    complexity: 'Media',
     description: 'Crear, leer, actualizar y eliminar usuarios'
   },
   {
     id: '22',
     name: 'Sistema de Roles',
     category: 'Users',
-    hours: 35, // Q1225
-    complexity: 'Avanzado',
+    hours: 25,
+    complexity: 'Media',
     description: 'RBAC con permisos granulares'
+  },
+  {
+    id: '24',
+    name: 'Perfiles de Usuario',
+    category: 'Users',
+    hours: 15,
+    complexity: 'Baja',
+    description: 'Gestión de perfil y configuraciones'
+  },
+  {
+    id: '43',
+    name: 'Administración de Usuarios (Backoffice)',
+    category: 'Users',
+    hours: 22,
+    complexity: 'Media',
+    description: 'Alta/baja, suspensión, restablecer contraseñas, auditoría'
+  },
+
+  {
+    id: '41',
+    name: 'Acceso con Email/Password',
+    category: 'Auth',
+    hours: 16,
+    complexity: 'Media',
+    description: 'Registro, login, verificación por correo y cierre de sesión'
+  },
+  {
+    id: '42',
+    name: 'Acceso con Redes Sociales (OAuth)',
+    category: 'Auth',
+    hours: 20,
+    complexity: 'Media',
+    description: 'Google, Facebook, Apple, GitHub con enlace a cuentas'
   },
   {
     id: '23',
     name: 'Autenticación JWT',
-    category: 'Users',
-    hours: 25, // Q875
-    complexity: 'Avanzado',
+    category: 'Auth',
+    hours: 25,
+    complexity: 'Alta',
     description: 'JSON Web Tokens con refresh tokens'
-  },
-  {
-    id: '24',
-    name: 'Perfil de Usuario',
-    category: 'Users',
-    hours: 20, // Q700
-    complexity: 'Básico',
-    description: 'Gestión de perfil y configuraciones'
   },
   {
     id: '25',
     name: 'Recuperación de Contraseña',
-    category: 'Users',
-    hours: 18, // Q630
-    complexity: 'Intermedio',
+    category: 'Auth',
+    hours: 20,
+    complexity: 'Media',
     description: 'Reset password con email verification'
   },
 
-  // Security & Payments
   {
     id: '26',
     name: 'Encriptación de Datos',
     category: 'Security',
-    hours: 22, // Q770
-    complexity: 'Avanzado',
+    hours: 20,
+    complexity: 'Media',
     description: 'Bcrypt, hashing y datos sensibles'
-  },
-  {
-    id: '27',
-    name: 'Pasarela de Pago',
-    category: 'Security',
-    hours: 40, // Q1400
-    complexity: 'Avanzado',
-    description: 'Stripe/PayPal integration con webhooks'
   },
   {
     id: '28',
     name: 'Validación de Datos',
     category: 'Security',
-    hours: 15, // Q525
-    complexity: 'Básico',
+    hours: 15,
+    complexity: 'Baja',
     description: 'Sanitización y validación de inputs'
   },
   {
     id: '29',
     name: 'Rate Limiting',
     category: 'Security',
-    hours: 12, // Q420
-    complexity: 'Intermedio',
+    hours: 15,
+    complexity: 'Media',
     description: 'Protección contra ataques DDoS'
   },
   {
     id: '30',
     name: 'CORS y Headers',
     category: 'Security',
-    hours: 10, // Q350
-    complexity: 'Básico',
+    hours: 10,
+    complexity: 'Baja',
     description: 'Configuración de seguridad HTTP'
   },
+  {
+    id: '55',
+    name: 'Certificados de Seguridad (SSL/TLS)',
+    category: 'Security',
+    hours: 8,
+    complexity: 'Baja',
+    description: 'HTTPS, renovación automática y HSTS'
+  },
+  {
+    id: '56',
+    name: 'Configuraciones de Privacidad',
+    category: 'Security',
+    hours: 14,
+    complexity: 'Media',
+    description: 'Controles de visibilidad, consentimientos y data export'
+  },
+  {
+    id: '57',
+    name: 'Moderación de Actividad (Seguridad)',
+    category: 'Security',
+    hours: 18,
+    complexity: 'Media',
+    description: 'Reportes, bloqueo de usuarios y filtros de contenido'
+  },
 
-  // SEO & Optimization
+  {
+    id: '27',
+    name: 'Pasarela de Pago',
+    category: 'Payments',
+    hours: 25,
+    complexity: 'Alta',
+    description: 'Stripe/PayPal integration con webhooks'
+  },
+  {
+    id: '53',
+    name: 'Pagos en la App',
+    category: 'Payments',
+    hours: 20,
+    complexity: 'Media',
+    description: 'Checkout con pasarela y conciliación básica'
+  },
+  {
+    id: '54',
+    name: 'Suscripciones/Recurrentes',
+    category: 'Payments',
+    hours: 24,
+    complexity: 'Alta',
+    description: 'Planes, renovación, prorrateos y webhooks de estado'
+  },
+  {
+    id: '97',
+    name: 'Reservas con Pagos',
+    category: 'Payments',
+    hours: 26,
+    complexity: 'Alta',
+    description: 'Reserva de slots con cobro y reembolso'
+  },
+
   {
     id: '31',
     name: 'SEO On-Page',
     category: 'SEO',
-    hours: 25, // Q875
-    complexity: 'Intermedio',
+    hours: 15,
+    complexity: 'Baja',
     description: 'Meta tags, schema markup y sitemap'
   },
   {
     id: '32',
     name: 'Core Web Vitals',
     category: 'SEO',
-    hours: 20, // Q700
-    complexity: 'Avanzado',
+    hours: 15,
+    complexity: 'Media',
     description: 'Optimización LCP, FID y CLS'
   },
   {
     id: '33',
     name: 'Analytics Integration',
     category: 'SEO',
-    hours: 15, // Q525
-    complexity: 'Básico',
+    hours: 10,
+    complexity: 'Baja',
     description: 'Google Analytics y Search Console'
   },
   {
     id: '34',
     name: 'Open Graph & Twitter Cards',
     category: 'SEO',
-    hours: 12, // Q420
-    complexity: 'Básico',
+    hours: 10,
+    complexity: 'Baja',
     description: 'Metadatos para redes sociales'
   },
+  {
+    id: '87',
+    name: 'Soporte Open Graph',
+    category: 'SEO',
+    hours: 8,
+    complexity: 'Baja',
+    description: 'OG tags por tipo de contenido'
+  },
 
-  // Mobile Development
   {
     id: '35',
     name: 'App Android Nativa',
     category: 'Mobile',
-    hours: 120, // Q4200
-    complexity: 'Avanzado',
+    hours: 120,
+    complexity: 'Alta',
     description: 'Desarrollo en Kotlin/Java'
   },
   {
     id: '36',
     name: 'App iOS Nativa',
     category: 'Mobile',
-    hours: 120, // Q4200
-    complexity: 'Avanzado',
+    hours: 120,
+    complexity: 'Alta',
     description: 'Desarrollo en Swift/SwiftUI'
   },
   {
     id: '37',
-    name: 'React Native App',
+    name: 'React Native App (Híbrida)',
     category: 'Mobile',
-    hours: 80, // Q2800
-    complexity: 'Intermedio',
+    hours: 80,
+    complexity: 'Alta',
     description: 'App híbrida multiplataforma'
-  },
-  {
-    id: '38',
-    name: 'Push Notifications',
-    category: 'Mobile',
-    hours: 25, // Q875
-    complexity: 'Avanzado',
-    description: 'FCM/APNS integration'
   },
   {
     id: '39',
     name: 'Integración Play Store',
     category: 'Mobile',
-    hours: 18, // Q630
-    complexity: 'Intermedio',
+    hours: 15,
+    complexity: 'Baja',
     description: 'Publicación y configuración en Google Play'
   },
   {
     id: '40',
     name: 'Integración App Store',
     category: 'Mobile',
-    hours: 20, // Q700
-    complexity: 'Intermedio',
+    hours: 15,
+    complexity: 'Baja',
     description: 'Publicación y review en Apple App Store'
+  },
+
+  {
+    id: '44',
+    name: 'Sitio Web 5–8 páginas',
+    category: 'Web',
+    hours: 35,
+    complexity: 'Media',
+    description: 'Home, About, Servicios, Portafolio, Blog, Contacto, Políticas'
+  },
+  {
+    id: '107',
+    name: 'Páginas de Campaña/Landing',
+    category: 'Web',
+    hours: 14,
+    complexity: 'Baja',
+    description: 'Landing para campañas con conversión y A/B testing básico'
+  },
+  {
+    id: '108',
+    name: 'Formulario de Contacto + Captcha',
+    category: 'Web',
+    hours: 10,
+    complexity: 'Baja',
+    description: 'Formulario, validación, reCAPTCHA y envío a email/CRM'
+  },
+
+  {
+    id: '45',
+    name: 'Sistema para Administrar Contenido (CMS)',
+    category: 'Content',
+    hours: 28,
+    complexity: 'Media',
+    description: 'CRUD de posts, páginas, categorías y publicación programada'
+  },
+  {
+    id: '46',
+    name: 'Soporte para Comentarios',
+    category: 'Content',
+    hours: 14,
+    complexity: 'Baja',
+    description: 'Comentarios con moderación y notificaciones'
+  },
+  {
+    id: '47',
+    name: 'Clasificación por TAGS',
+    category: 'Content',
+    hours: 20,
+    complexity: 'Media',
+    description: 'Etiquetado de contenido y filtrado por taxonomías'
+  },
+
+  {
+    id: '48',
+    name: 'Texto libre de búsqueda (Full-Text)',
+    category: 'Search',
+    hours: 18,
+    complexity: 'Media',
+    description: 'Búsqueda con índices, sugerencias y resaltado'
+  },
+  {
+    id: '101',
+    name: 'Búsqueda por Filtros/Facetas',
+    category: 'Search',
+    hours: 16,
+    complexity: 'Media',
+    description: 'Facetas por categoría, precio, fecha y ordenamiento'
+  },
+
+  {
+    id: '49',
+    name: 'Carga de Archivos',
+    category: 'Files & Media',
+    hours: 20,
+    complexity: 'Media',
+    description: 'Subida segura, tamaños máximos, virus scan y previews'
+  },
+  {
+    id: '50',
+    name: 'Edición Básica de Imágenes',
+    category: 'Files & Media',
+    hours: 24,
+    complexity: 'Media',
+    description: 'Crop, resize, compresión, thumbnails, conversión de formato'
+  },
+  {
+    id: '51',
+    name: 'Procesamiento de Video/Audio (server-side)',
+    category: 'Files & Media',
+    hours: 28,
+    complexity: 'Alta',
+    description: 'Transcodificación, metadatos y streaming adaptativo básico'
+  },
+  {
+    id: '85',
+    name: 'Música y Audio',
+    category: 'Files & Media',
+    hours: 16,
+    complexity: 'Media',
+    description: 'Reproductor, playlists y control en background'
+  },
+
+  {
+    id: '52',
+    name: 'Carrito de Compras',
+    category: 'Ecommerce',
+    hours: 35,
+    complexity: 'Media',
+    description: 'Carrito persistente, cupones y cálculo de totales'
+  },
+  {
+    id: '102',
+    name: 'Wishlist/Favoritos',
+    category: 'Ecommerce',
+    hours: 15,
+    complexity: 'Baja',
+    description: 'Listas de deseos por usuario y sincronización'
+  },
+
+  {
+    id: '59',
+    name: 'Envío de Correos',
+    category: 'Comms',
+    hours: 15,
+    complexity: 'Baja',
+    description: 'Plantillas transaccionales y reputación (SPF/DKIM/DMARC)'
+  },
+  {
+    id: '60',
+    name: 'Integración SMS',
+    category: 'Comms',
+    hours: 14,
+    complexity: 'Media',
+    description: 'OTP, recordatorios y webhooks de entrega'
+  },
+  {
+    id: '61',
+    name: 'Chat en Tiempo Real',
+    category: 'Comms',
+    hours: 30,
+    complexity: 'Media',
+    description: 'Canales, presencia y lectura/entrega'
+  },
+  {
+    id: '38',
+    name: 'Notificaciones Push',
+    category: 'Comms',
+    hours: 25,
+    complexity: 'Media',
+    description: 'FCM/APNS integration'
+  },
+  {
+    id: '88',
+    name: 'Plantillas de Email',
+    category: 'Comms',
+    hours: 15,
+    complexity: 'Baja',
+    description: 'Motores de plantillas y variables'
+  },
+
+  {
+    id: '62',
+    name: 'Funcionalidad Offline',
+    category: 'Offline & Realtime',
+    hours: 18,
+    complexity: 'Media',
+    description: 'Cache, cola local y reintentos (PWA/SQLite móvil)'
+  },
+  {
+    id: '63',
+    name: 'Sincronización Multi-Dispositivo',
+    category: 'Offline & Realtime',
+    hours: 30,
+    complexity: 'Media',
+    description: 'Conflictos, merges y timestamping'
+  },
+  {
+    id: '64',
+    name: 'Usuarios Concurrentes en Tiempo Real',
+    category: 'Offline & Realtime',
+    hours: 16,
+    complexity: 'Media',
+    description: 'WS/Webhooks para conteo de presencia'
+  },
+
+  {
+    id: '65',
+    name: 'Geo-Localización',
+    category: 'Device & Sensors',
+    hours: 14,
+    complexity: 'Baja',
+    description: 'Permisos, precisión y reverse-geocoding'
+  },
+  {
+    id: '66',
+    name: 'Mapas',
+    category: 'Device & Sensors',
+    hours: 15,
+    complexity: 'Media',
+    description: 'Map SDK, marcadores, rutas y clustering básico'
+  },
+  {
+    id: '67',
+    name: 'Brújula / Sensor de Orientación',
+    category: 'Device & Sensors',
+    hours: 10,
+    complexity: 'Baja',
+    description: 'Lectura de sensores y smoothing'
+  },
+  {
+    id: '68',
+    name: 'Códigos QR',
+    category: 'Device & Sensors',
+    hours: 8,
+    complexity: 'Baja',
+    description: 'Generación y escaneo en móvil'
+  },
+  {
+    id: '69',
+    name: 'Códigos de Barra',
+    category: 'Device & Sensors',
+    hours: 14,
+    complexity: 'Media',
+    description: 'Escaneo multi-formato y validación'
+  },
+  {
+    id: '70',
+    name: 'Cámara y Fotografías',
+    category: 'Device & Sensors',
+    hours: 16,
+    complexity: 'Media',
+    description: 'Captura, permisos y metadatos EXIF'
+  },
+  {
+    id: '71',
+    name: 'Cámara y Video',
+    category: 'Device & Sensors',
+    hours: 18,
+    complexity: 'Media',
+    description: 'Grabación, compresión y subida'
+  },
+
+  {
+    id: '72',
+    name: 'Integración Calendario',
+    category: 'Integrations',
+    hours: 16,
+    complexity: 'Media',
+    description: 'Eventos, recordatorios y permisos'
+  },
+  {
+    id: '73',
+    name: 'Integración con Terceros (API)',
+    category: 'Integrations',
+    hours: 20,
+    complexity: 'Media',
+    description: 'OAuth2, rate limits y firma de peticiones'
+  },
+  {
+    id: '106',
+    name: 'SSO Enterprise (SAML/OIDC)',
+    category: 'Integrations',
+    hours: 25,
+    complexity: 'Alta',
+    description: 'Integración con proveedores SSO (Okta, Azure AD, ADFS)'
+  },
+
+  {
+    id: '74',
+    name: 'Compartir en Redes Sociales',
+    category: 'Social',
+    hours: 8,
+    complexity: 'Baja',
+    description: 'Share intents y deep-links'
+  },
+  {
+    id: '76',
+    name: 'Sistema de Calificaciones',
+    category: 'Social',
+    hours: 12,
+    complexity: 'Baja',
+    description: 'Estrellas, ‘likes’ y ranking'
+  },
+  {
+    id: '77',
+    name: 'Sistema de Retroalimentación',
+    category: 'Social',
+    hours: 10,
+    complexity: 'Baja',
+    description: 'NPS, encuestas y formularios in-app'
+  },
+
+  {
+    id: '78',
+    name: 'Reservas/Booking',
+    category: 'Business & Productivity',
+    hours: 22,
+    complexity: 'Media',
+    description: 'Slots, disponibilidad, cancelaciones y recordatorios'
+  },
+  {
+    id: '79',
+    name: 'Listas de Tareas',
+    category: 'Business & Productivity',
+    hours: 10,
+    complexity: 'Baja',
+    description: 'CRUD, recordatorios y prioridades'
+  },
+
+  {
+    id: '80',
+    name: 'Múltiples Lenguajes (i18n)',
+    category: 'Internationalization & Accessibility',
+    hours: 25,
+    complexity: 'Media',
+    description: 'Traducciones, fechas/moneda y RTL'
+  },
+  {
+    id: '81',
+    name: 'Accesibilidad (a11y)',
+    category: 'Internationalization & Accessibility',
+    hours: 14,
+    complexity: 'Media',
+    description: 'Teclado, ARIA, contraste y lectores de pantalla'
+  },
+
+  {
+    id: '82',
+    name: 'Panel de Configuración',
+    category: 'Admin & Moderation',
+    hours: 12,
+    complexity: 'Baja',
+    description: 'Flags, parámetros del sistema y toggles'
+  },
+  {
+    id: '90',
+    name: 'Capacidad de Moderar Actividad',
+    category: 'Admin & Moderation',
+    hours: 16,
+    complexity: 'Media',
+    description: 'Herramientas de revisión, baneo y auditoría'
+  },
+  {
+    id: '99',
+    name: 'Panel de Moderación Avanzado',
+    category: 'Admin & Moderation',
+    hours: 22,
+    complexity: 'Alta',
+    description: 'Cola de revisión, reglas y métricas'
+  },
+
+  {
+    id: '83',
+    name: 'Reportes de Estadísticas',
+    category: 'Analytics & Quality',
+    hours: 18,
+    complexity: 'Media',
+    description: 'Dashboards, exportables y KPIs'
+  },
+  {
+    id: '58',
+    name: 'Reporte de Errores',
+    category: 'Analytics & Quality',
+    hours: 10,
+    complexity: 'Baja',
+    description: 'Sentry/LogRocket, alertas y trazabilidad'
+  },
+
+  {
+    id: '84',
+    name: 'Realidad Aumentada Básica',
+    category: 'R&D',
+    hours: 32,
+    complexity: 'Alta',
+    description: 'ARKit/ARCore o WebAR para overlays simples'
+  },
+  {
+    id: '103',
+    name: 'Generación de Imágenes con IA',
+    category: 'R&D',
+    hours: 24,
+    complexity: 'Alta',
+    description: 'Prompts, estilos y post-procesado automático'
+  },
+
+  {
+    id: '100',
+    name: 'Exportación de Datos (CSV/JSON)',
+    category: 'Data',
+    hours: 10,
+    complexity: 'Baja',
+    description: 'Descarga de listados y backups manuales'
+  },
+  {
+    id: '105',
+    name: 'Importación de Datos (CSV/Excel)',
+    category: 'Data',
+    hours: 20,
+    complexity: 'Media',
+    description: 'Validación, mapeo de columnas y vista previa'
+  },
+
+  {
+    id: '91',
+    name: 'Cola de Trabajos/Background Jobs',
+    category: 'Ops & Infra',
+    hours: 16,
+    complexity: 'Media',
+    description: 'Workers para emails, pagos y procesamientos'
+  },
+  {
+    id: '92',
+    name: 'Cache de Aplicación',
+    category: 'Ops & Infra',
+    hours: 12,
+    complexity: 'Media',
+    description: 'Cacheo en memoria/Redis y políticas de expiración'
+  },
+  {
+    id: '94',
+    name: 'CI/CD Básico',
+    category: 'Ops & Infra',
+    hours: 12,
+    complexity: 'Media',
+    description: 'Builds automatizados, tests y despliegue'
+  },
+  {
+    id: '95',
+    name: 'Testing E2E/Unitario',
+    category: 'Ops & Infra',
+    hours: 20,
+    complexity: 'Media',
+    description: 'Cobertura mínima y pruebas de flujo crítico'
+  },
+
+  {
+    id: '96',
+    name: 'Políticas y Términos',
+    category: 'Compliance & Legal',
+    hours: 8,
+    complexity: 'Baja',
+    description: 'Privacidad, Términos y manejo de cookies'
+  },
+  {
+    id: '104',
+    name: 'Gestión de Consentimiento de Cookies',
+    category: 'Compliance & Legal',
+    hours: 8,
+    complexity: 'Baja',
+    description: 'Banner, preferencias granulares y log de consentimientos'
   }
 ];
 
@@ -363,6 +900,15 @@ export default function QuotationModern() {
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>(
     systemElements.map(item => ({ ...item, selected: false }))
   );
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  
+  // Estados para el panel de administración
+  const [adminSettings, setAdminSettings] = useState<AdminSettings>(DEFAULT_SETTINGS);
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [adminPassword, setAdminPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [editingItemId, setEditingItemId] = useState<string | null>(null);
+  const [tempHours, setTempHours] = useState<number>(0);
 
   // SEO para Cotizador Moderno
   useSEO({
@@ -387,11 +933,52 @@ export default function QuotationModern() {
     priority: 'high'
   });
 
-  // Cálculos simplificados
+  // Cálculos con configuración dinámica
   const selectedItemsList = selectedItems.filter(item => item.selected);
-  const totalPrice = selectedItemsList.reduce((sum, item) => sum + (item.hours * HOURLY_RATE), 0);
+  const totalPrice = selectedItemsList.reduce((sum, item) => sum + (item.hours * adminSettings.hourlyRate), 0);
   const totalHours = selectedItemsList.reduce((sum, item) => sum + item.hours, 0);
-  const estimatedDays = Math.ceil(totalHours / 8); // 8 horas por día fijo
+  const estimatedDays = Math.ceil(totalHours / adminSettings.hoursPerDay);
+
+  // Funciones de administración
+  const handleAdminLogin = () => {
+    if (adminPassword === ADMIN_PASSWORD) {
+      setAdminSettings(prev => ({ ...prev, isAuthenticated: true }));
+      setAdminPassword('');
+      alert('¡Acceso concedido! Ahora puedes modificar la configuración.');
+    } else {
+      alert('Contraseña incorrecta');
+      setAdminPassword('');
+    }
+  };
+
+  const handleAdminLogout = () => {
+    setAdminSettings(DEFAULT_SETTINGS);
+    setShowAdminPanel(false);
+    setEditingItemId(null);
+  };
+
+  const handleSettingsChange = (key: keyof AdminSettings, value: number | string) => {
+    setAdminSettings(prev => ({
+      ...prev,
+      [key]: value
+    }));
+  };
+
+  const handleItemHoursChange = (itemId: string, newHours: number) => {
+    setSelectedItems(prev =>
+      prev.map(item =>
+        item.id === itemId
+          ? { ...item, hours: Math.max(1, newHours) }
+          : item
+      )
+    );
+    setEditingItemId(null);
+  };
+
+  const startEditingHours = (itemId: string, currentHours: number) => {
+    setEditingItemId(itemId);
+    setTempHours(currentHours);
+  };
 
   const handleItemToggle = (itemId: string) => {
     setSelectedItems(prev => 
@@ -534,7 +1121,7 @@ export default function QuotationModern() {
     const categoryStats = categories.map(category => {
       const items = selectedItemsList.filter(item => item.category === category);
       const hours = items.reduce((sum, item) => sum + item.hours, 0);
-      const cost = hours * HOURLY_RATE;
+      const cost = hours * adminSettings.hourlyRate;
       return { category, items: items.length, hours, cost };
     }).filter(stat => stat.items > 0);
     
@@ -636,8 +1223,8 @@ export default function QuotationModern() {
           
           // Badge de complejidad
           let complexityColor = colors.success;
-          if (item.complexity === 'Intermedio') complexityColor = colors.warning;
-          if (item.complexity === 'Avanzado') complexityColor = colors.danger;
+          if (item.complexity === 'Media') complexityColor = colors.warning;
+          if (item.complexity === 'Alta') complexityColor = colors.danger;
           
           doc.setFillColor(complexityColor[0], complexityColor[1], complexityColor[2]);
           doc.rect(90, yPos - 1, 25, 8, 'F');
@@ -650,7 +1237,7 @@ export default function QuotationModern() {
           doc.text(`${item.hours}h`, 145, yPos + 3);
           
           doc.setTextColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-          doc.text(`Q${(item.hours * HOURLY_RATE).toLocaleString()}`, 165, yPos + 3);
+          doc.text(`${adminSettings.currency}${(item.hours * adminSettings.hourlyRate).toLocaleString()}`, 165, yPos + 3);
           
           yPos += 12;
         });
@@ -738,13 +1325,27 @@ export default function QuotationModern() {
     return selectedItems.filter(item => item.category === category);
   };
 
+  const getFilteredCategories = () => {
+    if (selectedCategory === 'all') {
+      return categories;
+    }
+    return categories.filter(category => category === selectedCategory);
+  };
+
+  // const getFilteredItems = () => {
+  //   if (selectedCategory === 'all') {
+  //     return selectedItems;
+  //   }
+  //   return selectedItems.filter(item => item.category === selectedCategory);
+  // };
+
   const getComplexityColor = (complexity: string) => {
     switch (complexity) {
-      case 'Básico':
+      case 'Baja':
         return 'bg-green-500/20 text-green-300 border-green-500/30';
-      case 'Intermedio':
+      case 'Media':
         return 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30';
-      case 'Avanzado':
+      case 'Alta':
         return 'bg-red-500/20 text-red-300 border-red-500/30';
       default:
         return 'bg-gray-500/20 text-gray-300 border-gray-500/30';
@@ -754,63 +1355,153 @@ export default function QuotationModern() {
   const categories = Array.from(new Set(systemElements.map(item => item.category)));
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      {/* Header */}
-      <div className="text-center mb-8">
-        <div className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${gradients.primary} text-white rounded-full text-sm font-medium mb-4`}>
+    <div className="max-w-7xl mx-auto p-4">
+      {/* Header - más compacto */}
+      <div className="text-center mb-6">
+        <div className={`inline-flex items-center px-3 py-1 bg-gradient-to-r ${gradients.primary} text-white rounded-full text-sm font-medium mb-3`}>
           <Calculator className="w-4 h-4 mr-2" />
           Cotizador Inteligente
         </div>
-        <h1 className="text-3xl font-bold text-white mb-4">
+        <h1 className="text-2xl font-bold text-white mb-3">
           Calcula el <span className={`bg-gradient-to-r ${gradients.textPrimary} bg-clip-text text-transparent`}>costo</span> de tu proyecto
         </h1>
-        <p className="text-gray-300 max-w-2xl mx-auto">
+        <p className="text-gray-300 max-w-2xl mx-auto text-sm">
           Selecciona los elementos que necesitas y obtén una cotización personalizada al instante.
         </p>
-        <div className="mt-4 inline-flex items-center px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full text-purple-300 text-sm">
+        <div className="mt-3 inline-flex items-center px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full text-purple-300 text-sm">
           <DollarSign className="w-4 h-4 mr-1" />
-          Tarifa: Q35/hora
+          Tarifa: {adminSettings.currency}{adminSettings.hourlyRate}/hora
+        </div>
+        
+        {/* Botón de administración */}
+        <div className="mt-3">
+          <button
+            onClick={() => setShowAdminPanel(true)}
+            className="inline-flex items-center px-2 py-1 bg-gray-500/20 border border-gray-500/30 rounded-full text-gray-400 hover:text-gray-300 text-xs transition-colors"
+            title="Panel de Administración"
+          >
+            <Settings className="w-3 h-3" />
+          </button>
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-4 gap-6">
+      <div className="grid lg:grid-cols-6 gap-4">
+        {/* Panel lateral de filtros */}
+        <div className="lg:col-span-1">
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 sticky top-20">
+            <h3 className="text-sm font-bold text-white mb-3 flex items-center">
+              <FileText className="w-4 h-4 mr-2 text-purple-400" />
+              Categorías
+            </h3>
+            <div className="max-h-[700px] overflow-y-auto space-y-2 scrollbar-thin scrollbar-track-white/10 scrollbar-thumb-purple-500/50 hover:scrollbar-thumb-purple-500/70 pr-2">
+              <button
+                onClick={() => setSelectedCategory('all')}
+                className={`w-full text-left px-3 py-2 rounded-lg text-xs transition-all duration-300 ${
+                  selectedCategory === 'all'
+                    ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50'
+                    : 'text-gray-400 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                Todas ({systemElements.length})
+              </button>
+              {categories.map(category => {
+                const count = systemElements.filter(item => item.category === category).length;
+                return (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={`w-full text-left px-3 py-2 rounded-lg text-xs transition-all duration-300 ${
+                      selectedCategory === category
+                        ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50'
+                        : 'text-gray-400 hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="truncate">{category}</span>
+                      <span className="text-xs opacity-75">({count})</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
         {/* Lista de elementos - más compacta */}
-        <div className="lg:col-span-3 space-y-4">
-          {categories.map(category => (
-            <div key={category} className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
-              <h3 className="text-lg font-bold text-white mb-3 flex items-center">
-                <FileText className="w-5 h-5 mr-2 text-purple-400" />
+        <div className="lg:col-span-3 space-y-3">
+          {getFilteredCategories().map(category => (
+            <div key={category} className="bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-white/10">
+              <h3 className="text-base font-bold text-white mb-3 flex items-center">
+                <FileText className="w-4 h-4 mr-2 text-purple-400" />
                 {category}
+                <span className="ml-2 text-xs text-gray-400">
+                  ({getCategoryItems(category).length} elementos)
+                </span>
               </h3>
-              <div className="grid md:grid-cols-2 gap-3">
+              <div className="grid md:grid-cols-1 gap-2">
                 {getCategoryItems(category).map(item => (
                   <div
                     key={item.id}
-                    className={`p-3 rounded-lg border transition-all duration-300 cursor-pointer hover:scale-[1.02] ${
+                    className={`p-2 rounded-lg border transition-all duration-300 cursor-pointer hover:scale-[1.01] ${
                       item.selected 
                         ? 'bg-purple-500/20 border-purple-500/50 shadow-lg shadow-purple-500/20' 
                         : 'bg-white/5 border-white/10 hover:border-white/30 hover:bg-white/10'
                     }`}
                     onClick={() => handleItemToggle(item.id)}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                            item.selected ? 'bg-purple-500 border-purple-500' : 'border-white/30'
-                          }`}>
-                            {item.selected && <CheckCircle className="w-3 h-3 text-white" />}
-                          </div>
-                          <h4 className="font-semibold text-white text-sm">{item.name}</h4>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3 flex-1">
+                        <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${
+                          item.selected ? 'bg-purple-500 border-purple-500' : 'border-white/30'
+                        }`}>
+                          {item.selected && <CheckCircle className="w-3 h-3 text-white" />}
                         </div>
-                        <p className="text-gray-400 text-xs mb-2">{item.description}</p>
-                        <div className="flex items-center justify-between">
-                          <span className={`px-2 py-1 text-xs rounded-full border ${getComplexityColor(item.complexity)}`}>
-                            {item.complexity}
-                          </span>
-                          <div className="text-right">
-                            <div className="text-purple-400 font-bold text-sm">Q{(item.hours * HOURLY_RATE).toLocaleString()}</div>
-                            <div className="text-gray-400 text-xs">{item.hours}h</div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-white text-sm truncate">{item.name}</h4>
+                          <p className="text-gray-400 text-xs truncate">{item.description}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2 flex-shrink-0">
+                        <span className={`px-2 py-1 text-xs rounded-full border ${getComplexityColor(item.complexity)}`}>
+                          {item.complexity}
+                        </span>
+                        <div className="text-right">
+                          <div className="text-purple-400 font-bold text-sm">{adminSettings.currency}{(item.hours * adminSettings.hourlyRate).toLocaleString()}</div>
+                          <div className="text-gray-400 text-xs flex items-center">
+                            {adminSettings.isAuthenticated && editingItemId === item.id ? (
+                              <div className="flex items-center space-x-1">
+                                <input
+                                  type="number"
+                                  value={tempHours}
+                                  onChange={(e) => setTempHours(Math.max(1, parseInt(e.target.value) || 1))}
+                                  className="w-12 px-1 text-xs bg-gray-700 text-white border border-gray-600 rounded"
+                                  min="1"
+                                  title="Editar horas"
+                                  placeholder="Horas"
+                                />
+                                <button
+                                  onClick={() => handleItemHoursChange(item.id, tempHours)}
+                                  className="text-green-400 hover:text-green-300"
+                                  title="Guardar cambios"
+                                >
+                                  <Save className="w-3 h-3" />
+                                </button>
+                                <button
+                                  onClick={() => setEditingItemId(null)}
+                                  className="text-red-400 hover:text-red-300"
+                                  title="Cancelar"
+                                >
+                                  <X className="w-3 h-3" />
+                                </button>
+                              </div>
+                            ) : (
+                              <span
+                                onClick={() => adminSettings.isAuthenticated && startEditingHours(item.id, item.hours)}
+                                className={adminSettings.isAuthenticated ? "cursor-pointer hover:text-white" : ""}
+                              >
+                                {item.hours}h
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -823,7 +1514,7 @@ export default function QuotationModern() {
         </div>
 
         {/* Resumen de cotización - sidebar compacto */}
-        <div className="space-y-4">
+        <div className="lg:col-span-2 space-y-4">
           <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 sticky top-20 z-20">
             <h3 className="text-lg font-bold text-white mb-4 flex items-center">
               <DollarSign className="w-5 h-5 mr-2 text-green-400" />
@@ -840,21 +1531,21 @@ export default function QuotationModern() {
                 </p>
               </div>
             ) : (
-              <div className="space-y-4">
-                {/* Items seleccionados - compacto */}
-                <div className="max-h-48 overflow-y-auto space-y-2 scrollbar-thin scrollbar-track-white/10 scrollbar-thumb-purple-500/50 hover:scrollbar-thumb-purple-500/70">
+              <div className="space-y-3">
+                {/* Items seleccionados - más compacto */}
+                <div className="max-h-40 overflow-y-auto space-y-1 scrollbar-thin scrollbar-track-white/10 scrollbar-thumb-purple-500/50 hover:scrollbar-thumb-purple-500/70">
                   {selectedItemsList.map(item => (
-                    <div key={item.id} className="flex justify-between items-center text-sm bg-white/5 rounded-lg p-2">
-                      <div>
-                        <span className="text-white font-medium">{item.name}</span>
+                    <div key={item.id} className="flex justify-between items-center text-xs bg-white/5 rounded-lg p-2">
+                      <div className="flex-1 min-w-0">
+                        <span className="text-white font-medium block truncate">{item.name}</span>
                         <div className="text-gray-400 text-xs">{item.hours}h</div>
                       </div>
-                      <span className="text-purple-400 font-bold">Q{(item.hours * HOURLY_RATE).toLocaleString()}</span>
+                      <span className="text-purple-400 font-bold text-xs ml-2">{adminSettings.currency}{(item.hours * adminSettings.hourlyRate).toLocaleString()}</span>
                     </div>
                   ))}
                 </div>
                 
-                <div className="border-t border-white/20 pt-4 space-y-2">
+                <div className="border-t border-white/20 pt-3 space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-300">Total horas:</span>
                     <span className="text-white font-semibold">{totalHours}h</span>
@@ -862,13 +1553,13 @@ export default function QuotationModern() {
                   <div className="flex justify-between">
                     <span className="text-lg font-bold text-white">Total:</span>
                     <span className="text-lg font-bold text-green-400">
-                      Q{totalPrice.toLocaleString()}
+                      {adminSettings.currency}{totalPrice.toLocaleString()}
                     </span>
                   </div>
                 </div>
 
-                <div className={`bg-gradient-to-r ${gradients.primary} bg-opacity-20 rounded-lg p-3 border border-purple-500/30`}>
-                  <div className="flex items-center mb-2">
+                <div className={`bg-gradient-to-r ${gradients.primary} bg-opacity-20 rounded-lg p-2 border border-purple-500/30`}>
+                  <div className="flex items-center mb-1">
                     <Clock className="w-4 h-4 mr-2 text-purple-400" />
                     <span className="text-purple-300 font-semibold text-sm">Tiempo estimado</span>
                   </div>
@@ -880,7 +1571,7 @@ export default function QuotationModern() {
                 <button
                   onClick={generatePDF}
                   disabled={selectedItemsList.length === 0}
-                  className={`w-full py-3 bg-gradient-to-r ${gradients.primary} text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100`}
+                  className={`w-full py-2 bg-gradient-to-r ${gradients.primary} text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-sm`}
                 >
                   <Download className="w-4 h-4 mr-2" />
                   Descargar PDF
@@ -888,18 +1579,19 @@ export default function QuotationModern() {
                 
               </div>
             )}
-            <div className="bg-yellow-500/10 backdrop-blur-sm rounded-xl p-4 border border-yellow-500/30 sticky z-10 mt-4">
-              <h4 className="text-yellow-300 font-semibold text-sm mb-2 flex items-center">
+            
+            {/* Disclaimer importante - más compacto */}
+            <div className="bg-yellow-500/10 backdrop-blur-sm rounded-xl p-3 border border-yellow-500/30 mt-3">
+              <h4 className="text-yellow-300 font-semibold text-xs mb-1 flex items-center">
                 ⚠️ Estimado de Proyecto
               </h4>
               <p className="text-yellow-200/80 text-xs leading-relaxed">
-                Este es un <strong>estimado aproximado</strong> de un proyecto promedio. 
-                El costo final puede ser <strong>menor o mayor</strong> dependiendo de la complejidad específica. 
-                Para una cotización precisa, contáctanos.
+                Este es un <strong>estimado aproximado</strong>. El costo final puede variar según la complejidad específica.
               </p>
             </div>
-            <div className="text-center mt-4">
-              <p className="text-gray-400 text-xs mb-2">
+            
+            <div className="text-center mt-3">
+              <p className="text-gray-400 text-xs mb-1">
                 ¿Necesitas algo personalizado?
               </p>
               <button 
@@ -907,14 +1599,143 @@ export default function QuotationModern() {
                 className="text-purple-400 hover:text-purple-300 text-sm font-medium transition-colors flex items-center justify-center mx-auto"
               >
                 <Phone className="w-4 h-4 mr-1" />
-                Llamar: +502 3792-3612
+                +502 3792-3612
               </button>
             </div>
           </div>
-
-          {/* Disclaimer importante */}
         </div>
       </div>
+
+      {/* Modal del Panel de Administración */}
+      {showAdminPanel && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gray-900 rounded-2xl p-6 w-full max-w-md border border-gray-700">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-white flex items-center">
+                <Settings className="w-5 h-5 mr-2 text-purple-400" />
+                Panel de Administración
+              </h3>
+              <button
+                onClick={() => setShowAdminPanel(false)}
+                className="text-gray-400 hover:text-white"
+                title="Cerrar"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {!adminSettings.isAuthenticated ? (
+              /* Panel de Login */
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="admin-password" className="block text-sm font-medium text-gray-300 mb-2">
+                    Contraseña de Administrador
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="admin-password"
+                      type={showPassword ? "text" : "password"}
+                      value={adminPassword}
+                      onChange={(e) => setAdminPassword(e.target.value)}
+                      className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"
+                      placeholder="Ingresa la contraseña"
+                      onKeyPress={(e) => e.key === 'Enter' && handleAdminLogin()}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                      title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+                <button
+                  onClick={handleAdminLogin}
+                  className={`w-full py-2 bg-gradient-to-r ${gradients.primary} text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25`}
+                >
+                  Acceder
+                </button>
+              </div>
+            ) : (
+              /* Panel de Configuración */
+              <div className="space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="admin-hourly-rate" className="block text-sm font-medium text-gray-300 mb-2">
+                      Tarifa por Hora
+                    </label>
+                    <input
+                      id="admin-hourly-rate"
+                      type="number"
+                      value={adminSettings.hourlyRate}
+                      onChange={(e) => handleSettingsChange('hourlyRate', parseFloat(e.target.value) || 0)}
+                      className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"
+                      min="0"
+                      step="0.5"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="admin-currency" className="block text-sm font-medium text-gray-300 mb-2">
+                      Moneda
+                    </label>
+                    <select
+                      id="admin-currency"
+                      value={adminSettings.currency}
+                      onChange={(e) => handleSettingsChange('currency', e.target.value)}
+                      className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"
+                    >
+                      <option value="Q">Q (Quetzal)</option>
+                      <option value="$">$ (Dólar)</option>
+                      <option value="€">€ (Euro)</option>
+                      <option value="£">£ (Libra)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="admin-hours-per-day" className="block text-sm font-medium text-gray-300 mb-2">
+                    Horas Trabajadas por Día
+                  </label>
+                  <input
+                    id="admin-hours-per-day"
+                    type="number"
+                    value={adminSettings.hoursPerDay}
+                    onChange={(e) => handleSettingsChange('hoursPerDay', parseInt(e.target.value) || 1)}
+                    className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"
+                    min="1"
+                    max="24"
+                  />
+                </div>
+
+                <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
+                  <p className="text-purple-300 text-sm">
+                    ✨ <strong>Modo Administrador Activo</strong><br />
+                    • Haz clic en las horas de cualquier elemento para editarlas<br />
+                    • Los cambios se aplican instantáneamente
+                  </p>
+                </div>
+
+                <div className="flex space-x-3">
+                  <button
+                    onClick={() => setShowAdminPanel(false)}
+                    className="flex-1 py-2 bg-gray-700 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors"
+                  >
+                    Cerrar
+                  </button>
+                  <button
+                    onClick={handleAdminLogout}
+                    className="flex-1 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-500 transition-colors"
+                  >
+                    Cerrar Sesión
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
