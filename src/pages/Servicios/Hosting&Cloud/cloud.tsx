@@ -1,4 +1,4 @@
-import { Cloud, Server, Database, Shield, CheckCircle, Zap, Globe } from 'lucide-react';
+import { Cloud, Server, Database, Globe, CheckCircle, Shield, Zap, MessageCircle } from 'lucide-react';
 import { gradients } from '@/config/theme-colors';
 import { useSEO } from '@/hooks/useSEO';
 
@@ -10,6 +10,13 @@ export default function CloudServices() {
     keywords: ['servicios cloud', 'aws', 'azure', 'google cloud', 'migración cloud', 'devops'],
     canonical: '/servicios/hosting&cloud/cloud'
   });
+
+  const handleWhatsAppContact = (serviceName: string) => {
+    const phoneNumber = '+50237923612';
+    const message = `Hola! Estoy interesado en el servicio de ${serviceName}. Me podrían brindar más información?`;
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   const features = [
     'Migración a la nube',
@@ -153,7 +160,7 @@ export default function CloudServices() {
               <h3 className="text-xl font-bold text-white mb-3">{service.title}</h3>
               <p className="text-gray-400 mb-4">{service.description}</p>
               <div className="text-purple-400 font-bold text-lg mb-4">{service.price}</div>
-              <ul className="space-y-2">
+              <ul className="space-y-2 mb-6">
                 {service.features.map((feature, fIndex) => (
                   <li key={fIndex} className="flex items-center text-sm text-gray-300">
                     <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
@@ -161,6 +168,13 @@ export default function CloudServices() {
                   </li>
                 ))}
               </ul>
+              <button 
+                onClick={() => handleWhatsAppContact(service.title)}
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Consultar por WhatsApp</span>
+              </button>
             </div>
           ))}
         </div>

@@ -308,5 +308,5 @@ export const companyInfo = {
   phone: "+1 (555) 123-4567",
   email: "contacto@codedmo.com",
   website: "www.codedmo.com",
-  logo: "/public/codedmo-logo.svg" // Ruta al logo de la empresa
+  logo: "/public/codedmo-logo-white-horizontal.svg" // Ruta al logo de la empresa
 }

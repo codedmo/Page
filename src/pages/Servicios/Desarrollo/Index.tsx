@@ -1,17 +1,141 @@
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import { Code, Globe, Monitor, Smartphone, Database, CheckCircle } from 'lucide-react';
 import { gradients, borders } from '@/config/theme-colors';
-import { useSEO } from '@/hooks/useSEO';
+import { useSEO, usePageSEO } from '@/hooks/useSEO';
 
 export default function Desarrollo() {
   const location = useLocation();
 
-  // SEO para Desarrollo
+  // SEO optimizado para la página de Desarrollo
+  const desarrolloSEOConfig = usePageSEO('desarrollo')
+  
+  // Aplicar SEO de página completa con prioridad alta
   useSEO({
-    title: 'Desarrollo de Software - Web, Móvil, APIs | CODEDMO',
-    description: 'Servicios de desarrollo de software personalizado. Desarrollo web con React, aplicaciones móviles, APIs e integraciones empresariales.',
-    keywords: ['desarrollo web', 'desarrollo software', 'aplicaciones móviles', 'desarrollo react', 'apis desarrollo'],
-    canonical: '/servicios/desarrollo'
+    ...desarrolloSEOConfig,
+    priority: 'high',
+    pageType: 'desarrollo',
+    // FAQs específicas para servicios de desarrollo
+    faqData: [
+      {
+        question: "¿Qué tecnologías utilizan para el desarrollo de software?",
+        answer: "Utilizamos tecnologías modernas como React, Next.js, TypeScript, Node.js, Python y bases de datos como PostgreSQL. Seleccionamos la mejor tecnología según las necesidades específicas de cada proyecto."
+      },
+      {
+        question: "¿Cuánto tiempo toma desarrollar una aplicación web completa?",
+        answer: "El tiempo varía según la complejidad. Una aplicación web básica puede tomar 3-6 semanas, mientras que sistemas empresariales complejos pueden requerir 3-6 meses. Realizamos una evaluación inicial gratuita para estimar tiempos precisos."
+      },
+      {
+        question: "¿Desarrollan tanto aplicaciones web como móviles?",
+        answer: "Sí, ofrecemos desarrollo completo: aplicaciones web con React/Next.js, aplicaciones móviles nativas para iOS y Android, software empresarial a medida, y APIs para integrar sistemas."
+      },
+      {
+        question: "¿Qué incluye el desarrollo de software a medida?",
+        answer: "Incluye análisis de requerimientos, diseño de arquitectura, desarrollo frontend y backend, base de datos, testing exhaustivo, documentación, capacitación y soporte post-lanzamiento por 3 meses."
+      },
+      {
+        question: "¿Ofrecen mantenimiento después del desarrollo?",
+        answer: "Sí, ofrecemos planes de mantenimiento y soporte técnico continuo. Incluye actualizaciones de seguridad, mejoras de rendimiento, nuevas funcionalidades y soporte técnico 24/7."
+      },
+      {
+        question: "¿Pueden integrar el software con sistemas existentes?",
+        answer: "Absolutamente. Desarrollamos APIs robustas y realizamos integraciones con sistemas ERP, CRM, bases de datos existentes y servicios de terceros como plataformas de pago y servicios web."
+      }
+    ],
+    // Información de empresa para datos estructurados
+    businessInfo: {
+      name: 'CODEDMO Solutions',
+      phone: '+502-3792-3612',
+      address: 'Guatemala, Guatemala',
+      openingHours: ['07:00-20:00']
+    },
+    // Idiomas alternativos para SEO internacional
+    alternateLanguages: [
+      { lang: 'es', href: 'https://codedmo.dev/servicios/desarrollo' },
+      { lang: 'es-GT', href: 'https://codedmo.dev/servicios/desarrollo' }
+    ],
+    // Breadcrumbs actualizados
+    breadcrumbs: [
+      { name: 'Inicio', url: 'https://codedmo.dev' },
+      { name: 'Servicios', url: 'https://codedmo.dev/servicios' },
+      { name: 'Desarrollo', url: 'https://codedmo.dev/servicios/desarrollo' }
+    ],
+    // Datos estructurados específicos para servicios de desarrollo
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: 'Servicios de Desarrollo de Software',
+      description: 'Desarrollo profesional de aplicaciones web, móviles, software empresarial y APIs con tecnologías modernas.',
+      provider: {
+        '@type': 'Organization',
+        name: 'CODEDMO Solutions',
+        alternateName: 'CODEDMO',
+        url: 'https://codedmo.dev',
+        logo: 'https://codedmo.dev/favicon.ico',
+        contactPoint: {
+          '@type': 'ContactPoint',
+          telephone: '+502-3792-3612',
+          contactType: 'customer service',
+          areaServed: 'GT',
+          availableLanguage: 'Spanish'
+        },
+        address: {
+          '@type': 'PostalAddress',
+          addressCountry: 'GT',
+          addressRegion: 'Guatemala',
+          addressLocality: 'Guatemala'
+        }
+      },
+      serviceType: 'Software Development',
+      areaServed: {
+        '@type': 'Country',
+        name: 'Guatemala'
+      },
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'Servicios de Desarrollo',
+        itemListElement: [
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Desarrollo Web',
+              description: 'Aplicaciones web modernas con React, Next.js y tecnologías de vanguardia'
+            }
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Desarrollo de Aplicaciones Móviles',
+              description: 'Apps nativas e híbridas para iOS y Android'
+            }
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Software a Medida',
+              description: 'Soluciones empresariales personalizadas y escalables'
+            }
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'APIs e Integraciones',
+              description: 'Desarrollo de APIs robustas y integración con sistemas existentes'
+            }
+          }
+        ]
+      },
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.9',
+        reviewCount: '47',
+        bestRating: '5',
+        worstRating: '1'
+      }
+    }
   });
 
   const services = [
@@ -51,6 +175,45 @@ export default function Desarrollo() {
   }
 
   return (
+    <>
+      {/* Meta tags adicionales específicos para la página de desarrollo */}
+      <div className="hidden">
+        {/* Preconnect a dominios externos para mejorar performance */}
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+        
+        {/* Meta tags adicionales para mejor indexación de servicios de desarrollo */}
+        <meta name="geo.region" content="GT" />
+        <meta name="geo.placename" content="Guatemala" />
+        <meta name="DC.title" content="Servicios de Desarrollo de Software - CODEDMO Guatemala" />
+        <meta name="DC.creator" content="CODEDMO Solutions" />
+        <meta name="DC.subject" content="desarrollo software, aplicaciones web, desarrollo móvil, APIs" />
+        <meta name="DC.description" content="Servicios profesionales de desarrollo de software con tecnologías modernas" />
+        <meta name="classification" content="business" />
+        <meta name="category" content="Software Development Services" />
+        <meta name="coverage" content="Guatemala" />
+        <meta name="distribution" content="global" />
+        <meta name="rating" content="general" />
+        <meta name="revisit-after" content="7 days" />
+        
+        {/* Meta tags específicos para servicios de desarrollo */}
+        <meta name="service.type" content="Software Development" />
+        <meta name="service.category" content="Technology Services" />
+        <meta name="service.provider" content="CODEDMO Solutions" />
+        <meta name="service.location" content="Guatemala" />
+        <meta name="service.languages" content="Spanish" />
+        <meta name="service.technologies" content="React, Next.js, TypeScript, Node.js, Python" />
+        <meta name="service.platforms" content="Web, Mobile, API" />
+        <meta name="service.industries" content="All Industries" />
+        
+        {/* Meta tags para experiencia de usuario */}
+        <meta name="format-detection" content="telephone=yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      </div>
+
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="text-center mb-12">
@@ -102,7 +265,7 @@ export default function Desarrollo() {
       <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 mb-12">
         <h2 className="text-2xl font-bold text-white mb-8 text-center">Tecnologías que utilizamos</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-          {['React', 'Next.js', 'Node.js', 'Python', 'TypeScript', 'PostgreSQL'].map((tech, index) => (
+          {['Next.js', 'Vite', 'Node.js', 'Python', 'TypeScript', 'PostgreSQL'].map((tech, index) => (
             <div key={index} className="text-center">
               <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mb-3 mx-auto">
                 <span className="text-white font-bold text-sm">{tech}</span>
@@ -157,5 +320,6 @@ export default function Desarrollo() {
         </div>
       </div>
     </div>
+    </>
   );
 }

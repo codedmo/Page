@@ -1,4 +1,4 @@
-import { Server, Shield, Zap, CheckCircle } from 'lucide-react';
+import { Server, Shield, Zap, CheckCircle, MessageCircle } from 'lucide-react';
 import { gradients } from '@/config/theme-colors';
 import { useSEO } from '@/hooks/useSEO';
 
@@ -10,6 +10,13 @@ export default function HostingProfesional() {
     keywords: ['hosting profesional', 'alojamiento web', 'ssl gratuito', 'backup diario', 'soporte 24/7'],
     canonical: '/servicios/hosting&cloud/hosting'
   });
+
+  const handleWhatsAppContact = (planName: string) => {
+    const phoneNumber = '+50237923612';
+    const message = `Hola! Estoy interesado en el plan ${planName} de Hosting. Me podrían brindar más información?`;
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   const features = [
     'SSL Gratuito incluido',
@@ -25,26 +32,26 @@ export default function HostingProfesional() {
   const plans = [
     {
       name: 'Básico',
-      price: '$5/mes',
-      storage: '10 GB SSD',
+      price: 'Q40/mes',
+      storage: '8 GB NVMe',
       domains: '1 dominio',
       emails: '10 cuentas email',
       features: ['SSL Gratuito', 'Backup diario', 'cPanel', 'Soporte 24/7']
     },
     {
       name: 'Profesional',
-      price: '$12/mes',
-      storage: '50 GB SSD',
-      domains: '5 dominios',
+      price: 'Q120/mes',
+      storage: '35 GB NVMe',
+      domains: '3 dominios',
       emails: '50 cuentas email',
       features: ['Todo lo del plan Básico', 'CDN incluido', 'Certificado premium', 'Migración gratuita'],
       recommended: true
     },
     {
       name: 'Empresarial',
-      price: '$25/mes',
-      storage: '100 GB SSD',
-      domains: 'Dominios ilimitados',
+      price: 'Q250/mes',
+      storage: '70 GB NVMe',
+      domains: '10 Dominios',
       emails: 'Cuentas email ilimitadas',
       features: ['Todo lo del plan Profesional', 'IP dedicada', 'Servidor privado virtual', 'Soporte prioritario']
     }
@@ -106,9 +113,16 @@ export default function HostingProfesional() {
                   </li>
                 ))}
               </ul>
-              <button className={`w-full py-3 bg-gradient-to-r ${gradients.primary} text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25`}>
-                Contratar Plan
+              <button 
+                onClick={() => handleWhatsAppContact(plan.name)}
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 mb-2"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Consultar por WhatsApp</span>
               </button>
+              {/* <button className={`w-full py-3 bg-gradient-to-r ${gradients.primary} text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25`}>
+                Contratar Plan
+              </button> */}
             </div>
           ))}
         </div>

@@ -7,7 +7,7 @@ interface SEOProps {
   canonical?: string
   ogImage?: string
   structuredData?: Record<string, unknown>
-  pageType?: 'home' | 'services' | 'about' | 'contact' | 'portfolio' | 'hosting' | 'desarrollo' | 'integracion'
+  pageType?: 'home' | 'services' | 'about' | 'contact' | 'portfolio' | 'hosting' | 'desarrollo' | 'integracion' | 'cotizacion' | 'estimacion' | 'triangulo'
   section?: string
   priority?: 'high' | 'medium' | 'low'
   // Nuevas propiedades para optimización avanzada
@@ -337,7 +337,7 @@ function addBusinessSchema(businessInfo: { name: string; phone: string; address:
 }
 
 // Hook optimizado para SEO de página completa
-export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' | 'portfolio' | 'hosting' | 'desarrollo' | 'integracion') => {
+export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' | 'portfolio' | 'hosting' | 'desarrollo' | 'integracion' | 'cotizacion' | 'estimacion' | 'triangulo') => {
   const baseCanonical = 'https://codedmo.dev'
   
   const pageConfigs = {
@@ -537,19 +537,121 @@ export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' |
       ]
     },
     desarrollo: {
-      title: 'Software a Medida | CODEDMO',
-      description: 'Desarrollo de software a medida, aplicaciones empresariales y sistemas personalizados para tu negocio. Tecnologías modernas y escalables.',
+      title: 'Desarrollo | CODEDMO',
+      description: 'Servicios profesionales de desarrollo de software: aplicaciones web con React/Next.js, apps móviles iOS/Android, software empresarial a medida y APIs robustas. +50 proyectos exitosos en Guatemala.',
       keywords: [
-        'desarrollo software a medida',
-        'software empresarial Guatemala',
-        'sistemas personalizados',
-        'automatización empresarial',
-        'desarrollo custom Guatemala'
+        'desarrollo software profesional Guatemala',
+        'desarrollo web React Next.js',
+        'aplicaciones móviles iOS Android',
+        'software empresarial a medida',
+        'desarrollo APIs integraciones',
+        'programación TypeScript Node.js',
+        'desarrollo fullstack Guatemala',
+        'aplicaciones web modernas',
+        'software personalizado empresas',
+        'desarrollo tecnológico Guatemala'
       ],
-      canonical: `${baseCanonical}/desarrollo`,
+      canonical: `${baseCanonical}/servicios/desarrollo`,
+      ogImage: `${baseCanonical}/images/desarrollo-hero.png`,
+      structuredData: {
+        '@context': 'https://schema.org',
+        '@type': 'Service',
+        name: 'Servicios de Desarrollo de Software',
+        description: 'Desarrollo profesional de aplicaciones web, móviles, software empresarial y APIs con tecnologías modernas como React, Next.js, TypeScript y Node.js.',
+        provider: {
+          '@type': 'Organization',
+          name: 'CODEDMO Solutions',
+          alternateName: 'CODEDMO',
+          url: baseCanonical,
+          logo: `${baseCanonical}/favicon.ico`,
+          foundingDate: '2022',
+          numberOfEmployees: '5-10',
+          contactPoint: {
+            '@type': 'ContactPoint',
+            telephone: '+502-3792-3612',
+            contactType: 'customer service',
+            areaServed: 'GT',
+            availableLanguage: 'Spanish'
+          },
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'GT',
+            addressRegion: 'Guatemala',
+            addressLocality: 'Guatemala'
+          },
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: '4.9',
+            reviewCount: '47',
+            bestRating: '5',
+            worstRating: '1'
+          }
+        },
+        serviceType: 'Software Development',
+        category: 'Technology Services',
+        areaServed: {
+          '@type': 'Country',
+          name: 'Guatemala'
+        },
+        hasOfferCatalog: {
+          '@type': 'OfferCatalog',
+          name: 'Servicios de Desarrollo de Software',
+          itemListElement: [
+            {
+              '@type': 'Offer',
+              itemOffered: {
+                '@type': 'Service',
+                name: 'Desarrollo Web Profesional',
+                description: 'Aplicaciones web modernas con React, Next.js, TypeScript y diseño responsivo optimizado para SEO',
+                category: 'Web Development'
+              }
+            },
+            {
+              '@type': 'Offer',
+              itemOffered: {
+                '@type': 'Service',
+                name: 'Desarrollo de Aplicaciones Móviles',
+                description: 'Apps nativas e híbridas para iOS y Android con diseño moderno y funcionalidades avanzadas',
+                category: 'Mobile Development'
+              }
+            },
+            {
+              '@type': 'Offer',
+              itemOffered: {
+                '@type': 'Service',
+                name: 'Software Empresarial a Medida',
+                description: 'Soluciones empresariales personalizadas, escalables y con integración a sistemas existentes',
+                category: 'Custom Software'
+              }
+            },
+            {
+              '@type': 'Offer',
+              itemOffered: {
+                '@type': 'Service',
+                name: 'Desarrollo de APIs e Integraciones',
+                description: 'APIs robustas, microservicios y integración con sistemas ERP, CRM y servicios de terceros',
+                category: 'API Development'
+              }
+            }
+          ]
+        },
+        knowsAbout: [
+          'React Development',
+          'Next.js Development', 
+          'TypeScript Programming',
+          'Node.js Backend',
+          'Mobile App Development',
+          'API Development',
+          'Database Design',
+          'Software Architecture',
+          'DevOps Practices',
+          'Agile Development'
+        ]
+      },
       breadcrumbs: [
         { name: 'Inicio', url: baseCanonical },
-        { name: 'Desarrollo', url: `${baseCanonical}/desarrollo` }
+        { name: 'Servicios', url: `${baseCanonical}/servicios` },
+        { name: 'Desarrollo', url: `${baseCanonical}/servicios/desarrollo` }
       ]
     },
     integracion: {
@@ -567,6 +669,59 @@ export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' |
         { name: 'Inicio', url: baseCanonical },
         { name: 'Integración', url: `${baseCanonical}/integracion` }
       ]
+    },
+    cotizacion: {
+      title: 'Cotización de Proyectos | CODEDMO',
+      description: 'Solicita una cotización gratuita para tu proyecto tecnológico. Presupuestos detallados y consulta técnica sin costo ni compromiso.',
+      keywords: [
+        'cotización desarrollo software',
+        'presupuesto proyecto web',
+        'consulta técnica gratuita',
+        'estimación desarrollo Guatemala',
+        'precio aplicaciones móviles'
+      ],
+      canonical: `${baseCanonical}/servicios/cotizacion`,
+      breadcrumbs: [
+        { name: 'Inicio', url: baseCanonical },
+        { name: 'Servicios', url: `${baseCanonical}/servicios` },
+        { name: 'Cotización', url: `${baseCanonical}/servicios/cotizacion` }
+      ]
+    },
+    estimacion: {
+      title: 'Estimación Rápida - Calculadora de Proyectos | CODEDMO',
+      description: 'Herramientas de estimación rápida para proyectos web. Cotizador inteligente y análisis del triángulo de hierro.',
+      keywords: [
+        'estimación proyectos desarrollo',
+        'calculadora costos web',
+        'cotizador automático',
+        'presupuesto inmediato',
+        'herramientas estimación'
+      ],
+      canonical: `${baseCanonical}/servicios/cotizacion/estimacion-rapida`,
+      breadcrumbs: [
+        { name: 'Inicio', url: baseCanonical },
+        { name: 'Servicios', url: `${baseCanonical}/servicios` },
+        { name: 'Cotización', url: `${baseCanonical}/servicios/cotizacion` },
+        { name: 'Estimación Rápida', url: `${baseCanonical}/servicios/cotizacion/estimacion-rapida` }
+      ]
+    },
+    triangulo: {
+      title: 'Triángulo de Hierro - Análisis de Proyectos | CODEDMO',
+      description: 'Herramienta interactiva del Triángulo de Hierro para analizar la relación entre calidad, tiempo y costo en proyectos de desarrollo.',
+      keywords: [
+        'triángulo hierro gestión',
+        'análisis calidad tiempo costo',
+        'planificación proyectos desarrollo',
+        'project management herramientas',
+        'optimización recursos proyecto'
+      ],
+      canonical: `${baseCanonical}/servicios/cotizacion/estimacion-rapida#triangulo`,
+      breadcrumbs: [
+        { name: 'Inicio', url: baseCanonical },
+        { name: 'Servicios', url: `${baseCanonical}/servicios` },
+        { name: 'Cotización', url: `${baseCanonical}/servicios/cotizacion` },
+        { name: 'Triángulo de Hierro', url: `${baseCanonical}/servicios/cotizacion/estimacion-rapida#triangulo` }
+      ]
     }
   }
 
@@ -582,9 +737,22 @@ export const useSectionSEO = (sectionType: string, parentPage?: string) => {
       keywords: ['desarrollo de software', 'aplicaciones web', 'desarrollo móvil', 'React', 'Node.js', 'TypeScript']
     },
     'servicios-web': {
-      title: 'Desarrollo Web | CODEDMO',
-      description: 'Desarrollamos aplicaciones web modernas, responsivas y optimizadas con React, Next.js y las últimas tecnologías.',
-      keywords: ['desarrollo web', 'React', 'Next.js', 'aplicaciones web', 'frontend', 'backend']
+      title: 'Desarrollo Web Profesional - Sitios Web Modernos | CODEDMO',
+      description: 'Desarrollo web profesional con React, Next.js y TypeScript. Sitios web modernos, responsivos, optimizados para SEO y de alta conversión. Landing pages, e-commerce y sitios corporativos en Guatemala.',
+      keywords: [
+        'desarrollo web profesional Guatemala',
+        'sitios web modernos React',
+        'desarrollo Next.js TypeScript',
+        'páginas web responsivas',
+        'desarrollo e-commerce Guatemala',
+        'landing pages alta conversión',
+        'sitios web corporativos',
+        'optimización SEO web',
+        'desarrollo frontend backend',
+        'aplicaciones web Guatemala',
+        'diseño web responsive',
+        'programación web moderna'
+      ]
     },
     'servicios-movil': {
       title: 'Apps Móviles | CODEDMO',
@@ -592,9 +760,22 @@ export const useSectionSEO = (sectionType: string, parentPage?: string) => {
       keywords: ['desarrollo móvil', 'apps móviles', 'React Native', 'Flutter', 'iOS', 'Android']
     },
     'servicios-software': {
-      title: 'Software a Medida | CODEDMO',
-      description: 'Desarrollamos software empresarial personalizado que se adapta perfectamente a las necesidades de tu negocio.',
-      keywords: ['software a medida', 'software empresarial', 'sistemas personalizados', 'automatización']
+      title: 'Desarrollo de Software Personalizado - Soluciones a Medida | CODEDMO',
+      description: 'Desarrollo de software empresarial personalizado: sistemas ERP, CRM, aplicaciones a medida y automatización de procesos. Soluciones escalables con tecnologías modernas en Guatemala.',
+      keywords: [
+        'desarrollo software personalizado Guatemala',
+        'software empresarial a medida',
+        'sistemas ERP CRM Guatemala',
+        'automatización procesos empresariales',
+        'aplicaciones empresariales custom',
+        'desarrollo sistemas gestión',
+        'software escalable empresas',
+        'soluciones tecnológicas medida',
+        'programación software corporativo',
+        'desarrollo aplicaciones negocio',
+        'sistemas información empresarial',
+        'software gestión empresarial'
+      ]
     },
     'servicios-hosting': {
       title: 'Hosting | CODEDMO',

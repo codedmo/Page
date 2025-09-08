@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Triangle, AlertTriangle, CheckCircle, TrendingUp, TrendingDown, Info } from 'lucide-react';
 import { gradients } from '@/config/theme-colors';
+import { useSEO } from '@/hooks/useSEO';
 
 interface TriangleValues {
   quality: number;
@@ -27,6 +28,29 @@ export default function IronTriangleModern() {
   const [selectedPreset, setSelectedPreset] = useState("custom");
   const [showAnalysis, setShowAnalysis] = useState(false);
 
+  // SEO para Triángulo de Hierro
+  useSEO({
+    title: 'Triángulo de Hierro - Análisis de Proyectos | CODEDMO',
+    description: 'Herramienta interactiva del Triángulo de Hierro para analizar la relación entre calidad, tiempo y costo en proyectos de desarrollo. Optimiza la gestión de tu proyecto.',
+    keywords: ['triángulo hierro', 'gestión proyectos', 'calidad tiempo costo', 'análisis proyectos', 'planificación desarrollo', 'project management'],
+    canonical: '/servicios/cotizacion/estimacion-rapida#triangulo',
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Triángulo de Hierro - Análisis de Proyectos",
+      "description": "Herramienta interactiva para analizar la relación entre calidad, tiempo y costo en proyectos de desarrollo",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "GTQ"
+      }
+    },
+    section: 'estimation-tools',
+    priority: 'medium'
+  });
+
   // Configuraciones predefinidas
   const presetConfigurations = {
     custom: { quality: 50, time: 50, cost: 50 },
@@ -38,7 +62,99 @@ export default function IronTriangleModern() {
     mvp: { quality: 25, time: 71, cost: 25 }
   };
 
-  // Función para analizar la viabilidad
+  // Función para calcular ajustes automáticos basado en las reglas del triángulo de hierro
+  // NOTA: Función deshabilitada - ahora los sliders funcionan independientemente
+  /*
+  const calculateDynamicAdjustment = (changedParam: keyof TriangleValues, newValue: number, currentValues: TriangleValues) => {
+    const adjusted = { ...currentValues, [changedParam]: newValue };
+    
+    // REGLA 1: Mayor calidad necesita más tiempo o más costo
+    if (changedParam === 'quality') {
+      const qualityIncrease = newValue - currentValues.quality;
+      
+      if (qualityIncrease > 0) {
+        // Calidad aumentó - necesita más tiempo O más costo
+        const timeDeficit = Math.max(0, newValue - currentValues.time);
+        const costDeficit = Math.max(0, newValue - currentValues.cost);
+        
+        if (timeDeficit > 0 && costDeficit > 0) {
+          // Ambos están por debajo, distribuir el ajuste
+          const totalDeficit = timeDeficit + costDeficit;
+          const timeAdjustment = (timeDeficit / totalDeficit) * qualityIncrease * 0.7;
+          const costAdjustment = (costDeficit / totalDeficit) * qualityIncrease * 0.7;
+          
+          adjusted.time = Math.round(Math.min(100, currentValues.time + timeAdjustment));
+          adjusted.cost = Math.round(Math.min(100, currentValues.cost + costAdjustment));
+        } else if (timeDeficit > costDeficit) {
+          // Tiempo necesita más ajuste
+          adjusted.time = Math.round(Math.min(100, currentValues.time + qualityIncrease * 0.6));
+        } else {
+          // Costo necesita más ajuste
+          adjusted.cost = Math.round(Math.min(100, currentValues.cost + qualityIncrease * 0.6));
+        }
+      } else if (qualityIncrease < 0) {
+        // Calidad disminuyó - permite reducir tiempo o costo
+        const reduction = Math.abs(qualityIncrease) * 0.4;
+        adjusted.time = Math.round(Math.max(10, currentValues.time - reduction * 0.5));
+        adjusted.cost = Math.round(Math.max(10, currentValues.cost - reduction * 0.5));
+      }
+    }
+    
+    // REGLA 2: Menos tiempo necesita menos calidad o más costo
+    if (changedParam === 'time') {
+      const timeChange = newValue - currentValues.time;
+      
+      if (timeChange < 0) {
+        // Tiempo disminuyó - necesita menos calidad O más costo
+        const timeReduction = Math.abs(timeChange);
+        
+        if (currentValues.quality > currentValues.cost) {
+          // Reducir calidad más que aumentar costo
+          adjusted.quality = Math.round(Math.max(10, currentValues.quality - timeReduction * 0.8));
+          adjusted.cost = Math.round(Math.min(100, currentValues.cost + timeReduction * 0.3));
+        } else {
+          // Aumentar costo más que reducir calidad
+          adjusted.cost = Math.round(Math.min(100, currentValues.cost + timeReduction * 0.8));
+          adjusted.quality = Math.round(Math.max(10, currentValues.quality - timeReduction * 0.3));
+        }
+      } else if (timeChange > 0) {
+        // Tiempo aumentó - permite más calidad sin aumentar tanto el costo
+        const timeIncrease = timeChange;
+        adjusted.quality = Math.round(Math.min(100, currentValues.quality + timeIncrease * 0.5));
+      }
+    }
+    
+    // REGLA 3: Menos costo necesita más tiempo o menos calidad
+    if (changedParam === 'cost') {
+      const costChange = newValue - currentValues.cost;
+      
+      if (costChange < 0) {
+        // Costo disminuyó - necesita más tiempo O menos calidad
+        const costReduction = Math.abs(costChange);
+        
+        if (currentValues.quality > currentValues.time) {
+          // Reducir calidad más que aumentar tiempo
+          adjusted.quality = Math.round(Math.max(10, currentValues.quality - costReduction * 0.8));
+          adjusted.time = Math.round(Math.min(100, currentValues.time + costReduction * 0.4));
+        } else {
+          // Aumentar tiempo más que reducir calidad
+          adjusted.time = Math.round(Math.min(100, currentValues.time + costReduction * 0.8));
+          adjusted.quality = Math.round(Math.max(10, currentValues.quality - costReduction * 0.4));
+        }
+      } else if (costChange > 0) {
+        // Costo aumentó - permite más calidad o menos tiempo
+        const costIncrease = costChange;
+        if (currentValues.quality < 70) {
+          adjusted.quality = Math.round(Math.min(100, currentValues.quality + costIncrease * 0.6));
+        }
+      }
+    }
+    
+    return adjusted;
+  };
+  */
+
+  // Función para analizar la viabilidad mejorada
   const analyzeViability = (): Analysis => {
     const warnings: string[] = [];
     const recommendations: string[] = [];
@@ -47,60 +163,106 @@ export default function IronTriangleModern() {
     let isProfitable = true;
     let riskLevel: 'low' | 'medium' | 'high' = 'low';
     
-    // Análisis de coherencia
-    const qualityTimeGap = Math.abs(values.quality - values.time);
-    const qualityCostGap = Math.abs(values.quality - values.cost);
-    const timeCostGap = Math.abs(values.time - values.cost);
+    // Análisis de las reglas del triángulo de hierro
+    const qualityTimeIndex = (values.quality + values.time) / 2;
+    const qualityCostIndex = (values.quality + values.cost) / 2;
+    const timeCostIndex = (values.time + values.cost) / 2;
     
-    // Configuraciones problemáticas
-    if (values.quality >= 80 && values.time <= 30) {
-      isViable = false;
-      warnings.push("Alta calidad con poco tiempo es técnicamente imposible");
-      recommendations.push("Aumentar tiempo a mínimo 60% o reducir calidad a 50%");
-      riskLevel = 'high';
+    // REGLA 1: Mayor calidad necesita más tiempo o más costo
+    if (values.quality > 70) {
+      if (values.time < 50 && values.cost < 50) {
+        isViable = false;
+        warnings.push("Alta calidad requiere más tiempo O más presupuesto");
+        recommendations.push("Aumentar tiempo a 60%+ o presupuesto a 60%+");
+        riskLevel = 'high';
+      } else if (values.time < 40 || values.cost < 40) {
+        warnings.push("Calidad alta con recursos limitados");
+        recommendations.push("Para calidad premium, considere más tiempo o presupuesto");
+        riskLevel = riskLevel === 'low' ? 'medium' : 'high';
+      }
     }
     
-    if (values.quality >= 70 && values.cost <= 25) {
-      isProfitable = false;
-      warnings.push("Alta calidad con presupuesto muy bajo no es rentable");
-      recommendations.push("Incrementar presupuesto para mantener la calidad");
+    // REGLA 2: Menos tiempo necesita menos calidad o más costo
+    if (values.time < 30) {
+      if (values.quality > 60 && values.cost < 60) {
+        isViable = false;
+        warnings.push("Poco tiempo requiere reducir calidad O aumentar presupuesto");
+        recommendations.push("Reducir calidad a 50% o aumentar presupuesto a 70%+");
+        riskLevel = 'high';
+      } else if (values.quality > 50) {
+        warnings.push("Tiempo limitado para la calidad deseada");
+        recommendations.push("Con poco tiempo, considere reducir alcance o aumentar presupuesto");
+        if (riskLevel === 'low') riskLevel = 'medium';
+      }
     }
     
-    if (values.time <= 20 && values.cost <= 30) {
-      warnings.push("Tiempo y presupuesto extremadamente limitados");
-      riskLevel = 'high';
+    // REGLA 3: Menos costo necesita más tiempo o menos calidad
+    if (values.cost < 30) {
+      if (values.quality > 50 && values.time < 60) {
+        isViable = false;
+        warnings.push("Bajo presupuesto requiere más tiempo O menos calidad");
+        recommendations.push("Aumentar tiempo a 70%+ o reducir calidad a 40%");
+        riskLevel = 'high';
+      } else if (values.quality > 40) {
+        warnings.push("Presupuesto limitado para la calidad esperada");
+        recommendations.push("Con presupuesto ajustado, considere más tiempo de desarrollo");
+        riskLevel = riskLevel === 'high' ? 'high' : 'medium';
+      }
     }
     
-    // Análisis de gaps grandes entre factores
-    if (qualityTimeGap > 50) {
-      warnings.push("Gran desbalance entre calidad y tiempo");
-      if (riskLevel === 'low') riskLevel = 'medium';
+    // Configuraciones optimizadas
+    if (qualityTimeIndex >= 60 && qualityCostIndex >= 60 && timeCostIndex >= 60) {
+      recommendations.push("Configuración premium bien balanceada");
+      isProfitable = true;
+    } else if (qualityTimeIndex <= 40 && qualityCostIndex <= 40 && timeCostIndex <= 40) {
+      recommendations.push("Configuración económica - verificar expectativas");
+      if (values.quality < 25) {
+        isProfitable = false;
+        warnings.push("Calidad muy baja puede afectar la viabilidad comercial");
+      }
     }
     
-    if (qualityCostGap > 45) {
-      warnings.push("Desbalance significativo entre calidad y costo");
-      if (riskLevel === 'low') riskLevel = 'medium';
+    // Casos especiales de equilibrio
+    const triangleBalance = Math.abs(values.quality - values.time) + Math.abs(values.quality - values.cost) + Math.abs(values.time - values.cost);
+    
+    if (triangleBalance <= 30) {
+      recommendations.push("Excelente equilibrio entre los tres factores");
+      riskLevel = 'low';
+    } else if (triangleBalance > 80) {
+      warnings.push("Gran desequilibrio entre factores del proyecto");
+      riskLevel = riskLevel === 'high' ? 'high' : 'medium';
     }
     
-    // Configuraciones óptimas
-    if (qualityTimeGap <= 20 && qualityCostGap <= 20 && timeCostGap <= 20) {
-      recommendations.push("Configuración bien balanceada");
+    // Análisis de rentabilidad basado en reglas
+    const projectValue = (values.quality * 0.4) + (values.time * 0.3) + (values.cost * 0.3);
+    if (projectValue >= 70) {
+      recommendations.push("Proyecto de alto valor con excelente potencial");
+    } else if (projectValue <= 35) {
+      recommendations.push("Proyecto de valor limitado - revisar objetivos");
+      if (projectValue <= 25) {
+        isProfitable = false;
+      }
     }
     
-    // Análisis de rentabilidad
-    const avgValue = (values.quality + values.time + values.cost) / 3;
-    if (avgValue >= 70) {
-      recommendations.push("Proyecto premium con alta inversión");
-    } else if (avgValue <= 30) {
-      recommendations.push("Proyecto económico, verificar viabilidad");
+    // Cálculo simplificado y proporcional del score
+    // triangleBalance ya está calculado arriba
+    
+    // Score base: promedio simple de los tres valores (60% del score total)
+    const averageValue = (values.quality + values.time + values.cost) / 3;
+    
+    // Penalización por desequilibrio (40% del score total)
+    // Cuanto más equilibrados estén los valores, mejor score
+    const maxBalance = 200; // Máximo desequilibrio posible (100+100+0)
+    const balanceScore = ((maxBalance - triangleBalance) / maxBalance) * 40;
+    
+    // Penalización por configuraciones no viables (solo si realmente es problemático)
+    let viabilityPenalty = 0;
+    if (!isViable) {
+      viabilityPenalty = 15; // Penalización fija por no viabilidad
     }
     
-    // Cálculo de score
-    const balance = 100 - Math.max(qualityTimeGap, qualityCostGap, timeCostGap);
-    const viabilityScore = isViable ? 25 : 0;
-    const profitabilityScore = isProfitable ? 25 : 0;
-    const riskScore = riskLevel === 'low' ? 25 : riskLevel === 'medium' ? 15 : 5;
-    const score = Math.round((balance + viabilityScore + profitabilityScore + riskScore) / 4);
+    // Score final: base + equilibrio - penalizaciones
+    const score = Math.round((averageValue * 0.6) + balanceScore - viabilityPenalty);
     
     return {
       isViable,
@@ -108,11 +270,12 @@ export default function IronTriangleModern() {
       riskLevel,
       recommendations,
       warnings,
-      score
+      score: Math.max(0, Math.min(100, score))
     };
   };
 
   const handleSliderChange = (param: keyof TriangleValues, value: number) => {
+    // Cambio independiente - solo actualizar el parámetro que se está moviendo
     setValues({ ...values, [param]: value });
     setSelectedPreset("custom");
   };
@@ -282,10 +445,39 @@ export default function IronTriangleModern() {
             </div>
             <div className="w-full bg-white/20 rounded-full h-3">
               <div 
-                className={`h-3 rounded-full bg-gradient-to-r ${gradients.primary} transition-all duration-500`}
+                className={`h-3 rounded-full transition-all duration-500 ${
+                  analysis.score >= 70 ? 'bg-gradient-to-r from-green-400 to-green-500' :
+                  analysis.score >= 40 ? 'bg-gradient-to-r from-yellow-400 to-yellow-500' :
+                  'bg-gradient-to-r from-red-400 to-red-500'
+                }`}
                 style={{ width: `${analysis.score}%` }}
               ></div>
             </div>
+          </div>
+
+          {/* Indicador de control independiente */}
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+            <h3 className="text-lg font-bold text-white mb-4 flex items-center">
+              <TrendingUp className="w-5 h-5 mr-2 text-blue-400" />
+              Control Independiente
+            </h3>
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center justify-between p-2 bg-white/5 rounded-lg">
+                <span className="text-gray-300">Calidad →</span>
+                <span className="text-blue-400">Control manual independiente</span>
+              </div>
+              <div className="flex items-center justify-between p-2 bg-white/5 rounded-lg">
+                <span className="text-gray-300">Tiempo →</span>
+                <span className="text-yellow-400">Control manual independiente</span>
+              </div>
+              <div className="flex items-center justify-between p-2 bg-white/5 rounded-lg">
+                <span className="text-gray-300">Costo →</span>
+                <span className="text-red-400">Control manual independiente</span>
+              </div>
+            </div>
+            <p className="text-xs text-gray-400 mt-3 italic">
+              Cada slider se mueve independientemente. El análisis te dirá si la combinación es viable.
+            </p>
           </div>
 
           {/* Estado del proyecto */}

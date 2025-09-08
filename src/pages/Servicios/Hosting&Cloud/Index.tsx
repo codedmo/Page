@@ -1,5 +1,5 @@
 import { Outlet, useLocation, Link } from 'react-router-dom';
-import { Server, Cloud, Globe, Shield, Zap, CheckCircle } from 'lucide-react';
+import { Server, Cloud,  Shield, Zap, CheckCircle } from 'lucide-react';
 import { gradients, borders } from '@/config/theme-colors';
 import { useSEO } from '@/hooks/useSEO';
 
@@ -22,20 +22,20 @@ export default function Hosting_Cloud() {
       path: '/servicios/hosting&cloud/hosting',
       features: ['SSL Gratis', 'Backup Diario', 'Soporte 24/7', 'cPanel incluido']
     },
-    {
-      icon: Server,
-      title: 'Servicios Cloud',
-      description: 'Infraestructura escalable en la nube',
-      path: '/servicios/hosting&cloud/cloud',
-      features: ['Escalabilidad', 'Alta disponibilidad', 'Monitoreo 24/7', 'Backup automático']
-    },
-    {
-      icon: Globe,
-      title: 'Registro de Dominios',
-      description: 'Registro y gestión de dominios web',
-      path: '/servicios/hosting&cloud/dominios',
-      features: ['Gestión DNS', 'Protección privacidad', 'Renovación automática', 'Soporte técnico']
-    }
+    // {
+    //   icon: Server,
+    //   title: 'Servicios Cloud',
+    //   description: 'Infraestructura escalable en la nube',
+    //   path: '/servicios/hosting&cloud/cloud',
+    //   features: ['Escalabilidad', 'Alta disponibilidad', 'Monitoreo 24/7', 'Backup automático']
+    // },
+    // {
+    //   icon: Globe,
+    //   title: 'Registro de Dominios',
+    //   description: 'Registro y gestión de dominios web',
+    //   path: '/servicios/hosting&cloud/dominios',
+    //   features: ['Gestión DNS', 'Protección privacidad', 'Renovación automática', 'Soporte técnico']
+    // }
   ];
 
   // Si estamos en una subruta, mostrar el outlet

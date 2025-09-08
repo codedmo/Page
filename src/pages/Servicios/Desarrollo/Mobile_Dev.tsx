@@ -1,4 +1,4 @@
-import { Smartphone, Tablet, Download, CheckCircle, Code, Zap } from 'lucide-react';
+import { Smartphone, Tablet, Download, CheckCircle, Code, Zap, MessageCircle } from 'lucide-react';
 import { gradients } from '@/config/theme-colors';
 import { useSEO } from '@/hooks/useSEO';
 
@@ -10,6 +10,13 @@ export default function Mobile_Dev() {
     keywords: ['desarrollo móvil', 'apps ios', 'apps android', 'react native', 'flutter', 'aplicaciones móviles'],
     canonical: '/servicios/desarrollo/mobile'
   });
+
+  const handleWhatsAppContact = (serviceName: string) => {
+    const phoneNumber = '+50237923612';
+    const message = `Hola! Estoy interesado en el servicio de ${serviceName}. Me podrían brindar más información?`;
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   const features = [
     'Apps nativas iOS/Android',
@@ -28,7 +35,7 @@ export default function Mobile_Dev() {
       description: 'Máximo rendimiento para iOS y Android',
       icon: Smartphone,
       features: ['Swift/Kotlin', 'Rendimiento óptimo', 'Acceso completo al hardware', 'App Store optimizado'],
-      price: 'Desde $3,000',
+      price: 'Desde Q12,000',
       time: '3-6 meses',
       platforms: ['iOS', 'Android']
     },
@@ -37,7 +44,7 @@ export default function Mobile_Dev() {
       description: 'Una app para iOS y Android',
       icon: Tablet,
       features: ['React Native/Flutter', 'Código compartido', 'Desarrollo más rápido', 'Menor costo'],
-      price: 'Desde $2,000',
+      price: 'Desde Q8,000',
       time: '2-4 meses',
       platforms: ['iOS', 'Android', 'Web']
     },
@@ -46,7 +53,7 @@ export default function Mobile_Dev() {
       description: 'Progressive Web App',
       icon: Download,
       features: ['Funciona sin conexión', 'Instalable desde navegador', 'Push notifications', 'Responsive design'],
-      price: 'Desde $1,000',
+      price: 'Desde Q5,000',
       time: '1-2 meses',
       platforms: ['iOS', 'Android', 'Web', 'Desktop']
     }
@@ -149,7 +156,7 @@ export default function Mobile_Dev() {
                   </li>
                 ))}
               </ul>
-              <div className="border-t border-white/10 pt-4 space-y-2">
+              <div className="border-t border-white/10 pt-4 space-y-2 mb-4">
                 <div className="text-purple-400 font-bold text-lg">{type.price}</div>
                 <div className="text-gray-400 text-sm">Tiempo: {type.time}</div>
                 <div className="flex flex-wrap gap-2 mt-3">
@@ -160,6 +167,13 @@ export default function Mobile_Dev() {
                   ))}
                 </div>
               </div>
+              <button 
+                onClick={() => handleWhatsAppContact(type.title)}
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Consultar por WhatsApp</span>
+              </button>
             </div>
           ))}
         </div>

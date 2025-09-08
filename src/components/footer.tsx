@@ -80,7 +80,7 @@ export default function Footer() {
               <div className="mb-6">
                 <Link to="/" className="flex items-center space-x-2">
                   <img 
-                    src="/codedmo-logo.svg" 
+                    src="/codedmo-logo-white-horizontal.svg" 
                     alt="CODEDMO Logo" 
                     className="h-8 w-auto"
                   />
@@ -173,13 +173,13 @@ export default function Footer() {
 
             {/* Newsletter y legal */}
             <div>
-              <h3 className="text-lg font-semibold text-white mb-6">Mantente Conectado</h3>
+              {/* <h3 className="text-lg font-semibold text-white mb-6">Mantente Conectado</h3>
               <p className="text-gray-300 mb-4">
                 Recibe las últimas noticias sobre tecnología y nuestros servicios.
-              </p>
+              </p> */}
               
               {/* Newsletter form */}
-              <div className="mb-6">
+              {/* <div className="mb-6">
                 <div className="flex">
                   <input
                     type="email"
@@ -193,7 +193,7 @@ export default function Footer() {
                 <p className="text-xs text-gray-400 mt-2">
                   No spam. Solo contenido valioso sobre tecnología.
                 </p>
-              </div>
+              </div> */}
 
               {/* Enlaces legales */}
               <div>

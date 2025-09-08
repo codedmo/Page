@@ -166,20 +166,20 @@ export default function Servicios() {
           path: '/servicios/hosting&cloud/hosting',
           description: 'Hosting seguro, rápido y confiable con SSL'
         },
-        {
-          id: 'hosting-cloud',
-          name: 'Servicios Cloud',
-          icon: Server,
-          path: '/servicios/hosting&cloud/cloud',
-          description: 'Infraestructura escalable en la nube'
-        },
-        {
-          id: 'hosting-dominio',
-          name: 'Registro de Dominios',
-          icon: Globe,
-          path: '/servicios/hosting&cloud/dominios',
-          description: 'Registro y gestión de dominios web'
-        }
+        // {
+        //   id: 'hosting-cloud',
+        //   name: 'Servicios Cloud',
+        //   icon: Server,
+        //   path: '/servicios/hosting&cloud/cloud',
+        //   description: 'Infraestructura escalable en la nube'
+        // },
+        // {
+        //   id: 'hosting-dominio',
+        //   name: 'Registro de Dominios',
+        //   icon: Globe,
+        //   path: '/servicios/hosting&cloud/dominios',
+        //   description: 'Registro y gestión de dominios web'
+        // }
       ]
     },
     {
@@ -215,13 +215,13 @@ export default function Servicios() {
       name: 'Cotización',
       icon: Calculator,
       items: [
-        {
-          id: 'cotizar-proyecto',
-          name: 'Cotización de Proyecto',
-          icon: Calculator,
-          path: '/servicios/cotizacion',
-          description: 'Cotización detallada y personalizada gratuita'
-        },
+        // {
+        //   id: 'cotizar-proyecto',
+        //   name: 'Cotización de Proyecto',
+        //   icon: Calculator,
+        //   path: '/servicios/cotizacion',
+        //   description: 'Cotización detallada y personalizada gratuita'
+        // },
         {
           id: 'consulta-gratis',
           name: 'Consulta Gratuita',

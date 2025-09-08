@@ -350,7 +350,7 @@ export default function Navbar() {
             aria-label="Ir al inicio"
           >
             <img 
-              src="/codedmo-logo.svg" 
+              src="/codedmo-logo-white-horizontal.svg" 
               alt="CODEDMO Logo" 
               width={120} 
               height={40} 

@@ -2,6 +2,7 @@ import { MessageCircle, Calendar, CheckCircle, Phone, Clock } from 'lucide-react
 import { gradients } from '@/config/theme-colors';
 import { useSEO } from '@/hooks/useSEO';
 import { Link } from 'react-router-dom';
+import Contact from '@/components/contact';
 
 export default function Consulta_Gratuita() {
   // SEO para Consulta Gratuita
@@ -98,47 +99,8 @@ export default function Consulta_Gratuita() {
 
         {/* Contact Form */}
         <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-          <h3 className="text-xl font-bold text-white mb-6">Solicita tu consulta</h3>
-          <form className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Nombre completo</label>
-              <input 
-                type="text" 
-                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
-                placeholder="Tu nombre"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
-              <input 
-                type="email" 
-                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
-                placeholder="tu@email.com"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Teléfono</label>
-              <input 
-                type="tel" 
-                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
-                placeholder="+502 0000-0000"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Describe tu proyecto</label>
-              <textarea 
-                rows={4}
-                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
-                placeholder="Cuéntanos sobre tu proyecto o necesidad tecnológica..."
-              />
-            </div>
-            <button 
-              type="submit"
-              className={`w-full py-3 bg-gradient-to-r ${gradients.primary} text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105`}
-            >
-              Solicitar Consulta Gratuita
-            </button>
-          </form>
+          {/* <h3 className="text-xl font-bold text-white mb-6">Solicita tu consulta</h3> */}
+          <Contact />
         </div>
       </div>
 

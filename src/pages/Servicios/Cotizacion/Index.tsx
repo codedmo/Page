@@ -15,16 +15,17 @@ export default function Cotizacion() {
   });
 
   const services = [
-    {
-      icon: Calculator,
-      title: 'Cotización Detallada',
-      description: 'Análisis completo y presupuesto personalizado',
-      path: '/servicios/cotizacion',
-      features: ['Análisis detallado', 'Presupuesto personalizado', 'Cronograma del proyecto', 'Sin costo ni compromiso'],
-      isMain: true
-    },
+    // {
+    //   icon: Calculator,
+    //   title: 'Cotización Detallada',
+    //   description: 'Análisis completo y presupuesto personalizado',
+    //   path: '/servicios/cotizacion',
+    //   features: ['Análisis detallado', 'Presupuesto personalizado', 'Cronograma del proyecto', 'Sin costo ni compromiso'],
+    //   isMain: true
+    // },
     {
       icon: MessageCircle,
+      isMain: true,
       title: 'Consulta Gratuita',
       description: 'Asesoría técnica sin costo ni compromiso',
       path: '/servicios/cotizacion/consulta',
@@ -80,6 +81,25 @@ export default function Cotizacion() {
 
       {/* Services Options */}
       <div className="grid md:grid-cols-3 gap-8 mb-12">
+        <div>
+          <h2 className="text-2xl font-bold text-white mb-8">¿Por qué cotizar con nosotros?</h2>
+          <div className="space-y-6">
+            {benefits.map((benefit, index) => {
+              const Icon = benefit.icon;
+              return (
+                <div key={index} className="flex items-start space-x-4">
+                  <div className={`flex-shrink-0 w-12 h-12 bg-gradient-to-r ${gradients.primary} rounded-lg flex items-center justify-center`}>
+                    <Icon className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white mb-2">{benefit.title}</h3>
+                    <p className="text-gray-400">{benefit.description}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
         {services.map((service, index) => {
           const Icon = service.icon;
           return (
@@ -121,9 +141,9 @@ export default function Cotizacion() {
       </div>
 
       {/* Main Contact Form */}
-      <div className="grid lg:grid-cols-2 gap-12 mb-12">
+      {/* <div className="grid lg:grid-cols-2 gap-12 mb-12"> */}
         {/* Benefits */}
-        <div>
+        {/* <div>
           <h2 className="text-2xl font-bold text-white mb-8">¿Por qué cotizar con nosotros?</h2>
           <div className="space-y-6">
             {benefits.map((benefit, index) => {
@@ -141,10 +161,10 @@ export default function Cotizacion() {
               );
             })}
           </div>
-        </div>
+        </div> */}
 
         {/* Contact Form */}
-        <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+        {/* <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
           <h3 className="text-xl font-bold text-white mb-6">Solicita tu cotización</h3>
           <form className="space-y-6">
             <div className="grid md:grid-cols-2 gap-4">
@@ -207,7 +227,7 @@ export default function Cotizacion() {
             </button>
           </form>
         </div>
-      </div>
+      </div> */}
 
       {/* Process Steps */}
       <div className="mb-12">
