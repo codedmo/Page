@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Calculator, CheckCircle, Clock, DollarSign, FileText, Download, Phone, Settings, Eye, EyeOff, X, Save } from 'lucide-react';
 import { gradients } from '@/config/theme-colors';
-import jsPDF from 'jspdf';
+import { PDFDocument, rgb } from 'pdf-lib';
 import { useSEO } from '@/hooks/useSEO';
 
 interface QuotationItem {
@@ -21,6 +21,7 @@ interface AdminSettings {
   hourlyRate: number;
   currency: string;
   hoursPerDay: number;
+  billingPercentage: number;
   isAuthenticated: boolean;
 }
 
@@ -30,6 +31,7 @@ const DEFAULT_SETTINGS: AdminSettings = {
   hourlyRate: 25,
   currency: 'Q',
   hoursPerDay: 5,
+  billingPercentage: 5,
   isAuthenticated: false
 };
 
@@ -909,6 +911,7 @@ export default function QuotationModern() {
   const [showPassword, setShowPassword] = useState(false);
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
   const [tempHours, setTempHours] = useState<number>(0);
+  const [showQuotationSummary, setShowQuotationSummary] = useState(false);
 
   // SEO para Cotizador Moderno
   useSEO({
@@ -935,7 +938,9 @@ export default function QuotationModern() {
 
   // Cálculos con configuración dinámica
   const selectedItemsList = selectedItems.filter(item => item.selected);
-  const totalPrice = selectedItemsList.reduce((sum, item) => sum + (item.hours * adminSettings.hourlyRate), 0);
+  const subtotalPrice = selectedItemsList.reduce((sum, item) => sum + (item.hours * adminSettings.hourlyRate), 0);
+  const billingAmount = subtotalPrice * (adminSettings.billingPercentage / 100);
+  const totalPrice = subtotalPrice + billingAmount;
   const totalHours = selectedItemsList.reduce((sum, item) => sum + item.hours, 0);
   const estimatedDays = Math.ceil(totalHours / adminSettings.hoursPerDay);
 
@@ -994,331 +999,199 @@ export default function QuotationModern() {
     window.open('tel:+50237923612', '_self');
   };
 
-  const generatePDF = async () => {
-    const doc = new jsPDF();
-    
-    // Colores modernos y tecnológicos
-    const colors = {
-      primary: [99, 102, 241], // Índigo
-      secondary: [139, 92, 246], // Violet
-      accent: [59, 130, 246], // Blue
-      techBlue: [20, 184, 166], // Teal
-      darkBg: [15, 23, 42], // Dark slate
-      cardBg: [30, 41, 59], // Slate
-      lightBg: [248, 250, 252], // Light gray
-      text: [51, 65, 85], // Dark text
-      lightText: [148, 163, 184], // Light text
-      success: [34, 197, 94],
-      warning: [245, 158, 11],
-      danger: [239, 68, 68]
+  // Función para generar el resumen de cotización
+  const generateQuotationSummary = () => {
+    const summary = {
+      fecha: new Date().toLocaleDateString('es-GT'),
+      cotizacionId: `COD-${Date.now().toString().slice(-6)}`,
+      cliente: 'Proyecto Personalizado',
+      elementos: selectedItemsList.map(item => ({
+        nombre: item.name,
+        categoria: item.category,
+        horas: item.hours,
+        complejidad: item.complexity,
+        descripcion: item.description,
+        costo: item.hours * adminSettings.hourlyRate
+      })),
+      resumen: {
+        totalElementos: selectedItemsList.length,
+        totalHoras: totalHours,
+        diasLaborales: estimatedDays,
+        subtotal: subtotalPrice,
+        iva: billingAmount,
+        total: totalPrice
+      },
+      configuracion: {
+        tarifaPorHora: adminSettings.hourlyRate,
+        moneda: adminSettings.currency,
+        porcentajeIVA: adminSettings.billingPercentage,
+        horasPorDia: adminSettings.hoursPerDay
+      },
+      categorias: categories.map(category => {
+        const items = selectedItemsList.filter(item => item.category === category);
+        const hours = items.reduce((sum, item) => sum + item.hours, 0);
+        const cost = hours * adminSettings.hourlyRate;
+        return {
+          categoria: category,
+          elementos: items.length,
+          horas: hours,
+          costo: cost
+        };
+      }).filter(cat => cat.elementos > 0)
     };
+    
+    return summary;
+  };
 
-    // ========== PÁGINA 1: PORTADA ==========
-    // Fondo degradado moderno
-    doc.setFillColor(colors.darkBg[0], colors.darkBg[1], colors.darkBg[2]);
-    doc.rect(0, 0, 210, 297, 'F');
-    
-    // Elementos geométricos decorativos
-    doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.circle(200, 30, 20, 'F');
-    doc.setFillColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-    doc.circle(15, 280, 15, 'F');
-    doc.setFillColor(colors.techBlue[0], colors.techBlue[1], colors.techBlue[2]);
-    doc.rect(180, 250, 30, 30, 'F');
-    
-    // Logo y marca principal
-    doc.setFontSize(36);
-    doc.setTextColor(255, 255, 255);
-    doc.text('CODEDMO', 105, 80, { align: 'center' });
-    
-    doc.setFontSize(14);
-    doc.setTextColor(colors.techBlue[0], colors.techBlue[1], colors.techBlue[2]);
-    doc.text('DESARROLLO DE SOFTWARE PROFESIONAL', 105, 95, { align: 'center' });
-    
-    // Título principal
-    doc.setFontSize(28);
-    doc.setTextColor(255, 255, 255);
-    doc.text('COTIZACIÓN', 105, 130, { align: 'center' });
-    doc.text('TÉCNICA', 105, 145, { align: 'center' });
-    
-    doc.setFontSize(16);
-    doc.setTextColor(colors.lightText[0], colors.lightText[1], colors.lightText[2]);
-    doc.text('Estimado de Proyecto de Desarrollo', 105, 165, { align: 'center' });
-    
-    // Información del documento
-    doc.setFillColor(colors.cardBg[0], colors.cardBg[1], colors.cardBg[2]);
-    doc.rect(40, 190, 130, 60, 'F');
-    
-    doc.setFontSize(12);
-    doc.setTextColor(colors.techBlue[0], colors.techBlue[1], colors.techBlue[2]);
-    doc.text('INFORMACIÓN DEL DOCUMENTO', 105, 205, { align: 'center' });
-    
-    doc.setFontSize(11);
-    doc.setTextColor(255, 255, 255);
-    doc.text(`Fecha: ${new Date().toLocaleDateString('es-GT')}`, 50, 220);
-    doc.text(`Cotización #: COD-${Date.now().toString().slice(-6)}`, 50, 230);
-    doc.text(`Cliente: Proyecto Personalizado`, 50, 240);
-    
-    // Footer de portada
-    doc.setFontSize(10);
-    doc.setTextColor(colors.lightText[0], colors.lightText[1], colors.lightText[2]);
-    doc.text('Tel: +502 3792-3612 | Email: info@codedmo.com', 105, 280, { align: 'center' });
+  const generatePDF = async () => {
+    try {
+      // Obtener la plantilla PDF
+      const templateUrl = '/PDF/Cotizacion.pdf';
+      const existingPdfBytes = await fetch(templateUrl).then(res => res.arrayBuffer());
+      
+      // Cargar el documento PDF
+      const pdfDoc = await PDFDocument.load(existingPdfBytes);
+      
+      // Obtener la página 8 (índice 7, ya que las páginas empiezan en 0)
+      const pages = pdfDoc.getPages();
+      if (pages.length < 8) {
+        console.error('El PDF no tiene suficientes páginas');
+        return;
+      }
+      const TextColor = rgb(1,1,1);
+      
+      const page8 = pages[7]; // Página 8
+      const { height } = page8.getSize();
 
-    // ========== PÁGINA 2: RESUMEN EJECUTIVO ==========
-    doc.addPage();
-    
-    // Header de página interna
-    doc.setFillColor(colors.lightBg[0], colors.lightBg[1], colors.lightBg[2]);
-    doc.rect(0, 0, 210, 25, 'F');
-    
-    doc.setFontSize(14);
-    doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
-    doc.text('CODEDMO - Cotización Técnica', 20, 15);
-    
-    doc.setFontSize(10);
-    doc.setTextColor(colors.lightText[0], colors.lightText[1], colors.lightText[2]);
-    doc.text(`Página 2 | ${new Date().toLocaleDateString('es-GT')}`, 150, 15);
-    
-    let yPos = 40;
-    
-    // Título de sección
-    doc.setFontSize(20);
-    doc.setTextColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.text('RESUMEN EJECUTIVO', 20, yPos);
-    yPos += 20;
-    
-    // Métricas principales en cards
-    const metrics = [
-      { label: 'Total de Elementos', value: selectedItemsList.length.toString(), color: colors.primary },
-      { label: 'Horas Totales', value: `${totalHours}h`, color: colors.secondary },
-      { label: 'Días Laborales', value: `${estimatedDays} días`, color: colors.techBlue },
-      { label: 'Inversión Total', value: `Q${totalPrice.toLocaleString()}`, color: colors.success }
-    ];
-    
-    metrics.forEach((metric, index) => {
-      const xPos = 20 + (index % 2) * 90;
-      const yOffset = Math.floor(index / 2) * 40;
+      // console.log(`Dimensiones de la página 8: ${width} x ${height}`);
       
-      doc.setFillColor(metric.color[0], metric.color[1], metric.color[2]);
-      doc.rect(xPos, yPos + yOffset, 80, 30, 'F');
+      // Generar el resumen de datos
+      const quotationData = generateQuotationSummary();
       
-      doc.setFontSize(10);
-      doc.setTextColor(255, 255, 255);
-      doc.text(metric.label, xPos + 5, yPos + yOffset + 10);
-      
-      doc.setFontSize(16);
-      doc.text(metric.value, xPos + 5, yPos + yOffset + 23);
-    });
-    
-    yPos += 100;
-    
-    // Distribución por categorías
-    doc.setFontSize(16);
-    doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
-    doc.text('DISTRIBUCIÓN POR CATEGORÍAS', 20, yPos);
-    yPos += 15;
-    
-    const categoryStats = categories.map(category => {
-      const items = selectedItemsList.filter(item => item.category === category);
-      const hours = items.reduce((sum, item) => sum + item.hours, 0);
-      const cost = hours * adminSettings.hourlyRate;
-      return { category, items: items.length, hours, cost };
-    }).filter(stat => stat.items > 0);
-    
-    categoryStats.forEach(stat => {
-      doc.setFillColor(colors.lightBg[0], colors.lightBg[1], colors.lightBg[2]);
-      doc.rect(20, yPos - 3, 170, 12, 'F');
-      
-      doc.setFontSize(11);
-      doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
-      doc.text(stat.category, 25, yPos + 4);
-      doc.text(`${stat.items} elementos`, 80, yPos + 4);
-      doc.text(`${stat.hours}h`, 120, yPos + 4);
-      doc.text(`Q${stat.cost.toLocaleString()}`, 150, yPos + 4);
-      
-      yPos += 15;
-    });
+      // Aquí puedes ajustar las coordenadas según tu plantilla PDF
+      // Las coordenadas (0,0) están en la esquina inferior izquierda
+      const fontSize = 14;
+      const lineHeight = 16;
 
-    // ========== PÁGINA 3: DETALLE TÉCNICO ==========
-    doc.addPage();
-    
-    // Header
-    doc.setFillColor(colors.lightBg[0], colors.lightBg[1], colors.lightBg[2]);
-    doc.rect(0, 0, 210, 25, 'F');
-    
-    doc.setFontSize(14);
-    doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
-    doc.text('CODEDMO - Cotización Técnica', 20, 15);
-    
-    doc.setFontSize(10);
-    doc.setTextColor(colors.lightText[0], colors.lightText[1], colors.lightText[2]);
-    doc.text(`Página 3 | ${new Date().toLocaleDateString('es-GT')}`, 150, 15);
-    
-    yPos = 40;
-    
-    // Título
-    doc.setFontSize(20);
-    doc.setTextColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.text('DETALLE TÉCNICO', 20, yPos);
-    yPos += 25;
-    
-    if (selectedItemsList.length > 0) {
-      // Header de tabla moderna
-      doc.setFillColor(colors.darkBg[0], colors.darkBg[1], colors.darkBg[2]);
-      doc.rect(20, yPos - 5, 170, 15, 'F');
+      // Ejemplo de cómo agregar texto a la página 8
+      // Ajusta las coordenadas según tu plantilla
+      let yPosition = height - 110.5; // Empezar desde arriba
+      console.log('Altura de la página:', height);
+      console.log('Y:', yPosition);
+
+      // Título
       
-      doc.setFontSize(10);
-      doc.setTextColor(255, 255, 255);
-      doc.text('ELEMENTO', 25, yPos + 5);
-      doc.text('COMPLEJIDAD', 90, yPos + 5);
-      doc.text('HORAS', 140, yPos + 5);
-      doc.text('COSTO', 165, yPos + 5);
+      // Información básica
+      // page8.drawText(`Fecha: ${quotationData.fecha}`, {
+      //   x: 50,
+      //   y: yPosition,
+      //   size: fontSize,
+      //   color: rgb(0, 0, 0),
+      // });
       
-      yPos += 20;
-      
-      // Detalles por categoría
-      categories.forEach(category => {
-        const categoryItems = selectedItemsList.filter(item => item.category === category);
-        if (categoryItems.length === 0) return;
-        
-        // Header de categoría
-        doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-        doc.rect(20, yPos - 3, 170, 12, 'F');
-        
-        doc.setFontSize(12);
-        doc.setTextColor(255, 255, 255);
-        doc.text(category, 25, yPos + 4);
-        yPos += 15;
-        
-        // Items
-        categoryItems.forEach((item, index) => {
-          if (yPos > 270) {
-            doc.addPage();
-            
-            // Header en nueva página
-            doc.setFillColor(colors.lightBg[0], colors.lightBg[1], colors.lightBg[2]);
-            doc.rect(0, 0, 210, 25, 'F');
-            
-            doc.setFontSize(14);
-            doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
-            doc.text('CODEDMO - Cotización Técnica', 20, 15);
-            
-            doc.setFontSize(10);
-            doc.setTextColor(colors.lightText[0], colors.lightText[1], colors.lightText[2]);
-            doc.text(`Continuación | ${new Date().toLocaleDateString('es-GT')}`, 150, 15);
-            
-            yPos = 40;
-          }
-          
-          // Fondo alternado
-          if (index % 2 === 0) {
-            doc.setFillColor(249, 250, 251);
-            doc.rect(20, yPos - 2, 170, 10, 'F');
-          }
-          
-          doc.setFontSize(9);
-          doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
-          const itemName = item.name.length > 35 ? item.name.substring(0, 32) + '...' : item.name;
-          doc.text(itemName, 25, yPos + 3);
-          
-          // Badge de complejidad
-          let complexityColor = colors.success;
-          if (item.complexity === 'Media') complexityColor = colors.warning;
-          if (item.complexity === 'Alta') complexityColor = colors.danger;
-          
-          doc.setFillColor(complexityColor[0], complexityColor[1], complexityColor[2]);
-          doc.rect(90, yPos - 1, 25, 8, 'F');
-          doc.setFontSize(8);
-          doc.setTextColor(255, 255, 255);
-          doc.text(item.complexity, 92, yPos + 4);
-          
-          doc.setFontSize(9);
-          doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
-          doc.text(`${item.hours}h`, 145, yPos + 3);
-          
-          doc.setTextColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-          doc.text(`${adminSettings.currency}${(item.hours * adminSettings.hourlyRate).toLocaleString()}`, 165, yPos + 3);
-          
-          yPos += 12;
-        });
-        yPos += 8;
+      // yPosition -= lineHeight;
+      page8.drawText(`Cotización #: ${quotationData.cotizacionId}`, {
+        x: 800,
+        y: yPosition,
+        size: 50,
+        color: TextColor,
       });
+      
+      yPosition -= lineHeight * 2;
+      page8.drawText('ELEMENTOS COTIZADOS:', {
+        x: 50,
+        y: yPosition,
+        size: fontSize + 2,
+        color: TextColor,
+      });
+      
+      yPosition -= lineHeight;
+      
+      // Listar elementos seleccionados
+      quotationData.elementos.forEach((elemento, index) => {
+        if (yPosition < 50) return; // Evitar salirse de la página
+        
+        page8.drawText(`${index + 1}. ${elemento.nombre}`, {
+          x: 60,
+          y: yPosition,
+          size: fontSize - 1,
+          color: TextColor,
+        });
+        
+        yPosition -= lineHeight;
+        page8.drawText(`   Categoría: ${elemento.categoria} | Horas: ${elemento.horas}h | Costo: ${adminSettings.currency}${elemento.costo.toLocaleString()}`, {
+          x: 70,
+          y: yPosition,
+          size: fontSize - 2,
+          color: rgb(0.3, 0.3, 0.3),
+        });
+        
+        yPosition -= lineHeight * 1.5;
+      });
+      
+      // Resumen final en la parte inferior
+      yPosition = 150; // Posición fija para el resumen
+      
+      page8.drawText('RESUMEN:', {
+        x: 50,
+        y: yPosition,
+        size: fontSize + 2,
+        color: TextColor,
+      });
+      
+      yPosition -= lineHeight;
+      page8.drawText(`Total elementos: ${quotationData.resumen.totalElementos}`, {
+        x: 60,
+        y: yPosition,
+        size: fontSize,
+        color: TextColor,
+      });
+      
+      yPosition -= lineHeight;
+      page8.drawText(`Total horas: ${quotationData.resumen.totalHoras}h`, {
+        x: 60,
+        y: yPosition,
+        size: fontSize,
+        color: TextColor,
+      });
+      
+      yPosition -= lineHeight;
+      page8.drawText(`Días laborales: ${quotationData.resumen.diasLaborales}`, {
+        x: 60,
+        y: yPosition,
+        size: fontSize,
+        color: TextColor,
+      });
+      
+      yPosition -= lineHeight * 1.5;
+      page8.drawText(`TOTAL: ${adminSettings.currency}${quotationData.resumen.total.toLocaleString()}`, {
+        x: 60,
+        y: yPosition,
+        size: fontSize + 4,
+        color: TextColor,
+      });
+      
+      // Serializar y descargar el PDF
+      const pdfBytes = await pdfDoc.save();
+      
+      // Crear blob y descargar - usando new Uint8Array para compatibilidad
+      const uint8Array = new Uint8Array(pdfBytes);
+      const blob = new Blob([uint8Array], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Cotizacion-CODEDMO-${quotationData.cotizacionId}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      console.log('PDF generado con datos:', quotationData);
+      
+    } catch (error) {
+      console.error('Error al generar PDF:', error);
+      alert('Error al generar el PDF. Verifica que la plantilla existe en /public/PDF/Cotizacion.pdf');
     }
-
-    // ========== PÁGINA 4: TÉRMINOS Y CONDICIONES ==========
-    doc.addPage();
-    
-    // Header
-    doc.setFillColor(colors.lightBg[0], colors.lightBg[1], colors.lightBg[2]);
-    doc.rect(0, 0, 210, 25, 'F');
-    
-    doc.setFontSize(14);
-    doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
-    doc.text('CODEDMO - Cotización Técnica', 20, 15);
-    
-    doc.setFontSize(10);
-    doc.setTextColor(colors.lightText[0], colors.lightText[1], colors.lightText[2]);
-    doc.text(`Página 4 | ${new Date().toLocaleDateString('es-GT')}`, 150, 15);
-    
-    yPos = 40;
-    
-    // Resumen final
-    doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.rect(20, yPos, 170, 40, 'F');
-    
-    doc.setFontSize(18);
-    doc.setTextColor(255, 255, 255);
-    doc.text('RESUMEN FINAL', 105, yPos + 15, { align: 'center' });
-    
-    doc.setFontSize(24);
-    doc.text(`TOTAL: Q${totalPrice.toLocaleString()}`, 105, yPos + 30, { align: 'center' });
-    
-    yPos += 60;
-    
-    // Términos importantes
-    doc.setFontSize(16);
-    doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
-    doc.text('TÉRMINOS Y CONDICIONES', 20, yPos);
-    yPos += 20;
-    
-    const terms = [
-      'Este es un estimado aproximado basado en especificaciones generales.',
-      'El costo final puede variar según la complejidad específica del proyecto.',
-      'Se requiere reunión técnica para afinar detalles y requerimientos.',
-      'Tiempo de desarrollo estimado: ' + estimatedDays + ' días laborales.',
-      'Incluye pruebas básicas y documentación técnica.',
-      'No incluye hosting, dominio o servicios externos adicionales.'
-    ];
-    
-    terms.forEach(term => {
-      doc.setFontSize(10);
-      doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
-      doc.text('• ' + term, 25, yPos);
-      yPos += 8;
-    });
-    
-    yPos += 20;
-    
-    // Contacto destacado
-    doc.setFillColor(colors.darkBg[0], colors.darkBg[1], colors.darkBg[2]);
-    doc.rect(20, yPos, 170, 30, 'F');
-    
-    doc.setFontSize(14);
-    doc.setTextColor(colors.techBlue[0], colors.techBlue[1], colors.techBlue[2]);
-    doc.text('CONTACTO DIRECTO', 105, yPos + 12, { align: 'center' });
-    
-    doc.setFontSize(11);
-    doc.setTextColor(255, 255, 255);
-    doc.text('Tel: +502 3792-3612 | Email: info@codedmo.com', 105, yPos + 22, { align: 'center' });
-    
-    // Footer final
-    doc.setFontSize(8);
-    doc.setTextColor(colors.lightText[0], colors.lightText[1], colors.lightText[2]);
-    doc.text('CODEDMO - Soluciones Tecnológicas Innovadoras', 105, 285, { align: 'center' });
-    doc.text(`Documento generado: ${new Date().toLocaleString('es-GT')}`, 105, 292, { align: 'center' });
-    
-    // Descargar
-    doc.save(`Cotizacion-Tecnica-CODEDMO-${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
   const getCategoryItems = (category: string) => {
@@ -1370,7 +1243,7 @@ export default function QuotationModern() {
         </p>
         <div className="mt-3 inline-flex items-center px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full text-purple-300 text-sm">
           <DollarSign className="w-4 h-4 mr-1" />
-          Tarifa: {adminSettings.currency}{adminSettings.hourlyRate}/hora
+          Tarifa: {adminSettings.currency}{adminSettings.hourlyRate}/hora + {adminSettings.billingPercentage}% IVA
         </div>
         
         {/* Botón de administración */}
@@ -1568,15 +1441,109 @@ export default function QuotationModern() {
                   </p>
                 </div>
 
-                <button
-                  onClick={generatePDF}
-                  disabled={selectedItemsList.length === 0}
-                  className={`w-full py-2 bg-gradient-to-r ${gradients.primary} text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-sm`}
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Descargar PDF
-                </button>
+                <div className="space-y-2">
+                  <button
+                    onClick={() => {
+                      const summary = generateQuotationSummary();
+                      console.log('📋 RESUMEN DE COTIZACIÓN:', summary);
+                      setShowQuotationSummary(!showQuotationSummary);
+                    }}
+                    disabled={selectedItemsList.length === 0}
+                    className={`w-full py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 hover:scale-105 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-sm`}
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
+                    {showQuotationSummary ? 'Ocultar' : 'Ver'} Resumen
+                  </button>
+
+                  <button
+                    onClick={generatePDF}
+                    disabled={selectedItemsList.length === 0}
+                    className={`w-full py-2 bg-gradient-to-r ${gradients.primary} text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-sm`}
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Descargar PDF
+                  </button>
+                </div>
                 
+              </div>
+            )}
+
+            {/* Panel de resumen detallado */}
+            {showQuotationSummary && selectedItemsList.length > 0 && (
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 border border-gray-600 mt-4">
+                <h4 className="text-white font-bold text-sm mb-3 flex items-center">
+                  <FileText className="w-4 h-4 mr-2 text-blue-400" />
+                  Resumen Detallado de Cotización
+                </h4>
+                
+                <div className="space-y-3 text-xs">
+                  {/* Información básica */}
+                  <div className="bg-blue-500/10 rounded-lg p-3 border border-blue-500/30">
+                    <h5 className="text-blue-300 font-semibold mb-2">📄 Información del Documento</h5>
+                    <div className="space-y-1 text-blue-200">
+                      <p>• Fecha: {new Date().toLocaleDateString('es-GT')}</p>
+                      <p>• Cotización #: COD-{Date.now().toString().slice(-6)}</p>
+                      <p>• Cliente: Proyecto Personalizado</p>
+                    </div>
+                  </div>
+
+                  {/* Elementos por categoría */}
+                  <div className="bg-purple-500/10 rounded-lg p-3 border border-purple-500/30">
+                    <h5 className="text-purple-300 font-semibold mb-2">📋 Elementos por Categoría</h5>
+                    <div className="space-y-2">
+                      {categories.map(category => {
+                        const items = selectedItemsList.filter(item => item.category === category);
+                        if (items.length === 0) return null;
+                        const hours = items.reduce((sum, item) => sum + item.hours, 0);
+                        const cost = hours * adminSettings.hourlyRate;
+                        return (
+                          <div key={category} className="bg-white/5 rounded p-2">
+                            <div className="flex justify-between items-center mb-1">
+                              <span className="text-purple-200 font-medium">{category}</span>
+                              <span className="text-purple-400">{items.length} elementos | {hours}h | {adminSettings.currency}{cost.toLocaleString()}</span>
+                            </div>
+                            <div className="space-y-1 pl-2">
+                              {items.map(item => (
+                                <div key={item.id} className="flex justify-between text-gray-300">
+                                  <span className="flex-1 truncate">{item.name}</span>
+                                  <span className="ml-2">{item.hours}h</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Resumen financiero */}
+                  <div className="bg-green-500/10 rounded-lg p-3 border border-green-500/30">
+                    <h5 className="text-green-300 font-semibold mb-2">💰 Resumen Financiero</h5>
+                    <div className="space-y-1 text-green-200">
+                      <div className="flex justify-between">
+                        <span>Subtotal ({totalHours}h × {adminSettings.currency}{adminSettings.hourlyRate}):</span>
+                        <span className="font-medium">{adminSettings.currency}{subtotalPrice.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>IVA ({adminSettings.billingPercentage}%):</span>
+                        <span className="font-medium">{adminSettings.currency}{billingAmount.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between border-t border-green-500/30 pt-1 text-green-100 font-bold">
+                        <span>TOTAL:</span>
+                        <span>{adminSettings.currency}{totalPrice.toLocaleString()}</span>
+                      </div>
+                      <div className="text-center pt-1 text-green-300">
+                        ⏱️ Tiempo estimado: {estimatedDays} días laborales
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-center">
+                    <p className="text-gray-400 text-xs">
+                      💡 Este resumen se incluirá en la página 8 del PDF de cotización
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
             
@@ -1709,10 +1676,27 @@ export default function QuotationModern() {
                   />
                 </div>
 
+                <div>
+                  <label htmlFor="admin-billing-percentage" className="block text-sm font-medium text-gray-300 mb-2">
+                    IVA (%)
+                  </label>
+                  <input
+                    id="admin-billing-percentage"
+                    type="number"
+                    value={adminSettings.billingPercentage}
+                    onChange={(e) => handleSettingsChange('billingPercentage', parseFloat(e.target.value) || 0)}
+                    className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                  />
+                </div>
+
                 <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
                   <p className="text-purple-300 text-sm">
                     ✨ <strong>Modo Administrador Activo</strong><br />
                     • Haz clic en las horas de cualquier elemento para editarlas<br />
+                    • El IVA se aplica automáticamente al costo<br />
                     • Los cambios se aplican instantáneamente
                   </p>
                 </div>
