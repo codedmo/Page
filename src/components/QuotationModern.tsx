@@ -1141,7 +1141,7 @@ export default function QuotationModern() {
           
           // Categoría en negrita
           page.drawText(`${elemento.categoria}`, {
-            x: 120,
+            x: 140,
             y: yPosition,
             size: fontSize,
             color: textColor,
@@ -1149,17 +1149,17 @@ export default function QuotationModern() {
           });
           
           // Guion separador
-          page.drawText(` - `, {
-            x: 230,
-            y: yPosition,
-            size: fontSize,
-            color: textColor,
-            font: regularFont,
-          });
+          // page.drawText(` - `, {
+          //   x: 370,
+          //   y: yPosition,
+          //   size: fontSize,
+          //   color: textColor,
+          //   font: regularFont,
+          // });
           
           // Nombre del elemento en negrita
           page.drawText(`${elemento.nombre}:`, {
-            x: 250,
+            x: 500,
             y: yPosition,
             size: fontSize,
             color: textColor,
