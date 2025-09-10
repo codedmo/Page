@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Calculator, CheckCircle, Clock, DollarSign, FileText, Download, Phone, Settings, Eye, EyeOff, X, Save } from 'lucide-react';
+import { Calculator, CheckCircle, Clock, DollarSign, FileText, Download, Phone, Settings, Eye, EyeOff, X, Save, Loader2 } from 'lucide-react';
 import { gradients } from '@/config/theme-colors';
-import { PDFDocument, rgb } from 'pdf-lib';
+import { PDFDocument, rgb, StandardFonts, PDFPage } from 'pdf-lib';
 import { useSEO } from '@/hooks/useSEO';
 
 interface QuotationItem {
@@ -912,6 +912,7 @@ export default function QuotationModern() {
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
   const [tempHours, setTempHours] = useState<number>(0);
   const [showQuotationSummary, setShowQuotationSummary] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   // SEO para Cotizador Moderno
   useSEO({
@@ -1044,6 +1045,7 @@ export default function QuotationModern() {
   };
 
   const generatePDF = async () => {
+    setIsGeneratingPDF(true);
     try {
       // Obtener la plantilla PDF
       const templateUrl = '/PDF/Cotizacion.pdf';
@@ -1052,129 +1054,237 @@ export default function QuotationModern() {
       // Cargar el documento PDF
       const pdfDoc = await PDFDocument.load(existingPdfBytes);
       
+      // Cargar fuentes para texto normal y negrita
+      const regularFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+      const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+      
       // Obtener la página 8 (índice 7, ya que las páginas empiezan en 0)
       const pages = pdfDoc.getPages();
       if (pages.length < 8) {
         console.error('El PDF no tiene suficientes páginas');
         return;
       }
-      const TextColor = rgb(1,1,1);
       
-      const page8 = pages[7]; // Página 8
-      const { height } = page8.getSize();
-
-      // console.log(`Dimensiones de la página 8: ${width} x ${height}`);
+      const textColor = rgb(1, 1, 1); // Color blanco
+      const fontSize = 14;
+      const lineHeight = 16;
+      const elementsPerPage = 16; // Máximo de elementos por página
       
       // Generar el resumen de datos
       const quotationData = generateQuotationSummary();
       
-      // Aquí puedes ajustar las coordenadas según tu plantilla PDF
-      // Las coordenadas (0,0) están en la esquina inferior izquierda
-      const fontSize = 14;
-      const lineHeight = 16;
-
-      // Ejemplo de cómo agregar texto a la página 8
-      // Ajusta las coordenadas según tu plantilla
-      let yPosition = height - 110.5; // Empezar desde arriba
-      console.log('Altura de la página:', height);
-      console.log('Y:', yPosition);
-
-      // Título
+      // Calcular cuántas páginas necesitamos
+      const totalElements = quotationData.elementos.length;
+      const totalPages = Math.ceil(totalElements / elementsPerPage);
       
-      // Información básica
-      // page8.drawText(`Fecha: ${quotationData.fecha}`, {
-      //   x: 50,
-      //   y: yPosition,
-      //   size: fontSize,
-      //   color: rgb(0, 0, 0),
-      // });
+      console.log(`PDF original: ${pages.length} páginas`);
+      console.log(`Elementos totales: ${totalElements}`);
+      console.log(`Páginas necesarias: ${totalPages}`);
+      console.log(`Elementos por página: ${elementsPerPage}`);
       
-      // yPosition -= lineHeight;
-      page8.drawText(`Cotización #: ${quotationData.cotizacionId}`, {
-        x: 800,
-        y: yPosition,
-        size: 50,
-        color: TextColor,
-      });
+      // PRIMERO: Crear todas las páginas duplicadas necesarias ANTES de llenar cualquier dato
+      const allPages: PDFPage[] = [pages[7]]; // Empezar con la página 8 original
       
-      yPosition -= lineHeight * 2;
-      page8.drawText('ELEMENTOS COTIZADOS:', {
-        x: 50,
-        y: yPosition,
-        size: fontSize + 2,
-        color: TextColor,
-      });
-      
-      yPosition -= lineHeight;
-      
-      // Listar elementos seleccionados
-      quotationData.elementos.forEach((elemento, index) => {
-        if (yPosition < 50) return; // Evitar salirse de la página
+      if (totalPages > 1) {
+        console.log(`Creando ${totalPages - 1} páginas duplicadas...`);
         
-        page8.drawText(`${index + 1}. ${elemento.nombre}`, {
-          x: 60,
-          y: yPosition,
-          size: fontSize - 1,
-          color: TextColor,
+        for (let i = 1; i < totalPages; i++) {
+          const insertIndex = 7 + i; // 8, 9, 10...
+          console.log(`Duplicando página 8 vacía en posición ${insertIndex}`);
+          
+          // Copiar la página 8 ORIGINAL (sin datos) y insertarla
+          const [copiedPage] = await pdfDoc.copyPages(pdfDoc, [7]);
+          pdfDoc.insertPage(insertIndex, copiedPage);
+          allPages.push(copiedPage);
+        }
+      }
+      
+      console.log(`Total de páginas preparadas: ${allPages.length}`);
+      
+
+      // Función para agregar el "Costo por Hora" en cada página
+      const addCostPerHour = (page: PDFPage, height: number) => {
+        const yPos = height - 142.5;
+        page.drawText(`Costo por Hora: `, {
+          x: 75,
+          y: yPos,
+          size: fontSize + 8,
+          color: textColor,
+          font: regularFont,
         });
         
-        yPosition -= lineHeight;
-        page8.drawText(`   Categoría: ${elemento.categoria} | Horas: ${elemento.horas}h | Costo: ${adminSettings.currency}${elemento.costo.toLocaleString()}`, {
-          x: 70,
+        // Texto en negrita para el valor
+        page.drawText(`${quotationData.configuracion.tarifaPorHora}`, {
+          x: 250, // Posición específica para el valor en negrita
+          y: yPos,
+          size: fontSize + 8,
+          color: textColor,
+          font: boldFont,
+        });
+      };
+      
+      // Función para agregar elementos a una página
+      const addElementsToPage = (page: PDFPage, elements: typeof quotationData.elementos, startIndex: number, pageHeight: number) => {
+        let yPosition = pageHeight - 142.5 - (lineHeight * 6.5);
+        
+        elements.forEach((elemento, index) => {
+          const globalIndex = startIndex + index;
+          
+          // Número del elemento en negrita
+          page.drawText(`${globalIndex + 1}.`, {
+            x: 90,
+            y: yPosition,
+            size: fontSize,
+            color: textColor,
+            font: regularFont,
+          });
+          
+          // Categoría en negrita
+          page.drawText(`${elemento.categoria}`, {
+            x: 120,
+            y: yPosition,
+            size: fontSize,
+            color: textColor,
+            font: boldFont,
+          });
+          
+          // Guion separador
+          page.drawText(` - `, {
+            x: 230,
+            y: yPosition,
+            size: fontSize,
+            color: textColor,
+            font: regularFont,
+          });
+          
+          // Nombre del elemento en negrita
+          page.drawText(`${elemento.nombre}:`, {
+            x: 250,
+            y: yPosition,
+            size: fontSize,
+            color: textColor,
+            font: regularFont,
+          });
+          
+          // Descripción en texto normal
+          // page.drawText(` ${elemento.descripcion}`, {
+          //   x: 400,
+          //   y: yPosition,
+          //   size: fontSize,
+          //   color: textColor,
+          //   font: regularFont,
+          // });
+          
+          // Costo en negrita
+          page.drawText(`${adminSettings.currency}${elemento.costo.toLocaleString()}`, {
+            x: 1050,
+            y: yPosition,
+            size: fontSize,
+            color: textColor,
+            font: regularFont,
+          });
+          
+          // Horas en negrita
+          page.drawText(`${elemento.horas}h`, {
+            x: 1300,
+            y: yPosition,
+            size: fontSize,
+            color: textColor,
+            font: regularFont,
+          });
+          
+          yPosition -= lineHeight * 1.51;
+        });
+      };
+      
+      // Función para agregar el resumen final con detalle de IVA (solo en la última página)
+      const addSummary = (page: PDFPage) => {
+        let yPosition = 172;
+        
+        // Título "RESUMEN:" en negrita
+        page.drawText('RESUMEN:', {
+          x: 80,
           y: yPosition,
-          size: fontSize - 2,
-          color: rgb(0.3, 0.3, 0.3),
+          size: fontSize + 2,
+          color: textColor,
+          font: boldFont,
         });
         
-        yPosition -= lineHeight * 1.5;
-      });
+        yPosition -= lineHeight + 8;
+        
+        // "Total elementos:" en texto normal, número en negrita
+        page.drawText(`Total elementos: `, {
+          x: 90,
+          y: yPosition,
+          size: fontSize,
+          color: textColor,
+          font: regularFont,
+        });
+        
+        page.drawText(`${quotationData.resumen.totalElementos}`, {
+          x: 220,
+          y: yPosition,
+          size: fontSize,
+          color: textColor,
+          font: boldFont,
+        });
+        
+        // Detalle financiero en una línea: Total sin IVA: Q... | IVA: Q... | Total: Q...
+        const subtotalText = `Total sin IVA: ${adminSettings.currency}${quotationData.resumen.subtotal.toLocaleString()}`;
+        const ivaText = `IVA: ${adminSettings.currency}${quotationData.resumen.iva.toLocaleString()}`;
+        const totalText = `Total: ${adminSettings.currency}${quotationData.resumen.total.toLocaleString()}`;
+        
+        // Línea completa del resumen financiero
+        page.drawText(`${subtotalText} | ${ivaText} | ${totalText}`, {
+          x: 750,
+          y: yPosition,
+          size: fontSize + 1,
+          color: textColor,
+          font: boldFont,
+        });
+        
+        // Horas y días en negrita
+        page.drawText(`${quotationData.resumen.totalHoras}h/${quotationData.resumen.diasLaborales}d`, {
+          x: 1270,
+          y: yPosition,
+          size: fontSize + 4,
+          color: textColor,
+          font: boldFont,
+        });
+      };
       
-      // Resumen final en la parte inferior
-      yPosition = 150; // Posición fija para el resumen
-      
-      page8.drawText('RESUMEN:', {
-        x: 50,
-        y: yPosition,
-        size: fontSize + 2,
-        color: TextColor,
-      });
-      
-      yPosition -= lineHeight;
-      page8.drawText(`Total elementos: ${quotationData.resumen.totalElementos}`, {
-        x: 60,
-        y: yPosition,
-        size: fontSize,
-        color: TextColor,
-      });
-      
-      yPosition -= lineHeight;
-      page8.drawText(`Total horas: ${quotationData.resumen.totalHoras}h`, {
-        x: 60,
-        y: yPosition,
-        size: fontSize,
-        color: TextColor,
-      });
-      
-      yPosition -= lineHeight;
-      page8.drawText(`Días laborales: ${quotationData.resumen.diasLaborales}`, {
-        x: 60,
-        y: yPosition,
-        size: fontSize,
-        color: TextColor,
-      });
-      
-      yPosition -= lineHeight * 1.5;
-      page8.drawText(`TOTAL: ${adminSettings.currency}${quotationData.resumen.total.toLocaleString()}`, {
-        x: 60,
-        y: yPosition,
-        size: fontSize + 4,
-        color: TextColor,
-      });
+      // SEGUNDO: Ahora llenar todas las páginas con datos
+      for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
+        console.log(`Llenando página ${pageIndex + 1} de ${totalPages}`);
+        
+        // Usar la página correspondiente del array pre-creado
+        const currentPage = allPages[pageIndex];
+        const pageHeight = currentPage.getSize().height;
+        
+        // Agregar "Costo por Hora" en cada página
+        addCostPerHour(currentPage, pageHeight);
+        
+        // Calcular qué elementos van en esta página
+        const startIndex = pageIndex * elementsPerPage;
+        const endIndex = Math.min(startIndex + elementsPerPage, totalElements);
+        const pageElements = quotationData.elementos.slice(startIndex, endIndex);
+        
+        console.log(`Página ${pageIndex + 1}: elementos ${startIndex + 1} al ${endIndex}`);
+        
+        // Agregar elementos a la página
+        addElementsToPage(currentPage, pageElements, startIndex, pageHeight);
+        
+        // Agregar resumen solo en la última página
+        if (pageIndex === totalPages - 1) {
+          console.log(`Agregando resumen en la última página (${pageIndex + 1})`);
+          addSummary(currentPage);
+        }
+      }
       
       // Serializar y descargar el PDF
       const pdfBytes = await pdfDoc.save();
       
-      // Crear blob y descargar - usando new Uint8Array para compatibilidad
+      // Crear blob y descargar
       const uint8Array = new Uint8Array(pdfBytes);
       const blob = new Blob([uint8Array], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
@@ -1187,10 +1297,15 @@ export default function QuotationModern() {
       window.URL.revokeObjectURL(url);
       
       console.log('PDF generado con datos:', quotationData);
+      console.log(`Páginas creadas: ${totalPages}, Elementos totales: ${totalElements}`);
+      console.log(`PDF original tenía ${pages.length} páginas`);
+      console.log(`PDF final tiene ${pdfDoc.getPageCount()} páginas`);
       
     } catch (error) {
       console.error('Error al generar PDF:', error);
       alert('Error al generar el PDF. Verifica que la plantilla existe en /public/PDF/Cotizacion.pdf');
+    } finally {
+      setIsGeneratingPDF(false);
     }
   };
 
@@ -1228,26 +1343,26 @@ export default function QuotationModern() {
   const categories = Array.from(new Set(systemElements.map(item => item.category)));
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
-      {/* Header - más compacto */}
-      <div className="text-center mb-6">
-        <div className={`inline-flex items-center px-3 py-1 bg-gradient-to-r ${gradients.primary} text-white rounded-full text-sm font-medium mb-3`}>
-          <Calculator className="w-4 h-4 mr-2" />
+    <div className="max-w-7xl mx-auto p-2 sm:p-4">
+      {/* Header - más compacto y responsivo */}
+      <div className="text-center mb-4 sm:mb-6">
+        <div className={`inline-flex items-center px-3 py-1 bg-gradient-to-r ${gradients.primary} text-white rounded-full text-xs sm:text-sm font-medium mb-3`}>
+          <Calculator className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
           Cotizador Inteligente
         </div>
-        <h1 className="text-2xl font-bold text-white mb-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-white mb-3">
           Calcula el <span className={`bg-gradient-to-r ${gradients.textPrimary} bg-clip-text text-transparent`}>costo</span> de tu proyecto
         </h1>
-        <p className="text-gray-300 max-w-2xl mx-auto text-sm">
+        <p className="text-gray-300 max-w-2xl mx-auto text-xs sm:text-sm px-4">
           Selecciona los elementos que necesitas y obtén una cotización personalizada al instante.
         </p>
-        <div className="mt-3 inline-flex items-center px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full text-purple-300 text-sm">
-          <DollarSign className="w-4 h-4 mr-1" />
-          Tarifa: {adminSettings.currency}{adminSettings.hourlyRate}/hora + {adminSettings.billingPercentage}% IVA
-        </div>
-        
-        {/* Botón de administración */}
-        <div className="mt-3">
+        <div className="mt-3 inline-flex flex-wrap items-center justify-center gap-2">
+          <div className="inline-flex items-center px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full text-purple-300 text-xs sm:text-sm">
+            <DollarSign className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+            <span className="whitespace-nowrap">Tarifa: {adminSettings.currency}{adminSettings.hourlyRate}/h + {adminSettings.billingPercentage}% IVA</span>
+          </div>
+          
+          {/* Botón de administración */}
           <button
             onClick={() => setShowAdminPanel(true)}
             className="inline-flex items-center px-2 py-1 bg-gray-500/20 border border-gray-500/30 rounded-full text-gray-400 hover:text-gray-300 text-xs transition-colors"
@@ -1258,24 +1373,25 @@ export default function QuotationModern() {
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-6 gap-4">
-        {/* Panel lateral de filtros */}
-        <div className="lg:col-span-1">
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 sticky top-20">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-3 sm:gap-4">
+        {/* Panel lateral de filtros - mejorado responsivo */}
+        <div className="lg:col-span-1 order-2 lg:order-1">
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/10 lg:sticky lg:top-20">
             <h3 className="text-sm font-bold text-white mb-3 flex items-center">
               <FileText className="w-4 h-4 mr-2 text-purple-400" />
               Categorías
             </h3>
-            <div className="max-h-[700px] overflow-y-auto space-y-2 scrollbar-thin scrollbar-track-white/10 scrollbar-thumb-purple-500/50 hover:scrollbar-thumb-purple-500/70 pr-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-2 lg:space-y-0 lg:max-h-[700px] lg:overflow-y-auto lg:scrollbar-thin lg:scrollbar-track-white/10 lg:scrollbar-thumb-purple-500/50 hover:lg:scrollbar-thumb-purple-500/70 lg:pr-2">
               <button
                 onClick={() => setSelectedCategory('all')}
-                className={`w-full text-left px-3 py-2 rounded-lg text-xs transition-all duration-300 ${
+                className={`w-full text-left px-2 sm:px-3 py-2 rounded-lg text-xs transition-all duration-300 ${
                   selectedCategory === 'all'
                     ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50'
                     : 'text-gray-400 hover:text-white hover:bg-white/10'
                 }`}
               >
-                Todas ({systemElements.length})
+                <span className="block truncate">Todas</span>
+                <span className="text-xs opacity-75 block sm:inline lg:block">({systemElements.length})</span>
               </button>
               {categories.map(category => {
                 const count = systemElements.filter(item => item.category === category).length;
@@ -1283,14 +1399,14 @@ export default function QuotationModern() {
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-xs transition-all duration-300 ${
+                    className={`w-full text-left px-2 sm:px-3 py-2 rounded-lg text-xs transition-all duration-300 ${
                       selectedCategory === category
                         ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50'
                         : 'text-gray-400 hover:text-white hover:bg-white/10'
                     }`}
                   >
-                    <div className="flex justify-between items-center">
-                      <span className="truncate">{category}</span>
+                    <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row justify-between items-start sm:items-center lg:items-start xl:items-center">
+                      <span className="truncate text-xs">{category}</span>
                       <span className="text-xs opacity-75">({count})</span>
                     </div>
                   </button>
@@ -1300,47 +1416,47 @@ export default function QuotationModern() {
           </div>
         </div>
 
-        {/* Lista de elementos - más compacta */}
-        <div className="lg:col-span-3 space-y-3">
+        {/* Lista de elementos - mejorada responsividad */}
+        <div className="lg:col-span-3 space-y-3 order-1 lg:order-2">
           {getFilteredCategories().map(category => (
             <div key={category} className="bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-white/10">
-              <h3 className="text-base font-bold text-white mb-3 flex items-center">
-                <FileText className="w-4 h-4 mr-2 text-purple-400" />
-                {category}
-                <span className="ml-2 text-xs text-gray-400">
+              <h3 className="text-sm sm:text-base font-bold text-white mb-3 flex items-center flex-wrap">
+                <FileText className="w-4 h-4 mr-2 text-purple-400 flex-shrink-0" />
+                <span className="flex-1 min-w-0 truncate">{category}</span>
+                <span className="ml-2 text-xs text-gray-400 flex-shrink-0">
                   ({getCategoryItems(category).length} elementos)
                 </span>
               </h3>
-              <div className="grid md:grid-cols-1 gap-2">
+              <div className="space-y-2">
                 {getCategoryItems(category).map(item => (
                   <div
                     key={item.id}
-                    className={`p-2 rounded-lg border transition-all duration-300 cursor-pointer hover:scale-[1.01] ${
+                    className={`p-2 sm:p-3 rounded-lg border transition-all duration-300 cursor-pointer hover:scale-[1.01] ${
                       item.selected 
                         ? 'bg-purple-500/20 border-purple-500/50 shadow-lg shadow-purple-500/20' 
                         : 'bg-white/5 border-white/10 hover:border-white/30 hover:bg-white/10'
                     }`}
                     onClick={() => handleItemToggle(item.id)}
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3 flex-1">
-                        <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${
+                    <div className="flex items-start sm:items-center justify-between gap-3">
+                      <div className="flex items-start sm:items-center space-x-3 flex-1 min-w-0">
+                        <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0 ${
                           item.selected ? 'bg-purple-500 border-purple-500' : 'border-white/30'
                         }`}>
                           {item.selected && <CheckCircle className="w-3 h-3 text-white" />}
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="font-semibold text-white text-sm truncate">{item.name}</h4>
-                          <p className="text-gray-400 text-xs truncate">{item.description}</p>
+                          <p className="text-gray-400 text-xs truncate mt-1">{item.description}</p>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2 flex-shrink-0">
+                      <div className="flex flex-col sm:flex-row items-end sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 flex-shrink-0">
                         <span className={`px-2 py-1 text-xs rounded-full border ${getComplexityColor(item.complexity)}`}>
                           {item.complexity}
                         </span>
                         <div className="text-right">
                           <div className="text-purple-400 font-bold text-sm">{adminSettings.currency}{(item.hours * adminSettings.hourlyRate).toLocaleString()}</div>
-                          <div className="text-gray-400 text-xs flex items-center">
+                          <div className="text-gray-400 text-xs flex items-center justify-end">
                             {adminSettings.isAuthenticated && editingItemId === item.id ? (
                               <div className="flex items-center space-x-1">
                                 <input
@@ -1386,18 +1502,18 @@ export default function QuotationModern() {
           ))}
         </div>
 
-        {/* Resumen de cotización - sidebar compacto */}
-        <div className="lg:col-span-2 space-y-4">
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 sticky top-20 z-20">
-            <h3 className="text-lg font-bold text-white mb-4 flex items-center">
-              <DollarSign className="w-5 h-5 mr-2 text-green-400" />
+        {/* Resumen de cotización - sidebar responsivo con detalle de IVA */}
+        <div className="lg:col-span-2 space-y-4 order-3">
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/10 lg:sticky lg:top-20 z-20">
+            <h3 className="text-base sm:text-lg font-bold text-white mb-4 flex items-center">
+              <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-green-400" />
               Cotización
             </h3>
             
             {selectedItemsList.length === 0 ? (
-              <div className="text-center py-8">
-                <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Calculator className="w-8 h-8 text-gray-400" />
+              <div className="text-center py-6 sm:py-8">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Calculator className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
                 </div>
                 <p className="text-gray-400 text-sm">
                   Selecciona elementos para ver la cotización
@@ -1405,8 +1521,8 @@ export default function QuotationModern() {
               </div>
             ) : (
               <div className="space-y-3">
-                {/* Items seleccionados - más compacto */}
-                <div className="max-h-40 overflow-y-auto space-y-1 scrollbar-thin scrollbar-track-white/10 scrollbar-thumb-purple-500/50 hover:scrollbar-thumb-purple-500/70">
+                {/* Items seleccionados - más compacto y responsivo */}
+                <div className="max-h-32 sm:max-h-40 overflow-y-auto space-y-1 scrollbar-thin scrollbar-track-white/10 scrollbar-thumb-purple-500/50 hover:scrollbar-thumb-purple-500/70">
                   {selectedItemsList.map(item => (
                     <div key={item.id} className="flex justify-between items-center text-xs bg-white/5 rounded-lg p-2">
                       <div className="flex-1 min-w-0">
@@ -1423,15 +1539,26 @@ export default function QuotationModern() {
                     <span className="text-gray-300">Total horas:</span>
                     <span className="text-white font-semibold">{totalHours}h</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-lg font-bold text-white">Total:</span>
-                    <span className="text-lg font-bold text-green-400">
-                      {adminSettings.currency}{totalPrice.toLocaleString()}
-                    </span>
+                  
+                  {/* Detalle del IVA */}
+                  <div className="bg-gray-800/50 rounded-lg p-3 space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-300">Total sin IVA:</span>
+                      <span className="text-white font-medium">{adminSettings.currency}{subtotalPrice.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-300">IVA ({adminSettings.billingPercentage}%):</span>
+                      <span className="text-white font-medium">{adminSettings.currency}{billingAmount.toLocaleString()}</span>
+                    </div>
+                    <hr className="border-gray-600" />
+                    <div className="flex justify-between text-base font-bold">
+                      <span className="text-green-300">TOTAL:</span>
+                      <span className="text-green-400">{adminSettings.currency}{totalPrice.toLocaleString()}</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className={`bg-gradient-to-r ${gradients.primary} bg-opacity-20 rounded-lg p-2 border border-purple-500/30`}>
+                <div className={`bg-gradient-to-r ${gradients.primary} bg-opacity-20 rounded-lg p-3 border border-purple-500/30`}>
                   <div className="flex items-center mb-1">
                     <Clock className="w-4 h-4 mr-2 text-purple-400" />
                     <span className="text-purple-300 font-semibold text-sm">Tiempo estimado</span>
@@ -1449,7 +1576,7 @@ export default function QuotationModern() {
                       setShowQuotationSummary(!showQuotationSummary);
                     }}
                     disabled={selectedItemsList.length === 0}
-                    className={`w-full py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 hover:scale-105 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-sm`}
+                    className={`w-full py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 hover:scale-105 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-sm`}
                   >
                     <Eye className="w-4 h-4 mr-2" />
                     {showQuotationSummary ? 'Ocultar' : 'Ver'} Resumen
@@ -1457,11 +1584,20 @@ export default function QuotationModern() {
 
                   <button
                     onClick={generatePDF}
-                    disabled={selectedItemsList.length === 0}
-                    className={`w-full py-2 bg-gradient-to-r ${gradients.primary} text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-sm`}
+                    disabled={selectedItemsList.length === 0 || isGeneratingPDF}
+                    className={`w-full py-2 sm:py-3 bg-gradient-to-r ${gradients.primary} text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-sm`}
                   >
-                    <Download className="w-4 h-4 mr-2" />
-                    Descargar PDF
+                    {isGeneratingPDF ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Generando PDF...
+                      </>
+                    ) : (
+                      <>
+                        <Download className="w-4 h-4 mr-2" />
+                        Descargar PDF
+                      </>
+                    )}
                   </button>
                 </div>
                 
@@ -1516,12 +1652,12 @@ export default function QuotationModern() {
                     </div>
                   </div>
 
-                  {/* Resumen financiero */}
+                  {/* Resumen financiero con detalle de IVA */}
                   <div className="bg-green-500/10 rounded-lg p-3 border border-green-500/30">
                     <h5 className="text-green-300 font-semibold mb-2">💰 Resumen Financiero</h5>
                     <div className="space-y-1 text-green-200">
                       <div className="flex justify-between">
-                        <span>Subtotal ({totalHours}h × {adminSettings.currency}{adminSettings.hourlyRate}):</span>
+                        <span>Total sin IVA ({totalHours}h × {adminSettings.currency}{adminSettings.hourlyRate}):</span>
                         <span className="font-medium">{adminSettings.currency}{subtotalPrice.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between">
@@ -1547,7 +1683,7 @@ export default function QuotationModern() {
               </div>
             )}
             
-            {/* Disclaimer importante - más compacto */}
+            {/* Disclaimer importante - más compacto y responsivo */}
             <div className="bg-yellow-500/10 backdrop-blur-sm rounded-xl p-3 border border-yellow-500/30 mt-3">
               <h4 className="text-yellow-300 font-semibold text-xs mb-1 flex items-center">
                 ⚠️ Estimado de Proyecto
@@ -1573,14 +1709,15 @@ export default function QuotationModern() {
         </div>
       </div>
 
-      {/* Modal del Panel de Administración */}
+      {/* Modal del Panel de Administración - mejorado responsivo */}
       {showAdminPanel && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-900 rounded-2xl p-6 w-full max-w-md border border-gray-700">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-white flex items-center">
-                <Settings className="w-5 h-5 mr-2 text-purple-400" />
-                Panel de Administración
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-gray-900 rounded-2xl p-4 sm:p-6 w-full max-w-sm sm:max-w-md border border-gray-700 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h3 className="text-lg sm:text-xl font-bold text-white flex items-center">
+                <Settings className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-purple-400" />
+                <span className="hidden sm:inline">Panel de Administración</span>
+                <span className="sm:hidden">Admin</span>
               </h3>
               <button
                 onClick={() => setShowAdminPanel(false)}
@@ -1592,7 +1729,7 @@ export default function QuotationModern() {
             </div>
 
             {!adminSettings.isAuthenticated ? (
-              /* Panel de Login */
+              /* Panel de Login - responsivo */
               <div className="space-y-4">
                 <div>
                   <label htmlFor="admin-password" className="block text-sm font-medium text-gray-300 mb-2">
@@ -1604,7 +1741,7 @@ export default function QuotationModern() {
                       type={showPassword ? "text" : "password"}
                       value={adminPassword}
                       onChange={(e) => setAdminPassword(e.target.value)}
-                      className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none text-sm sm:text-base"
                       placeholder="Ingresa la contraseña"
                       onKeyPress={(e) => e.key === 'Enter' && handleAdminLogin()}
                     />
@@ -1620,15 +1757,15 @@ export default function QuotationModern() {
                 </div>
                 <button
                   onClick={handleAdminLogin}
-                  className={`w-full py-2 bg-gradient-to-r ${gradients.primary} text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25`}
+                  className={`w-full py-2 sm:py-3 bg-gradient-to-r ${gradients.primary} text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 text-sm sm:text-base`}
                 >
                   Acceder
                 </button>
               </div>
             ) : (
-              /* Panel de Configuración */
-              <div className="space-y-6">
-                <div className="grid grid-cols-2 gap-4">
+              /* Panel de Configuración - responsivo */
+              <div className="space-y-4 sm:space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <label htmlFor="admin-hourly-rate" className="block text-sm font-medium text-gray-300 mb-2">
                       Tarifa por Hora
@@ -1638,7 +1775,7 @@ export default function QuotationModern() {
                       type="number"
                       value={adminSettings.hourlyRate}
                       onChange={(e) => handleSettingsChange('hourlyRate', parseFloat(e.target.value) || 0)}
-                      className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none text-sm sm:text-base"
                       min="0"
                       step="0.5"
                     />
@@ -1651,7 +1788,7 @@ export default function QuotationModern() {
                       id="admin-currency"
                       value={adminSettings.currency}
                       onChange={(e) => handleSettingsChange('currency', e.target.value)}
-                      className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none text-sm sm:text-base"
                     >
                       <option value="Q">Q (Quetzal)</option>
                       <option value="$">$ (Dólar)</option>
@@ -1670,7 +1807,7 @@ export default function QuotationModern() {
                     type="number"
                     value={adminSettings.hoursPerDay}
                     onChange={(e) => handleSettingsChange('hoursPerDay', parseInt(e.target.value) || 1)}
-                    className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"
+                    className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none text-sm sm:text-base"
                     min="1"
                     max="24"
                   />
@@ -1685,7 +1822,7 @@ export default function QuotationModern() {
                     type="number"
                     value={adminSettings.billingPercentage}
                     onChange={(e) => handleSettingsChange('billingPercentage', parseFloat(e.target.value) || 0)}
-                    className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none"
+                    className="w-full px-3 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:border-purple-500 focus:outline-none text-sm sm:text-base"
                     min="0"
                     max="100"
                     step="0.1"
@@ -1701,22 +1838,44 @@ export default function QuotationModern() {
                   </p>
                 </div>
 
-                <div className="flex space-x-3">
+                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                   <button
                     onClick={() => setShowAdminPanel(false)}
-                    className="flex-1 py-2 bg-gray-700 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors"
+                    className="flex-1 py-2 bg-gray-700 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors text-sm sm:text-base"
                   >
                     Cerrar
                   </button>
                   <button
                     onClick={handleAdminLogout}
-                    className="flex-1 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-500 transition-colors"
+                    className="flex-1 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-500 transition-colors text-sm sm:text-base"
                   >
                     Cerrar Sesión
                   </button>
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Pantalla de carga para generación de PDF */}
+      {isGeneratingPDF && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="bg-gray-900 rounded-2xl p-8 border border-gray-700 text-center max-w-sm mx-4">
+            <div className="mb-6">
+              <Loader2 className="w-12 h-12 text-purple-400 animate-spin mx-auto" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">
+              Generando PDF
+            </h3>
+            <p className="text-gray-300 text-sm">
+              Por favor espera mientras se genera tu cotización en PDF...
+            </p>
+            <div className="mt-4 bg-purple-500/20 rounded-lg p-3">
+              <p className="text-purple-300 text-xs">
+                Este proceso puede tomar unos segundos
+              </p>
+            </div>
           </div>
         </div>
       )}
