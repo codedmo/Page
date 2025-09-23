@@ -195,17 +195,17 @@ export default function Web_Design() {
       title: 'Landing Pages',
       description: 'Páginas de alta conversión para campañas específicas',
       icon: Zap,
-      features: ['Optimizada para conversión', 'A/B Testing', 'Integración con forms', 'Analytics avanzados'],
+      features: ['Optimizada para conversión', 'A/B Testing', 'Integración con forms', 'Analytics avanzados', 'SEO básico'],
       price: 'Desde Q1000',
-      time: '1-2 semanas'
+      time: '1 - 2 semanas'
     },
     {
       title: 'Sitios Corporativos',
       description: 'Presencia web profesional para tu empresa',
       icon: Globe,
-      features: ['Diseño corporativo', 'CMS integrado', 'Blog incluido', 'Optimización SEO'],
+      features: ['Diseño corporativo', 'CMS integrado', 'Blog incluido', 'Optimización SEO avanzada', 'Soporte post-lanzamiento'],
       price: 'Desde Q2000',
-      time: '2-4 semanas'
+      time: '2 - 4 semanas'
     },
     {
       title: 'E-commerce',
@@ -213,7 +213,7 @@ export default function Web_Design() {
       icon: Smartphone,
       features: ['Carrito de compras', 'Pagos integrados', 'Gestión de inventario', 'Panel de administración'],
       price: 'Desde Q3500',
-      time: '4-8 semanas'
+      time: '6 - 8 semanas'
     }
   ];
 

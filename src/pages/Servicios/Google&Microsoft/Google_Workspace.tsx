@@ -291,21 +291,21 @@ export default function Google_Workspace() {
               <tbody className="text-gray-300">
                 <tr className="border-b border-white/10">
                   <td className="py-3 px-4">1-5 usuarios</td>
-                  <td className="text-center py-3 px-4">Q400/mes</td>
-                  <td className="text-center py-3 px-4">Q750/mes</td>
-                  <td className="text-center py-3 px-4">Q1,150/mes</td>
+                  <td className="text-center py-3 px-4">Q445/mes</td>
+                  <td className="text-center py-3 px-4">Q833/mes</td>
+                  <td className="text-center py-3 px-4">Q1,332/mes</td>
                 </tr>
                 <tr className="border-b border-white/10">
                   <td className="py-3 px-4">6-10 usuarios</td>
-                  <td className="text-center py-3 px-4">Q700/mes</td>
-                  <td className="text-center py-3 px-4">Q1,300/mes</td>
-                  <td className="text-center py-3 px-4">Q2,100/mes</td>
+                  <td className="text-center py-3 px-4">Q815/mes</td>
+                  <td className="text-center py-3 px-4">Q1,525/mes</td>
+                  <td className="text-center py-3 px-4">Q2,440/mes</td>
                 </tr>
                 <tr className="border-b border-white/10">
                   <td className="py-3 px-4">11-15 usuarios</td>
-                  <td className="text-center py-3 px-4">Q1,000/mes</td>
-                  <td className="text-center py-3 px-4">Q1,900/mes</td>
-                  <td className="text-center py-3 px-4">Q3,000/mes</td>
+                  <td className="text-center py-3 px-4">Q1,183/mes</td>
+                  <td className="text-center py-3 px-4">Q2,218/mes</td>
+                  <td className="text-center py-3 px-4">Q3,550/mes</td>
                 </tr>
                 <tr>
                   <td className="py-3 px-4">16+ usuarios</td>

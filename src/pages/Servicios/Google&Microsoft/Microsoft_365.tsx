@@ -293,21 +293,21 @@ export default function Microsoft_365() {
               <tbody className="text-gray-300">
                 <tr className="border-b border-white/10">
                   <td className="py-3 px-4">1-5 usuarios</td>
-                  <td className="text-center py-3 px-4">Q250/mes</td>
-                  <td className="text-center py-3 px-4">Q450/mes</td>
-                  <td className="text-center py-3 px-4">Q700/mes</td>
+                  <td className="text-center py-3 px-4">Q279/mes</td>
+                  <td className="text-center py-3 px-4">Q528/mes</td>
+                  <td className="text-center py-3 px-4">Q778/mes</td>
                 </tr>
                 <tr className="border-b border-white/10">
                   <td className="py-3 px-4">6-10 usuarios</td>
-                  <td className="text-center py-3 px-4">Q450/mes</td>
-                  <td className="text-center py-3 px-4">Q800/mes</td>
-                  <td className="text-center py-3 px-4">Q1,200/mes</td>
+                  <td className="text-center py-3 px-4">Q510/mes</td>
+                  <td className="text-center py-3 px-4">Q968/mes</td>
+                  <td className="text-center py-3 px-4">Q1,424/mes</td>
                 </tr>
                 <tr className="border-b border-white/10">
                   <td className="py-3 px-4">11-15 usuarios</td>
-                  <td className="text-center py-3 px-4">Q650/mes</td>
-                  <td className="text-center py-3 px-4">Q1,150/mes</td>
-                  <td className="text-center py-3 px-4">Q1,800/mes</td>
+                  <td className="text-center py-3 px-4">Q740/mes</td>
+                  <td className="text-center py-3 px-4">Q1,405/mes</td>
+                  <td className="text-center py-3 px-4">Q2,070/mes</td>
                 </tr>
                 <tr>
                   <td className="py-3 px-4">16+ usuarios</td>
