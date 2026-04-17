@@ -8,7 +8,7 @@ export default function HostingProfesional() {
     title: 'Hosting Profesional - Alojamiento Web Seguro | CODEDMO',
     description: 'Hosting profesional con SSL gratuito, backup diario y soporte 24/7. Alojamiento web rápido y seguro para tu sitio web o aplicación.',
     keywords: ['hosting profesional', 'alojamiento web', 'ssl gratuito', 'backup diario', 'soporte 24/7'],
-    canonical: '/servicios/hosting&cloud/hosting'
+    canonical: 'https://codedmo.dev/servicios/hosting&cloud/hosting'
   });
 
   const handleWhatsAppContact = (planName: string) => {

@@ -8,7 +8,7 @@ export default function Api_Dev() {
     title: 'Desarrollo de APIs e Integraciones - Soluciones Backend | CODEDMO',
     description: 'Desarrollo de APIs REST, GraphQL y microservicios. Integraciones personalizadas para conectar tus sistemas y aplicaciones.',
     keywords: ['desarrollo apis', 'microservicios', 'integraciones', 'rest api', 'graphql', 'backend'],
-    canonical: '/servicios/desarrollo/api'
+    canonical: 'https://codedmo.dev/servicios/desarrollo/api'
   });
 
   const handleWhatsAppContact = (serviceName: string) => {

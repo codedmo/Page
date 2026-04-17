@@ -8,7 +8,7 @@ export default function Dominios() {
     title: 'Registro de Dominios - Tu Identidad Online | CODEDMO',
     description: 'Registro de dominios .com, .net, .org y más. Precios competitivos, renovación automática y DNS gratuito.',
     keywords: ['registro dominios', 'dominios baratos', 'com net org', 'dns gratuito', 'whois privacy'],
-    canonical: '/servicios/hosting&cloud/dominios'
+    canonical: 'https://codedmo.dev/servicios/hosting&cloud/dominios'
   });
 
   const features = [

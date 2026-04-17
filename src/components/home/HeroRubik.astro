@@ -1,0 +1,190 @@
+---
+const faces = ['front', 'back', 'left', 'right', 'top', 'bottom'];
+---
+
+<div class="relative">
+  <div class="absolute -left-8 -top-8 h-28 w-28 rounded-full bg-blue-500/20 blur-3xl" aria-hidden="true"></div>
+  <div class="absolute -bottom-10 -right-8 h-36 w-36 rounded-full bg-cyan-500/15 blur-3xl" aria-hidden="true"></div>
+
+  <div data-cube-main-shell class="transition-all duration-500">
+    <div class="absolute -top-20 left-1/2 -translate-x-1/2">
+      <div
+        data-cube-status
+        class="rounded-full border border-amber-400/30 bg-amber-500/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-amber-200"
+      >
+        Procesando
+      </div>
+    </div>
+
+    <div class="absolute -bottom-14 left-1/2 -translate-x-1/2">
+      <div class="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/90 shadow-lg shadow-black/20">
+        Presiona el cubo
+      </div>
+    </div>
+
+    <div class="absolute -left-8 top-10 rounded-full border border-white/10 bg-slate-950/70 px-4 py-2 text-xs font-medium text-slate-200 shadow-xl backdrop-blur-md">
+      React & Next.js
+    </div>
+    <div class="absolute -right-8 top-1/2 -translate-y-1/2 rounded-full border border-white/10 bg-slate-950/70 px-4 py-2 text-xs font-medium text-slate-200 shadow-xl backdrop-blur-md">
+      WordPress & PHP
+    </div>
+    <div class="absolute -left-4 bottom-0 rounded-full border border-white/10 bg-slate-950/70 px-4 py-2 text-xs font-medium text-slate-200 shadow-xl backdrop-blur-md">
+      E-commerce
+    </div>
+    <div class="absolute right-4 top-0 rounded-full border border-white/10 bg-slate-950/70 px-4 py-2 text-xs font-medium text-slate-200 shadow-xl backdrop-blur-md">
+      SEO & Analytics
+    </div>
+
+    <button
+      type="button"
+      data-cube-toggle
+      class="relative block rounded-[2.25rem] p-16 transition-transform duration-300 hover:scale-[1.03] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+      aria-label="Alternar cubo Rubik"
+      title="Alternar cubo Rubik"
+    >
+      <div class="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/15 via-cyan-500/10 to-teal-500/10 blur-3xl" aria-hidden="true"></div>
+      <div class="rubik-cube-container relative z-10">
+        <div data-cube-scene class="rubik-cube animate-cube-rotate">
+          {
+            faces.map((face) => (
+              <div class={`face ${face}`} data-face={face}></div>
+            ))
+          }
+        </div>
+      </div>
+      <div class="pointer-events-none absolute inset-0 rounded-full border border-white/10" aria-hidden="true"></div>
+    </button>
+  </div>
+
+  <button
+    type="button"
+    data-cube-floating
+    hidden
+    class="fixed right-6 top-24 z-40 rounded-2xl border border-blue-400/20 bg-slate-950/85 p-3 shadow-2xl shadow-black/30 backdrop-blur-xl transition-transform duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+    aria-label="Alternar cubo Rubik"
+    title="Alternar cubo Rubik"
+  >
+    <div class="rubik-cube-container scale-[0.22] origin-center">
+      <div data-cube-scene class="rubik-cube animate-cube-rotate">
+        {
+          faces.map((face) => (
+            <div class={`face ${face}`} data-face={face}></div>
+          ))
+        }
+      </div>
+    </div>
+  </button>
+</div>
+
+<script>
+  const faceOrder = ['front', 'back', 'left', 'right', 'top', 'bottom'];
+  const solvedColors = {
+    front: '#FFFFFF',
+    back: '#FFF600',
+    left: '#18C10B',
+    right: '#1800FF',
+    top: '#FF8400',
+    bottom: '#FF0000',
+  };
+
+  const colorClasses = {
+    '#FFFFFF': 'cube-piece-white',
+    '#FFF600': 'cube-piece-yellow',
+    '#18C10B': 'cube-piece-green',
+    '#1800FF': 'cube-piece-blue',
+    '#FF8400': 'cube-piece-orange',
+    '#FF0000': 'cube-piece-red',
+  };
+
+  const roots = Array.from(document.querySelectorAll('[data-cube-scene]'));
+  const toggles = Array.from(document.querySelectorAll('[data-cube-toggle], [data-cube-floating]'));
+  const floatingButton = document.querySelector('[data-cube-floating]');
+  const statusBadge = document.querySelector('[data-cube-status]');
+  const mainShell = document.querySelector('[data-cube-main-shell]');
+
+  let isSolved = false;
+  let scramble = buildScramble();
+
+  function buildScramble() {
+    const pool = [];
+    Object.keys(colorClasses).forEach((color) => {
+      for (let i = 0; i < 9; i += 1) pool.push(color);
+    });
+
+    for (let i = pool.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+
+    const result = {};
+    faceOrder.forEach((face, faceIndex) => {
+      result[face] = pool.slice(faceIndex * 9, faceIndex * 9 + 9);
+    });
+    return result;
+  }
+
+  function renderCube(scene, palette) {
+    faceOrder.forEach((face) => {
+      const container = scene.querySelector(`[data-face="${face}"]`);
+      if (!container) return;
+      container.innerHTML = '';
+      palette[face].forEach((color, index) => {
+        const piece = document.createElement('div');
+        piece.className = `cube-piece ${colorClasses[color]}`;
+        piece.dataset.face = face;
+        piece.dataset.index = `${index}`;
+        container.appendChild(piece);
+      });
+    });
+  }
+
+  function solvedPalette() {
+    const result = {};
+    faceOrder.forEach((face) => {
+      result[face] = Array.from({ length: 9 }, () => solvedColors[face]);
+    });
+    return result;
+  }
+
+  function syncStatus() {
+    if (!statusBadge) return;
+    statusBadge.textContent = isSolved ? 'Resuelto' : 'Procesando';
+    statusBadge.className = isSolved
+      ? 'rounded-full border border-green-400/30 bg-green-500/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-green-200'
+      : 'rounded-full border border-amber-400/30 bg-amber-500/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-amber-200';
+  }
+
+  function syncCubes() {
+    const palette = isSolved ? solvedPalette() : scramble;
+    roots.forEach((scene) => renderCube(scene, palette));
+    syncStatus();
+  }
+
+  function toggleCube() {
+    if (isSolved) {
+      scramble = buildScramble();
+      isSolved = false;
+    } else {
+      isSolved = true;
+    }
+    syncCubes();
+  }
+
+  toggles.forEach((toggle) => toggle.addEventListener('click', toggleCube));
+
+  function syncScrollState() {
+    const scrolled = window.scrollY > 100;
+    if (mainShell) {
+      mainShell.classList.toggle('scale-90', scrolled);
+      mainShell.classList.toggle('opacity-0', scrolled);
+      mainShell.classList.toggle('pointer-events-none', scrolled);
+    }
+    if (floatingButton instanceof HTMLElement) {
+      floatingButton.hidden = !scrolled;
+    }
+  }
+
+  syncCubes();
+  syncScrollState();
+  window.addEventListener('scroll', syncScrollState, { passive: true });
+</script>

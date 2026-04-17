@@ -1,0 +1,55 @@
+<section class="relative overflow-hidden bg-slate-950 py-20">
+  <div class="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:34px_34px]" aria-hidden="true"></div>
+  <div class="absolute right-1/4 top-10 h-80 w-80 rounded-full bg-blue-500/10 blur-3xl" aria-hidden="true"></div>
+
+  <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+      <div>
+        <div class="inline-flex items-center rounded-full border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-sm font-medium text-cyan-100">
+          Conoce a CODEDMO
+        </div>
+        <h2 class="mt-6 text-4xl font-black text-white sm:text-5xl">
+          Tecnología con criterio, no por moda
+        </h2>
+        <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
+          Somos una empresa guatemalteca enfocada en entregar soluciones digitales con impacto real:
+          claridad técnica, diseño útil, implementación responsable y soporte cercano.
+        </p>
+
+        <div class="mt-10 grid gap-6 md:grid-cols-2">
+          <article class="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <h3 class="text-xl font-bold text-white">Misión</h3>
+            <p class="mt-3 text-sm leading-7 text-slate-300">
+              Convertir ideas de negocio en sistemas y experiencias digitales sostenibles, accesibles
+              y medibles para empresas que quieren crecer.
+            </p>
+          </article>
+
+          <article class="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <h3 class="text-xl font-bold text-white">Visión</h3>
+            <p class="mt-3 text-sm leading-7 text-slate-300">
+              Ser el socio técnico de referencia para empresas que necesitan avanzar su operación sin
+              cargar con complejidad innecesaria.
+            </p>
+          </article>
+        </div>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          [
+            ['Excelencia', 'Priorizamos arquitectura limpia, rendimiento y mantenibilidad.'],
+            ['Confiabilidad', 'Tomamos en serio seguridad, soporte y continuidad operativa.'],
+            ['Colaboración', 'Trabajamos cerca del cliente, con claridad en alcance y decisiones.'],
+            ['Resultados', 'Cada entrega busca impacto visible en ventas, operación o productividad.'],
+          ].map(([title, description]) => (
+            <article class="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+              <h3 class="text-lg font-bold text-white">{title}</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-300">{description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

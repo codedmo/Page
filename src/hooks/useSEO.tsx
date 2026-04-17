@@ -697,12 +697,12 @@ export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' |
         'presupuesto inmediato',
         'herramientas estimación'
       ],
-      canonical: `${baseCanonical}/servicios/cotizacion/estimacion-rapida`,
+      canonical: `${baseCanonical}/servicios/cotizacion/estimacion`,
       breadcrumbs: [
         { name: 'Inicio', url: baseCanonical },
         { name: 'Servicios', url: `${baseCanonical}/servicios` },
         { name: 'Cotización', url: `${baseCanonical}/servicios/cotizacion` },
-        { name: 'Estimación Rápida', url: `${baseCanonical}/servicios/cotizacion/estimacion-rapida` }
+        { name: 'Estimación Rápida', url: `${baseCanonical}/servicios/cotizacion/estimacion` }
       ]
     },
     triangulo: {
@@ -715,12 +715,12 @@ export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' |
         'project management herramientas',
         'optimización recursos proyecto'
       ],
-      canonical: `${baseCanonical}/servicios/cotizacion/estimacion-rapida#triangulo`,
+      canonical: `${baseCanonical}/servicios/cotizacion/estimacion#triangulo`,
       breadcrumbs: [
         { name: 'Inicio', url: baseCanonical },
         { name: 'Servicios', url: `${baseCanonical}/servicios` },
         { name: 'Cotización', url: `${baseCanonical}/servicios/cotizacion` },
-        { name: 'Triángulo de Hierro', url: `${baseCanonical}/servicios/cotizacion/estimacion-rapida#triangulo` }
+        { name: 'Triángulo de Hierro', url: `${baseCanonical}/servicios/cotizacion/estimacion#triangulo` }
       ]
     }
   }

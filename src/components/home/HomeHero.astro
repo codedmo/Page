@@ -1,0 +1,71 @@
+---
+import HeroRubik from './HeroRubik.astro';
+---
+
+<section class="relative overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950">
+  <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:52px_52px]" aria-hidden="true"></div>
+  <div class="absolute left-1/4 top-24 h-96 w-96 rounded-full bg-blue-500/15 blur-3xl" aria-hidden="true"></div>
+  <div class="absolute bottom-10 right-1/4 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" aria-hidden="true"></div>
+
+  <div class="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl items-center gap-14 px-4 py-14 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-10">
+    <div class="space-y-7">
+      <div class="inline-flex items-center rounded-full border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-sm font-medium text-cyan-100">
+        Desarrollo web, software e infraestructura para equipos que necesitan ejecutar mejor
+      </div>
+
+      <div class="space-y-4">
+        <h1 class="max-w-3xl text-4xl font-black leading-tight text-white sm:text-5xl lg:text-7xl">
+          <span class="bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text text-transparent">
+            Desarrollo Web
+          </span>
+          <br />
+          <span class="text-white">& Software</span>
+          <br />
+          <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            Profesional
+          </span>
+        </h1>
+        <div class="h-1 w-28 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500"></div>
+      </div>
+
+      <p class="max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
+        Construimos productos digitales claros, rápidos y sostenibles. Sitios web, software a medida,
+        automatización e infraestructura pensados para crecer con tu operación.
+      </p>
+
+      <div class="grid gap-3 sm:grid-cols-3">
+        <div class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200 backdrop-blur-sm">
+          <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+          Desarrollo Web Personalizado
+        </div>
+        <div class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200 backdrop-blur-sm">
+          <span class="h-2.5 w-2.5 rounded-full bg-blue-400"></span>
+          Apps, APIs y Automatización
+        </div>
+        <div class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200 backdrop-blur-sm">
+          <span class="h-2.5 w-2.5 rounded-full bg-cyan-400"></span>
+          SEO, Hosting y Soporte
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <a
+          href="/contacto"
+          class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-3 text-base font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/20"
+        >
+          Contáctanos
+        </a>
+        <a
+          href="/servicios"
+          class="inline-flex items-center justify-center rounded-xl border border-blue-400/30 bg-white/5 px-6 py-3 text-base font-semibold text-white transition-all duration-300 hover:bg-white/10"
+        >
+          Ver Servicios
+        </a>
+      </div>
+    </div>
+
+    <div class="flex justify-center lg:justify-end">
+      <HeroRubik />
+    </div>
+  </div>
+</section>

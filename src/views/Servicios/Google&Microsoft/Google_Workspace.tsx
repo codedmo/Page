@@ -11,7 +11,7 @@ export default function Google_Workspace() {
     title: 'Google Workspace - Gmail, Drive, Meet | CODEDMO',
     description: 'Implementación y gestión de Google Workspace para empresas. Gmail profesional, Google Drive, Google Meet y herramientas colaborativas.',
     keywords: ['google workspace', 'gmail empresarial', 'google drive', 'google meet', 'herramientas colaborativas', 'productividad empresarial'],
-    canonical: '/servicios/google&microsoft/workspace'
+    canonical: 'https://codedmo.dev/servicios/google&microsoft/workspace'
   });
 
   const handleWhatsAppContact = (planName: string) => {

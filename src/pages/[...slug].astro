@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getRouteMeta } from '../lib/route-meta';
+import { reactIslandPaths, type ReactIslandRoutePath } from '../lib/react-island-routes';
+import ApiDev from '../views/Servicios/Desarrollo/Api_Dev';
+import MobileDev from '../views/Servicios/Desarrollo/Mobile_Dev';
+import SoftwareDev from '../views/Servicios/Desarrollo/Software_Dev';
+import WebDev from '../views/Servicios/Desarrollo/Web_Dev';
+import ConsultaGratuita from '../views/Servicios/Cotizacion/Consulta_Gratuita';
+import EstimacionRapida from '../views/Servicios/Cotizacion/Estimacion_Rapida';
+import GoogleWorkspace from '../views/Servicios/Google&Microsoft/Google_Workspace';
+import Microsoft365 from '../views/Servicios/Google&Microsoft/Microsoft_365';
+import CloudServices from '../views/Servicios/Hosting&Cloud/cloud';
+import Dominios from '../views/Servicios/Hosting&Cloud/dominios';
+import HostingProfesional from '../views/Servicios/Hosting&Cloud/hostingProfesional';
+
+export function getStaticPaths() {
+  return reactIslandPaths.map((routePath) => ({
+    params: { slug: routePath.slice(1) },
+    props: { routePath },
+  }));
+}
+
+const { routePath } = Astro.props as { routePath: ReactIslandRoutePath };
+const meta = getRouteMeta(routePath);
+---
+
+<BaseLayout {...meta} currentPath={routePath}>
+  {routePath === '/servicios/desarrollo/web' && <WebDev client:load />}
+  {routePath === '/servicios/desarrollo/software' && <SoftwareDev client:load />}
+  {routePath === '/servicios/desarrollo/movil' && <MobileDev client:load />}
+  {routePath === '/servicios/desarrollo/api' && <ApiDev client:load />}
+  {routePath === '/servicios/hosting&cloud/hosting' && <HostingProfesional client:load />}
+  {routePath === '/servicios/hosting&cloud/cloud' && <CloudServices client:load />}
+  {routePath === '/servicios/hosting&cloud/dominios' && <Dominios client:load />}
+  {routePath === '/servicios/google&microsoft/workspace' && <GoogleWorkspace client:load />}
+  {routePath === '/servicios/google&microsoft/microsoft365' && <Microsoft365 client:load />}
+  {routePath === '/servicios/cotizacion/consulta' && <ConsultaGratuita client:load />}
+  {routePath === '/servicios/cotizacion/estimacion' && <EstimacionRapida client:load />}
+</BaseLayout>

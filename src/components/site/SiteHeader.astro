@@ -1,0 +1,103 @@
+---
+import { Menu, X } from 'lucide-react';
+import { navigation } from '../../data/site';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+
+const isActive = (href: string) =>
+  href === '/' ? currentPath === '/' : currentPath === href || currentPath.startsWith(`${href}/`);
+---
+
+<header
+  id="site-header"
+  class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-slate-950/75 backdrop-blur-xl transition-shadow duration-300"
+>
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+    <a
+      href="/"
+      class="flex items-center gap-3 transition-opacity duration-300 hover:opacity-80"
+      aria-label="Ir al inicio"
+    >
+      <img
+        src="/codedmo-logo-white-horizontal.svg"
+        alt="CODEDMO"
+        width="140"
+        height="40"
+        class="h-9 w-auto"
+      />
+    </a>
+
+    <nav class="hidden items-center gap-2 md:flex">
+      {
+        navigation.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'rounded-full px-4 py-2 text-sm font-medium transition-all duration-300',
+              isActive(item.href)
+                ? 'bg-blue-500/15 text-white ring-1 ring-blue-400/40'
+                : 'text-slate-300 hover:bg-white/5 hover:text-white',
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <details class="relative md:hidden" data-mobile-nav>
+      <summary
+        class="flex cursor-pointer list-none items-center justify-center rounded-xl border border-white/10 bg-white/5 p-2 text-white transition-colors duration-300 hover:bg-white/10"
+        aria-label="Abrir menú"
+      >
+        <Menu class="h-5 w-5 details-open:hidden" />
+        <X class="hidden h-5 w-5 details-open:block" />
+      </summary>
+      <div class="absolute right-0 top-14 w-72 rounded-2xl border border-white/10 bg-slate-950/95 p-3 shadow-2xl shadow-black/30 backdrop-blur-xl">
+        <nav class="flex flex-col gap-1">
+          {
+            navigation.map((item) => (
+              <a
+                href={item.href}
+                class:list={[
+                  'rounded-xl px-4 py-3 text-sm font-medium transition-colors duration-300',
+                  isActive(item.href)
+                    ? 'bg-blue-500/15 text-white ring-1 ring-blue-400/40'
+                    : 'text-slate-300 hover:bg-white/5 hover:text-white',
+                ]}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </details>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('site-header');
+  const mobileNav = document.querySelector('[data-mobile-nav]');
+
+  const syncShadow = () => {
+    if (!header) return;
+    header.classList.toggle('shadow-xl', window.scrollY > 10);
+    header.classList.toggle('shadow-black/20', window.scrollY > 10);
+  };
+
+  syncShadow();
+  window.addEventListener('scroll', syncShadow, { passive: true });
+
+  document.addEventListener('click', (event) => {
+    if (!(mobileNav instanceof HTMLDetailsElement)) return;
+    if (!mobileNav.open) return;
+    if (mobileNav.contains(event.target)) return;
+    mobileNav.open = false;
+  });
+  
+</script>

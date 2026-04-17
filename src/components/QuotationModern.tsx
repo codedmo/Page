@@ -919,7 +919,7 @@ export default function QuotationModern() {
     title: 'Cotizador de Proyectos - Presupuesto Instantáneo | CODEDMO',
     description: 'Cotizador interactivo para proyectos de desarrollo web y software. Genera presupuestos detallados y exporta cotizaciones en PDF profesional.',
     keywords: ['cotizador proyectos', 'presupuesto desarrollo', 'calculadora costos web', 'estimación software', 'cotización pdf'],
-    canonical: '/servicios/cotizacion/estimacion-rapida#cotizador',
+    canonical: 'https://codedmo.dev/servicios/cotizacion/estimacion#cotizador',
     structuredData: {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",

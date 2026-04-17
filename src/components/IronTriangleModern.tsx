@@ -33,7 +33,7 @@ export default function IronTriangleModern() {
     title: 'Triángulo de Hierro - Análisis de Proyectos | CODEDMO',
     description: 'Herramienta interactiva del Triángulo de Hierro para analizar la relación entre calidad, tiempo y costo en proyectos de desarrollo. Optimiza la gestión de tu proyecto.',
     keywords: ['triángulo hierro', 'gestión proyectos', 'calidad tiempo costo', 'análisis proyectos', 'planificación desarrollo', 'project management'],
-    canonical: '/servicios/cotizacion/estimacion-rapida#triangulo',
+    canonical: 'https://codedmo.dev/servicios/cotizacion/estimacion#triangulo',
     structuredData: {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",

@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-
 export default function NotFound() {
   return (
     <div className="min-h-[calc(68vh-theme(spacing.16)-theme(spacing.20))] tech-bg flex items-center justify-center p-4 pt-20">
@@ -28,18 +26,18 @@ export default function NotFound() {
 
           {/* Botones de acción */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link 
-              to="/" 
+            <a
+              href="/"
               className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-blue-500/25"
             >
               ← Volver al inicio
-            </Link>
-            <Link 
-              to="/contacto" 
+            </a>
+            <a
+              href="/contacto"
               className="px-6 py-3 border border-teal-500/50 text-teal-400 font-semibold rounded-lg hover:bg-teal-500/10 transition-all duration-300"
             >
               Reportar error
-            </Link>
+            </a>
           </div>
 
           {/* Información adicional */}

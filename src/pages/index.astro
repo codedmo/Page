@@ -1,0 +1,71 @@
+---
+import Contact from '../components/contact';
+import HomeAbout from '../components/home/HomeAbout.astro';
+import HomeHero from '../components/home/HomeHero.astro';
+import HomeServices from '../components/home/HomeServices.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const canonical = 'https://codedmo.dev';
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'CODEDMO',
+    url: canonical,
+    description:
+      'Desarrollo web, software a medida, infraestructura, automatización y productividad empresarial en Guatemala.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'CODEDMO Solutions',
+    url: canonical,
+    logo: `${canonical}/favicon.ico`,
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: '+50237923612',
+      contactType: 'customer service',
+      areaServed: 'GT',
+      availableLanguage: ['Spanish', 'English'],
+    },
+  },
+];
+---
+
+<BaseLayout
+  currentPath="/"
+  title="Inicio | CODEDMO"
+  description="Desarrollo web, software a medida, hosting, integraciones y productividad empresarial para equipos que necesitan ejecutar mejor."
+  canonical={canonical}
+  keywords={[
+    'desarrollo web Guatemala',
+    'software a medida',
+    'hosting profesional',
+    'Google Workspace',
+    'Microsoft 365',
+    'cotización de proyectos',
+  ]}
+  ogImage="/images/Hero.png"
+  structuredData={structuredData}
+>
+  <HomeHero />
+  <HomeServices />
+  <HomeAbout />
+
+  <section class="relative overflow-hidden bg-slate-900 py-20">
+    <div class="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.07)_1px,transparent_1px)] bg-[size:30px_30px]" aria-hidden="true"></div>
+    <div class="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl" aria-hidden="true"></div>
+    <div class="absolute bottom-0 right-1/4 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" aria-hidden="true"></div>
+    <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div class="mb-10 text-center">
+        <h2 class="text-4xl font-black text-white sm:text-5xl">Contáctanos</h2>
+        <p class="mx-auto mt-4 max-w-2xl text-lg leading-8 text-slate-300">
+          Cuéntanos el contexto de tu proyecto y armamos el siguiente paso con criterio técnico.
+        </p>
+      </div>
+      <div class="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm sm:p-10">
+        <Contact client:load />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

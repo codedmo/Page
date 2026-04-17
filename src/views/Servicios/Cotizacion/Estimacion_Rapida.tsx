@@ -11,7 +11,7 @@ export default function EstimacionRapida() {
     title: 'Estimación Rápida - Calculadora de Proyectos | CODEDMO',
     description: 'Herramientas de estimación rápida para proyectos web. Cotizador inteligente y análisis del triángulo de hierro.',
     keywords: ['estimación proyectos', 'cotizador web', 'calculadora desarrollo', 'triángulo hierro', 'planificación proyectos'],
-    canonical: '/servicios/cotizacion/estimacion-rapida'
+    canonical: 'https://codedmo.dev/servicios/cotizacion/estimacion'
   });
 
   const [activeTab, setActiveTab] = useState<'quotation' | 'triangle'>('quotation');

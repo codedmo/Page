@@ -11,7 +11,7 @@ export default function Microsoft_365() {
     title: 'Microsoft 365 - Office, Teams, OneDrive | CODEDMO',
     description: 'Implementación de Microsoft 365 para empresas. Office completo, Teams, OneDrive y herramientas de productividad empresarial.',
     keywords: ['microsoft 365', 'office 365', 'microsoft teams', 'onedrive', 'outlook', 'productividad empresarial'],
-    canonical: '/servicios/google&microsoft/microsoft365'
+    canonical: 'https://codedmo.dev/servicios/google&microsoft/microsoft365'
   });
 
   const handleWhatsAppContact = (planName: string) => {

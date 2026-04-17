@@ -1,0 +1,142 @@
+---
+import { ArrowUp, Facebook, Github, Instagram, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
+import { footerLegalLinks, featuredServices, navigation } from '../../data/site';
+
+const currentYear = new Date().getFullYear();
+
+const socialLinks = [
+  {
+    href: 'https://github.com/codedmo',
+    label: 'GitHub',
+    icon: Github,
+  },
+  {
+    href: 'https://www.facebook.com/profile.php?id=61578671524932',
+    label: 'Facebook',
+    icon: Facebook,
+  },
+  {
+    href: 'https://instagram.com/codedmo.dev',
+    label: 'Instagram',
+    icon: Instagram,
+  },
+  {
+    href: 'https://wa.me/50237923612',
+    label: 'WhatsApp',
+    icon: MessageCircle,
+  },
+];
+---
+
+<footer class="relative overflow-hidden border-t border-white/10 bg-slate-950">
+  <div class="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:34px_34px]" aria-hidden="true"></div>
+  <div class="absolute left-1/4 top-0 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" aria-hidden="true"></div>
+  <div class="absolute bottom-0 right-1/4 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" aria-hidden="true"></div>
+
+  <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="grid gap-10 lg:grid-cols-4">
+      <div class="lg:col-span-1">
+        <a href="/" class="inline-flex items-center gap-3">
+          <img
+            src="/codedmo-logo-white-horizontal.svg"
+            alt="CODEDMO"
+            width="150"
+            height="40"
+            class="h-9 w-auto"
+          />
+        </a>
+        <p class="mt-5 max-w-sm text-sm leading-7 text-slate-300">
+          Empresa guatemalteca enfocada en productos web, software a medida, infraestructura y
+          automatización para equipos que necesitan entregar mejor y más rápido.
+        </p>
+
+        <div class="mt-6 space-y-3 text-sm text-slate-300">
+          <a href="mailto:info@codedmo.dev" class="flex items-center gap-3 transition-colors hover:text-white">
+            <Mail class="h-4 w-4 text-blue-400" />
+            <span>info@codedmo.dev</span>
+          </a>
+          <a href="tel:+50237923612" class="flex items-center gap-3 transition-colors hover:text-white">
+            <Phone class="h-4 w-4 text-cyan-400" />
+            <span>+502 3792-3612</span>
+          </a>
+          <div class="flex items-center gap-3">
+            <MapPin class="h-4 w-4 text-teal-400" />
+            <span>Guatemala, Guatemala</span>
+          </div>
+        </div>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          {
+            socialLinks.map((social) => (
+              <a
+                href={social.href}
+                target="_blank"
+                rel="noreferrer"
+                class="rounded-xl border border-white/10 bg-white/5 p-2.5 text-slate-300 transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:text-white"
+                aria-label={social.label}
+              >
+                <social.icon class="h-5 w-5" />
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-400">Navegación</h2>
+        <ul class="mt-5 space-y-3 text-sm text-slate-300">
+          {
+            navigation.map((item) => (
+              <li>
+                <a href={item.href} class="transition-colors hover:text-white">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-400">Servicios</h2>
+        <ul class="mt-5 space-y-3 text-sm text-slate-300">
+          {
+            featuredServices.map((item) => (
+              <li>
+                <a href={item.href} class="transition-colors hover:text-white">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-400">Legal</h2>
+        <ul class="mt-5 space-y-3 text-sm text-slate-300">
+          {
+            footerLegalLinks.map((item) => (
+              <li>
+                <a href={item.href} class="transition-colors hover:text-white">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12 flex flex-col gap-4 border-t border-white/10 pt-6 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+      <p>© {currentYear} CODEDMO. Todos los derechos reservados.</p>
+      <a
+        href="#top"
+        class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-slate-300 transition-colors hover:bg-white/10 hover:text-white"
+      >
+        <ArrowUp class="h-4 w-4" />
+        <span>Volver arriba</span>
+      </a>
+    </div>
+  </div>
+</footer>

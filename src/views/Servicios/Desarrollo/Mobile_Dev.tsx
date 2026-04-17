@@ -8,7 +8,7 @@ export default function Mobile_Dev() {
     title: 'Desarrollo de Apps Móviles - iOS y Android | CODEDMO',
     description: 'Desarrollo de aplicaciones móviles nativas y multiplataforma para iOS y Android. Apps que tus usuarios amarán.',
     keywords: ['desarrollo móvil', 'apps ios', 'apps android', 'react native', 'flutter', 'aplicaciones móviles'],
-    canonical: '/servicios/desarrollo/mobile'
+    canonical: 'https://codedmo.dev/servicios/desarrollo/movil'
   });
 
   const handleWhatsAppContact = (serviceName: string) => {

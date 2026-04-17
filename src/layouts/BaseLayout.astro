@@ -1,0 +1,80 @@
+---
+import '../index.css';
+import SiteFooter from '../components/site/SiteFooter.astro';
+import SiteHeader from '../components/site/SiteHeader.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  keywords?: string[];
+  ogImage?: string;
+  noIndex?: boolean;
+  currentPath?: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  canonical,
+  keywords = [],
+  ogImage = '/favicon.ico',
+  noIndex = false,
+  currentPath = '/',
+  structuredData,
+} = Astro.props;
+
+const siteUrl = 'https://codedmo.dev';
+const resolvedOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+const robots = noIndex ? 'noindex, nofollow' : 'index, follow';
+const schemaItems = structuredData ? (Array.isArray(structuredData) ? structuredData : [structuredData]) : [];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
+    <meta name="author" content="CODEDMO Solutions" />
+    <meta name="robots" content={robots} />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta http-equiv="content-language" content="es" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={resolvedOgImage} />
+    <meta property="og:site_name" content="CODEDMO" />
+    <meta property="og:locale" content="es_GT" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={resolvedOgImage} />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="canonical" href={canonical} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    {
+      schemaItems.map((item) => (
+        <script type="application/ld+json" set:html={JSON.stringify(item)} />
+      ))
+    }
+  </head>
+  <body class="bg-slate-950 text-white antialiased">
+    <div id="top"></div>
+    <SiteHeader currentPath={currentPath} />
+    <main class="min-h-screen pt-16">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

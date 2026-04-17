@@ -1,0 +1,9 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { NOT_FOUND_META } from '../lib/route-meta';
+import NotFound from '../views/NotFound';
+---
+
+<BaseLayout {...NOT_FOUND_META}>
+  <NotFound />
+</BaseLayout>

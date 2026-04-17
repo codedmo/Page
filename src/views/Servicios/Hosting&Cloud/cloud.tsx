@@ -8,7 +8,7 @@ export default function CloudServices() {
     title: 'Servicios Cloud - Infraestructura en la Nube | CODEDMO',
     description: 'Servicios de cloud computing para empresas. AWS, Azure y Google Cloud. Migración, administración y optimización de costos.',
     keywords: ['servicios cloud', 'aws', 'azure', 'google cloud', 'migración cloud', 'devops'],
-    canonical: '/servicios/hosting&cloud/cloud'
+    canonical: 'https://codedmo.dev/servicios/hosting&cloud/cloud'
   });
 
   const handleWhatsAppContact = (serviceName: string) => {

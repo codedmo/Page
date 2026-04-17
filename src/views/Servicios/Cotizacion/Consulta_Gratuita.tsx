@@ -1,7 +1,6 @@
 import { MessageCircle, Calendar, CheckCircle, Phone, Clock } from 'lucide-react';
 import { gradients } from '@/config/theme-colors';
 import { useSEO } from '@/hooks/useSEO';
-import { Link } from 'react-router-dom';
 import Contact from '@/components/contact';
 
 export default function Consulta_Gratuita() {
@@ -10,7 +9,7 @@ export default function Consulta_Gratuita() {
     title: 'Consulta Gratuita - Asesoría Técnica Sin Costo | CODEDMO',
     description: 'Solicita una consulta gratuita con nuestros expertos. Asesoría técnica sin costo ni compromiso para tu proyecto tecnológico.',
     keywords: ['consulta gratuita', 'asesoría técnica', 'consulta sin costo', 'evaluación proyecto', 'asesoramiento tecnológico'],
-    canonical: '/servicios/cotizacion/consulta'
+    canonical: 'https://codedmo.dev/servicios/cotizacion/consulta'
   });
 
   const benefits = [
@@ -125,13 +124,13 @@ export default function Consulta_Gratuita() {
         <h3 className="text-xl font-bold text-white mb-4">¿Prefieres hablar directamente?</h3>
         <p className="text-gray-300 mb-6">Llámanos o envíanos un WhatsApp para agendar tu consulta inmediatamente</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link 
-            to="/contacto"
+          <a
+            href="/contacto"
             className={`inline-flex items-center px-6 py-3 bg-gradient-to-r ${gradients.primary} text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25`}
           >
             <Phone className="w-5 h-5 mr-2" />
             Contactar Ahora
-          </Link>
+          </a>
         </div>
       </div>
     </div>
