@@ -57,19 +57,19 @@ export default function CloudServices() {
     {
       title: 'Migración Cloud',
       description: 'Trasladamos tu infraestructura a la nube de forma segura',
-      price: 'Desde $1,500',
+      quote: 'Cotización según arquitectura',
       features: ['Análisis de infraestructura', 'Plan de migración', 'Ejecución supervisada', 'Optimización post-migración']
     },
     {
       title: 'Administración Cloud',
       description: 'Gestionamos tu infraestructura cloud 24/7',
-      price: 'Desde $500/mes',
+      quote: 'Cotización según operación',
       features: ['Monitoreo 24/7', 'Actualizaciones automáticas', 'Backup programado', 'Optimización de costos']
     },
     {
       title: 'DevOps & CI/CD',
       description: 'Automatizamos tus procesos de desarrollo y despliegue',
-      price: 'Desde $800',
+      quote: 'Cotización según alcance',
       features: ['Pipelines automatizados', 'Docker/Kubernetes', 'Infrastructure as Code', 'Monitoring avanzado']
     }
   ];
@@ -93,7 +93,7 @@ export default function CloudServices() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center mb-12">
         <div className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${gradients.primary} text-white rounded-full text-sm font-medium mb-6`}>
@@ -159,7 +159,7 @@ export default function CloudServices() {
             <div key={index} className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
               <h3 className="text-xl font-bold text-white mb-3">{service.title}</h3>
               <p className="text-gray-400 mb-4">{service.description}</p>
-              <div className="text-purple-400 font-bold text-lg mb-4">{service.price}</div>
+              <div className="text-purple-300 font-semibold mb-4">{service.quote}</div>
               <ul className="space-y-2 mb-6">
                 {service.features.map((feature, fIndex) => (
                   <li key={fIndex} className="flex items-center text-sm text-gray-300">

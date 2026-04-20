@@ -105,53 +105,29 @@ export default function Software_Dev() {
         itemListElement: [
           {
             '@type': 'Offer',
+            description: 'Cotización personalizada según módulos, integraciones y operación de tu empresa',
             itemOffered: {
               '@type': 'Service',
               name: 'ERP Empresarial',
-              description: 'Sistema integral de gestión empresarial con inventarios, contabilidad y recursos humanos',
-              offers: {
-                '@type': 'Offer',
-                priceCurrency: 'GTQ',
-                price: '10000',
-                priceSpecification: {
-                  '@type': 'PriceSpecification',
-                  priceCurrency: 'GTQ',
-                  price: '10000',
-                  valueAddedTaxIncluded: false
-                }
-              }
+              description: 'Sistema integral de gestión empresarial con inventarios, contabilidad y recursos humanos'
             }
           },
           {
             '@type': 'Offer',
+            description: 'Cotización personalizada según flujo comercial, automatizaciones y reporting',
             itemOffered: {
               '@type': 'Service',
               name: 'CRM Personalizado',
-              description: 'Sistema de gestión de relaciones con clientes y automatización de ventas',
-              offers: {
-                '@type': 'Offer',
-                priceCurrency: 'GTQ',
-                price: '8000',
-                priceSpecification: {
-                  '@type': 'PriceSpecification',
-                  priceCurrency: 'GTQ',
-                  price: '8000',
-                  valueAddedTaxIncluded: false
-                }
-              }
+              description: 'Sistema de gestión de relaciones con clientes y automatización de ventas'
             }
           },
           {
             '@type': 'Offer',
+            description: 'Cotización personalizada según requerimientos y arquitectura',
             itemOffered: {
               '@type': 'Service',
               name: 'Software Específico',
-              description: 'Desarrollo completamente personalizado según requerimientos específicos',
-              offers: {
-                '@type': 'Offer',
-                priceCurrency: 'GTQ',
-                description: 'Cotización personalizada según requerimientos'
-              }
+              description: 'Desarrollo completamente personalizado según requerimientos específicos'
             }
           }
         ]
@@ -190,21 +166,21 @@ export default function Software_Dev() {
       description: 'Sistema integral de gestión empresarial',
       icon: Cog,
       features: ['Gestión de inventarios', 'Contabilidad integrada', 'Recursos humanos', 'Reportes avanzados'],
-      price: 'Desde Q10,000'
+      quote: 'Cotización según alcance'
     },
     {
       title: 'CRM Personalizado',
       description: 'Gestión de relaciones con clientes',
       icon: Users,
       features: ['Seguimiento de leads', 'Automatización de ventas', 'Analytics de clientes', 'Integración email'],
-      price: 'Desde Q8,000'
+      quote: 'Cotización según alcance'
     },
     {
       title: 'Software Específico',
       description: 'Desarrollo completamente personalizado',
       icon: Monitor,
       features: ['Análisis de requerimientos', 'Diseño UX/UI', 'Desarrollo ágil', 'Testing completo'],
-      price: 'Cotización personalizada'
+      quote: 'Cotización personalizada'
     }
   ];
 
@@ -286,7 +262,7 @@ export default function Software_Dev() {
         <meta name="software.features" content="Inventory Management, Accounting, HR, Sales Automation" />
         <meta name="software.scalability" content="Enterprise-grade, Scalable Architecture" />
         <meta name="software.security" content="Data Encryption, Access Control, Audit Trails" />
-        <meta name="software.pricing" content="ERP from Q10,000, CRM from Q8,000" />
+        <meta name="software.pricing" content="Cotización personalizada según módulos, complejidad e integraciones" />
         
         {/* Meta tags para tecnologías específicas */}
         <meta name="tech.frontend" content="React, Angular, Vue.js" />
@@ -317,7 +293,7 @@ export default function Software_Dev() {
         <meta name="business.methodology" content="Agile Development with Regular Updates" />
       </div>
 
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center mb-12">
         <div className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${gradients.primary} text-white rounded-full text-sm font-medium mb-6`}>
@@ -360,7 +336,7 @@ export default function Software_Dev() {
                 ))}
               </ul>
               <div className="border-t border-white/10 pt-4 mb-4">
-                <div className="text-purple-400 font-bold text-lg">{solution.price}</div>
+                <div className="text-purple-300 font-semibold">{solution.quote}</div>
               </div>
               <button 
                 onClick={() => handleWhatsAppContact(solution.title)}

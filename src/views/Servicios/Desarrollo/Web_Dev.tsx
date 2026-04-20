@@ -105,59 +105,29 @@ export default function Web_Design() {
         itemListElement: [
           {
             '@type': 'Offer',
+            description: 'Cotización personalizada según alcance y objetivos de conversión',
             itemOffered: {
               '@type': 'Service',
               name: 'Landing Pages',
-              description: 'Páginas de alta conversión optimizadas para campañas específicas',
-              offers: {
-                '@type': 'Offer',
-                priceCurrency: 'GTQ',
-                price: '1000',
-                priceSpecification: {
-                  '@type': 'PriceSpecification',
-                  priceCurrency: 'GTQ',
-                  price: '1000',
-                  valueAddedTaxIncluded: false
-                }
-              }
+              description: 'Páginas de alta conversión optimizadas para campañas específicas'
             }
           },
           {
             '@type': 'Offer',
+            description: 'Cotización personalizada según estructura, contenidos e integraciones requeridas',
             itemOffered: {
               '@type': 'Service',
               name: 'Sitios Corporativos',
-              description: 'Presencia web profesional para empresas',
-              offers: {
-                '@type': 'Offer',
-                priceCurrency: 'GTQ',
-                price: '2000',
-                priceSpecification: {
-                  '@type': 'PriceSpecification',
-                  priceCurrency: 'GTQ',
-                  price: '2000',
-                  valueAddedTaxIncluded: false
-                }
-              }
+              description: 'Presencia web profesional para empresas'
             }
           },
           {
             '@type': 'Offer',
+            description: 'Cotización personalizada según catálogo, pagos e integraciones',
             itemOffered: {
               '@type': 'Service',
               name: 'E-commerce',
-              description: 'Tiendas online completas y funcionales',
-              offers: {
-                '@type': 'Offer',
-                priceCurrency: 'GTQ',
-                price: '3500',
-                priceSpecification: {
-                  '@type': 'PriceSpecification',
-                  priceCurrency: 'GTQ',
-                  price: '3500',
-                  valueAddedTaxIncluded: false
-                }
-              }
+              description: 'Tiendas online completas y funcionales'
             }
           }
         ]
@@ -196,7 +166,7 @@ export default function Web_Design() {
       description: 'Páginas de alta conversión para campañas específicas',
       icon: Zap,
       features: ['Optimizada para conversión', 'A/B Testing', 'Integración con forms', 'Analytics avanzados', 'SEO básico'],
-      price: 'Desde Q1000',
+      quote: 'Cotización según alcance',
       time: '1 - 2 semanas'
     },
     {
@@ -204,7 +174,7 @@ export default function Web_Design() {
       description: 'Presencia web profesional para tu empresa',
       icon: Globe,
       features: ['Diseño corporativo', 'CMS integrado', 'Blog incluido', 'Optimización SEO avanzada', 'Soporte post-lanzamiento'],
-      price: 'Desde Q2000',
+      quote: 'Cotización según alcance',
       time: '2 - 4 semanas'
     },
     {
@@ -212,7 +182,7 @@ export default function Web_Design() {
       description: 'Tiendas online completas y funcionales',
       icon: Smartphone,
       features: ['Carrito de compras', 'Pagos integrados', 'Gestión de inventario', 'Panel de administración'],
-      price: 'Desde Q3500',
+      quote: 'Cotización según alcance',
       time: '6 - 8 semanas'
     }
   ];
@@ -271,7 +241,7 @@ export default function Web_Design() {
         <meta name="service.performance" content="Lighthouse 90+, Core Web Vitals Optimized" />
         <meta name="service.seo" content="SEO Optimized, Schema Markup, Fast Loading" />
         <meta name="service.responsive" content="Mobile First, Responsive Design" />
-        <meta name="service.pricing" content="From Q1000, Competitive Rates" />
+        <meta name="service.pricing" content="Cotización personalizada según alcance y complejidad" />
         
         {/* Meta tags para tecnologías específicas */}
         <meta name="tech.frontend" content="React, Next.js, TypeScript, Tailwind CSS" />
@@ -299,7 +269,7 @@ export default function Web_Design() {
         <meta name="business.consultation" content="Free initial consultation" />
       </div>
 
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center mb-12">
         <div className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${gradients.primary} text-white rounded-full text-sm font-medium mb-6`}>
@@ -342,8 +312,8 @@ export default function Web_Design() {
                 ))}
               </ul>
               <div className="border-t border-white/10 pt-4 space-y-2 mb-4">
-                <div className="text-purple-400 font-bold text-lg">{type.price}</div>
-                <div className="text-gray-400 text-sm">Tiempo: {type.time}</div>
+                <div className="text-purple-300 font-semibold">{type.quote}</div>
+                <div className="text-gray-400 text-sm">Tiempo estimado: {type.time}</div>
               </div>
               <button 
                 onClick={() => handleWhatsAppContact(type.title)}

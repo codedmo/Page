@@ -134,7 +134,7 @@ export default function Google_Workspace() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center mb-12">
         <div className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${gradients.primary} text-white rounded-full text-sm font-medium mb-6`}>
@@ -145,7 +145,7 @@ export default function Google_Workspace() {
           Potencia tu empresa con <span className={`bg-gradient-to-r ${gradients.textPrimary} bg-clip-text text-transparent`}>Google Workspace</span>
         </h1>
         <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-          Gmail profesional, Google Drive ilimitado, Meet sin restricciones y todas las herramientas que tu equipo necesita. Paquetes diseñados para empresas guatemaltecas con precios accesibles.
+          Gmail profesional, Google Drive, Meet y herramientas colaborativas configuradas según la operación, seguridad y tamaño de tu equipo.
         </p>
       </div>
 
@@ -165,160 +165,72 @@ export default function Google_Workspace() {
         })}
       </div>
 
-      {/* Pricing */}
+      {/* Plans */}
       <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">Planes y Paquetes Disponibles</h2>
-        
-        {/* Paquetes por Empresa */}
-        {/* <div className="mb-12">
-          <h3 className="text-xl font-semibold text-white mb-6 text-center">Paquetes por Empresa</h3>
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
-            <div className="text-center bg-white/5 rounded-xl p-6">
-              <h4 className="text-lg font-bold text-white mb-2">Paquete Básico</h4>
-              <p className="text-3xl font-bold text-purple-400 mb-2">Q500</p>
-              <p className="text-sm text-gray-400 mb-4">Hasta 5 usuarios</p>
-              <ul className="text-gray-300 space-y-2 text-sm">
-                <li>Gmail profesional personalizado</li>
-                <li>30 GB por usuario</li>
-                <li>Google Meet (100 participantes)</li>
-                <li>Google Drive compartido</li>
-                <li>Soporte básico</li>
-              </ul>
-            </div>
-            <div className={`relative border-2 ${borders.primary} rounded-xl p-6 bg-white/5`}>
-              <div className={`absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r ${gradients.primary} text-white px-4 py-1 rounded-full text-sm font-medium`}>
-                Recomendado
-              </div>
-              <h4 className="text-lg font-bold text-white mb-2">Paquete Estándar</h4>
-              <p className="text-3xl font-bold text-purple-400 mb-2">Q1,300</p>
-              <p className="text-sm text-gray-400 mb-4">Hasta 10 usuarios</p>
-              <ul className="text-gray-300 space-y-2 text-sm">
-                <li>Gmail profesional personalizado</li>
-                <li>2 TB por usuario</li>
-                <li>Google Meet (150 participantes)</li>
-                <li>Grabación de reuniones</li>
-                <li>Google Drive colaborativo</li>
-                <li>Soporte prioritario</li>
-              </ul>
-            </div>
-            <div className="text-center bg-white/5 rounded-xl p-6">
-              <h4 className="text-lg font-bold text-white mb-2">Paquete Premium</h4>
-              <p className="text-3xl font-bold text-purple-400 mb-2">Q3,000</p>
-              <p className="text-sm text-gray-400 mb-4">Hasta 15 usuarios</p>
-              <ul className="text-gray-300 space-y-2 text-sm">
-                <li>Gmail profesional personalizado</li>
-                <li>5 TB por usuario</li>
-                <li>Google Meet (500 participantes)</li>
-                <li>Funciones de seguridad avanzadas</li>
-                <li>Google Vault (archivo)</li>
-                <li>Soporte 24/7</li>
-              </ul>
-            </div>
-          </div>
-        </div> */}
+        <h2 className="text-2xl font-bold text-white mb-4 text-center">Planes y alcance disponibles</h2>
+        <p className="text-center text-gray-400 max-w-3xl mx-auto mb-10">
+          Elegimos el plan adecuado según usuarios, almacenamiento, seguridad y nivel de acompañamiento que necesita tu empresa.
+        </p>
 
-        {/* Planes Individuales */}
-        {/* <div className="border-t border-white/10 pt-8">
-          <h3 className="text-xl font-semibold text-white mb-6 text-center">Planes por Usuario Individual</h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center bg-gray-900/50 rounded-xl p-6 border border-gray-700">
-              <h4 className="text-lg font-bold text-white mb-2">Business Starter</h4>
-              <p className="text-2xl font-bold text-blue-400 mb-2">Q85</p>
-              <p className="text-sm text-gray-400 mb-4">por usuario/mes</p>
-              <ul className="text-gray-300 space-y-2 text-sm">
-                <li>Gmail profesional</li>
-                <li>30 GB de almacenamiento</li>
-                <li>Google Meet (100 participantes)</li>
-                <li>Documentos, Hojas, Presentaciones</li>
-                <li>Soporte estándar</li>
-              </ul>
-            </div>
-            <div className="text-center bg-gray-900/50 rounded-xl p-6 border border-gray-700">
-              <h4 className="text-lg font-bold text-white mb-2">Business Standard</h4>
-              <p className="text-2xl font-bold text-blue-400 mb-2">Q120</p>
-              <p className="text-sm text-gray-400 mb-4">por usuario/mes</p>
-              <ul className="text-gray-300 space-y-2 text-sm">
-                <li>Todo de Business Starter</li>
-                <li>2 TB de almacenamiento</li>
-                <li>Google Meet (150 participantes)</li>
-                <li>Grabación de reuniones</li>
-                <li>Soporte mejorado</li>
-              </ul>
-            </div>
-            <div className="text-center bg-gray-900/50 rounded-xl p-6 border border-gray-700">
-              <h4 className="text-lg font-bold text-white mb-2">Business Plus</h4>
-              <p className="text-2xl font-bold text-blue-400 mb-2">Q180</p>
-              <p className="text-sm text-gray-400 mb-4">por usuario/mes</p>
-              <ul className="text-gray-300 space-y-2 text-sm">
-                <li>Todo de Business Standard</li>
-                <li>5 TB de almacenamiento</li>
-                <li>Google Meet (500 participantes)</li>
-                <li>Seguridad avanzada</li>
-                <li>Soporte 24/7</li>
-              </ul>
-            </div>
-          </div>
-        </div> */}
-
-        {/* Tabla de Comparación */}
-        <div className="mt-12 border-t border-white/10 pt-8">
-          <h3 className="text-xl font-semibold text-white mb-6 text-center">Comparación de Precios</h3>
-          <div className="overflow-x-auto relative">
-            <table className="w-full text-sm relative">
-              <thead>
-                <tr className="border-b border-white/20">
-                  <th className="text-left py-3 px-4 text-white font-semibold">Usuarios</th>
-                  <th className="text-center py-3 px-4 text-white font-semibold">
-                    <div className="flex items-center justify-center">
-                      Starter
-                      <TooltipInfo planKey="starter" planData={planDetails.starter} />
-                    </div>
-                  </th>
-                  <th className="text-center py-3 px-4 text-white font-semibold">
-                    <div className="flex items-center justify-center">
-                      Standard
-                      <TooltipInfo planKey="standard" planData={planDetails.standard} />
-                    </div>
-                  </th>
-                  <th className="text-center py-3 px-4 text-white font-semibold">
-                    <div className="flex items-center justify-center">
-                      Plus
-                      <TooltipInfo planKey="plus" planData={planDetails.plus} />
-                    </div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="text-gray-300">
-                <tr className="border-b border-white/10">
-                  <td className="py-3 px-4">1-5 usuarios</td>
-                  <td className="text-center py-3 px-4">Q445/mes</td>
-                  <td className="text-center py-3 px-4">Q833/mes</td>
-                  <td className="text-center py-3 px-4">Q1,332/mes</td>
-                </tr>
-                <tr className="border-b border-white/10">
-                  <td className="py-3 px-4">6-10 usuarios</td>
-                  <td className="text-center py-3 px-4">Q815/mes</td>
-                  <td className="text-center py-3 px-4">Q1,525/mes</td>
-                  <td className="text-center py-3 px-4">Q2,440/mes</td>
-                </tr>
-                <tr className="border-b border-white/10">
-                  <td className="py-3 px-4">11-15 usuarios</td>
-                  <td className="text-center py-3 px-4">Q1,183/mes</td>
-                  <td className="text-center py-3 px-4">Q2,218/mes</td>
-                  <td className="text-center py-3 px-4">Q3,550/mes</td>
-                </tr>
-                <tr>
-                  <td className="py-3 px-4">16+ usuarios</td>
-                  <td className="text-center py-3 px-4" colSpan={3}>Consultar precio personalizado</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div className="overflow-x-auto relative">
+          <table className="w-full text-sm relative">
+            <thead>
+              <tr className="border-b border-white/20">
+                <th className="text-left py-3 px-4 text-white font-semibold">Comparativa</th>
+                <th className="text-center py-3 px-4 text-white font-semibold">
+                  <div className="flex items-center justify-center">
+                    Starter
+                    <TooltipInfo planKey="starter" planData={planDetails.starter} />
+                  </div>
+                </th>
+                <th className="text-center py-3 px-4 text-white font-semibold">
+                  <div className="flex items-center justify-center">
+                    Standard
+                    <TooltipInfo planKey="standard" planData={planDetails.standard} />
+                  </div>
+                </th>
+                <th className="text-center py-3 px-4 text-white font-semibold">
+                  <div className="flex items-center justify-center">
+                    Plus
+                    <TooltipInfo planKey="plus" planData={planDetails.plus} />
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-300">
+              <tr className="border-b border-white/10">
+                <td className="py-3 px-4">Almacenamiento</td>
+                <td className="text-center py-3 px-4">30 GB por usuario</td>
+                <td className="text-center py-3 px-4">2 TB por usuario</td>
+                <td className="text-center py-3 px-4">5 TB por usuario</td>
+              </tr>
+              <tr className="border-b border-white/10">
+                <td className="py-3 px-4">Videollamadas</td>
+                <td className="text-center py-3 px-4">Meet hasta 100 participantes</td>
+                <td className="text-center py-3 px-4">Meet hasta 150 participantes + grabación</td>
+                <td className="text-center py-3 px-4">Meet hasta 500 participantes</td>
+              </tr>
+              <tr className="border-b border-white/10">
+                <td className="py-3 px-4">Colaboración</td>
+                <td className="text-center py-3 px-4">Docs, Sheets, Slides y calendarios compartidos</td>
+                <td className="text-center py-3 px-4">Todo Starter + páginas de reserva</td>
+                <td className="text-center py-3 px-4">Todo Standard + Google Vault</td>
+              </tr>
+              <tr className="border-b border-white/10">
+                <td className="py-3 px-4">Soporte</td>
+                <td className="text-center py-3 px-4">Estándar</td>
+                <td className="text-center py-3 px-4">Prioritario</td>
+                <td className="text-center py-3 px-4">24/7</td>
+              </tr>
+              <tr>
+                <td className="py-3 px-4">Implementación</td>
+                <td className="text-center py-3 px-4" colSpan={3}>Cotización y despliegue según usuarios, dominios y necesidades de seguridad</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        {/* Additional Info */}
         <div className="mt-8">
-          {/* WhatsApp Contact Buttons */}
           <div className="grid md:grid-cols-3 gap-4 mb-6">
             <button 
               onClick={() => handleWhatsAppContact('Business Starter')}
@@ -342,13 +254,10 @@ export default function Google_Workspace() {
               <span>Consultar Business Plus</span>
             </button>
           </div>
-          
+
           <div className="text-center">
-            <p className="text-gray-400 text-sm mb-4">
-              * Precios mensuales en quetzales guatemaltecos. Los paquetes incluyen configuración inicial gratuita.
-            </p>
             <p className="text-gray-300 text-sm">
-              ¿Necesitas una configuración especial? Contáctanos para un plan a medida.
+              Configuramos, migramos y administramos Google Workspace según la estructura real de tu equipo.
             </p>
           </div>
         </div>

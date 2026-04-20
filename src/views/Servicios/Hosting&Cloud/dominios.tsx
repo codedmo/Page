@@ -6,7 +6,7 @@ export default function Dominios() {
   // SEO para Dominios
   useSEO({
     title: 'Registro de Dominios - Tu Identidad Online | CODEDMO',
-    description: 'Registro de dominios .com, .net, .org y más. Precios competitivos, renovación automática y DNS gratuito.',
+    description: 'Registro de dominios .com, .net, .org y más. Renovación automática, gestión DNS y soporte técnico especializado.',
     keywords: ['registro dominios', 'dominios baratos', 'com net org', 'dns gratuito', 'whois privacy'],
     canonical: 'https://codedmo.dev/servicios/hosting&cloud/dominios'
   });
@@ -23,14 +23,14 @@ export default function Dominios() {
   ];
 
   const domainExtensions = [
-    { extension: '.com', price: '$12.99/año', description: 'El más popular para empresas' },
-    { extension: '.net', price: '$14.99/año', description: 'Ideal para tecnología' },
-    { extension: '.org', price: '$13.99/año', description: 'Perfecto para organizaciones' },
-    { extension: '.info', price: '$11.99/año', description: 'Para sitios informativos' },
-    { extension: '.biz', price: '$15.99/año', description: 'Enfocado en negocios' },
-    { extension: '.mx', price: '$35.99/año', description: 'Dominio mexicano' },
-    { extension: '.co', price: '$29.99/año', description: 'Alternativa moderna al .com' },
-    { extension: '.io', price: '$59.99/año', description: 'Popular entre startups tech' }
+    { extension: '.com', note: 'Consultar tarifa vigente', description: 'El más popular para empresas' },
+    { extension: '.net', note: 'Consultar tarifa vigente', description: 'Ideal para tecnología' },
+    { extension: '.org', note: 'Consultar tarifa vigente', description: 'Perfecto para organizaciones' },
+    { extension: '.info', note: 'Consultar tarifa vigente', description: 'Para sitios informativos' },
+    { extension: '.biz', note: 'Consultar tarifa vigente', description: 'Enfocado en negocios' },
+    { extension: '.mx', note: 'Consultar tarifa vigente', description: 'Dominio mexicano' },
+    { extension: '.co', note: 'Consultar tarifa vigente', description: 'Alternativa moderna al .com' },
+    { extension: '.io', note: 'Consultar tarifa vigente', description: 'Popular entre startups tech' }
   ];
 
   const services = [
@@ -84,7 +84,7 @@ export default function Dominios() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center mb-12">
         <div className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${gradients.primary} text-white rounded-full text-sm font-medium mb-6`}>
@@ -95,7 +95,7 @@ export default function Dominios() {
           Tu <span className={`bg-gradient-to-r ${gradients.textPrimary} bg-clip-text text-transparent`}>identidad digital</span> empieza aquí
         </h1>
         <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-          Registra el dominio perfecto para tu proyecto. Precios competitivos y todas las herramientas que necesitas.
+          Registra el dominio perfecto para tu proyecto con acompañamiento técnico, renovación automática y control total de DNS.
         </p>
       </div>
 
@@ -131,7 +131,7 @@ export default function Dominios() {
           {domainExtensions.map((domain, index) => (
             <div key={index} className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-purple-500/50 transition-all duration-300 text-center">
               <div className="text-2xl font-bold text-purple-400 mb-2">{domain.extension}</div>
-              <div className="text-lg font-semibold text-white mb-2">{domain.price}</div>
+              <div className="text-sm font-semibold text-purple-200 mb-2">{domain.note}</div>
               <div className="text-sm text-gray-400">{domain.description}</div>
             </div>
           ))}

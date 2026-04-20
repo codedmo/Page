@@ -59,7 +59,7 @@ export default function Consulta_Gratuita() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center mb-12">
         <div className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${gradients.primary} text-white rounded-full text-sm font-medium mb-6`}>
@@ -99,7 +99,7 @@ export default function Consulta_Gratuita() {
         {/* Contact Form */}
         <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
           {/* <h3 className="text-xl font-bold text-white mb-6">Solicita tu consulta</h3> */}
-          <Contact />
+          <Contact showHeader={false} />
         </div>
       </div>
 

@@ -3,7 +3,12 @@ import { portfolioProjects } from '../data/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const canonical = 'https://codedmo.dev/portafolio';
-const categories = ['all', ...new Set(portfolioProjects.map((project) => project.type))];
+const sortedProjects = [...portfolioProjects].sort((a, b) => {
+  const demoDiff = Number(!!a.demo) - Number(!!b.demo);
+  if (demoDiff !== 0) return demoDiff;
+  return Number(!!b.featured) - Number(!!a.featured);
+});
+const categories = ['all', ...new Set(sortedProjects.map((project) => project.type))];
 ---
 
 <BaseLayout
@@ -56,7 +61,7 @@ const categories = ['all', ...new Set(portfolioProjects.map((project) => project
 
       <div class="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-3" data-portfolio-grid>
         {
-          portfolioProjects.map((project) => (
+          sortedProjects.map((project) => (
             <article
               data-category={project.type}
               class="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1"

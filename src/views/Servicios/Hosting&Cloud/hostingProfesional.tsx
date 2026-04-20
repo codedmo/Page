@@ -32,7 +32,8 @@ export default function HostingProfesional() {
   const plans = [
     {
       name: 'Básico',
-      price: 'Q40/mes',
+      quote: 'Cotización personalizada',
+      focus: 'Ideal para sitios informativos, landing pages y proyectos que están empezando.',
       storage: '8 GB NVMe',
       domains: '1 dominio',
       emails: '10 cuentas email',
@@ -40,7 +41,8 @@ export default function HostingProfesional() {
     },
     {
       name: 'Profesional',
-      price: 'Q120/mes',
+      quote: 'Cotización personalizada',
+      focus: 'Pensado para negocios que necesitan más capacidad, migración y soporte prioritario.',
       storage: '35 GB NVMe',
       domains: '3 dominios',
       emails: '50 cuentas email',
@@ -49,7 +51,8 @@ export default function HostingProfesional() {
     },
     {
       name: 'Empresarial',
-      price: 'Q250/mes',
+      quote: 'Cotización personalizada',
+      focus: 'Para operaciones con mayor demanda, múltiples dominios y soporte especializado.',
       storage: '70 GB NVMe',
       domains: '10 Dominios',
       emails: 'Cuentas email ilimitadas',
@@ -58,7 +61,7 @@ export default function HostingProfesional() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center mb-12">
         <div className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${gradients.primary} text-white rounded-full text-sm font-medium mb-6`}>
@@ -98,7 +101,7 @@ export default function HostingProfesional() {
               )}
               <div className="text-center mb-6">
                 <h3 className="text-xl font-bold text-white mb-2">{plan.name}</h3>
-                <div className="text-3xl font-bold text-purple-400 mb-4">{plan.price}</div>
+                <p className="text-sm text-gray-400 mb-4">{plan.focus}</p>
                 <div className="space-y-2 text-gray-300">
                   <div>{plan.storage}</div>
                   <div>{plan.domains}</div>
@@ -113,6 +116,9 @@ export default function HostingProfesional() {
                   </li>
                 ))}
               </ul>
+              <div className="mb-6 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-purple-200">
+                {plan.quote}
+              </div>
               <button 
                 onClick={() => handleWhatsAppContact(plan.name)}
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 mb-2"

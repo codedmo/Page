@@ -60,11 +60,11 @@ const faces = ['front', 'back', 'left', 'right', 'top', 'bottom'];
     type="button"
     data-cube-floating
     hidden
-    class="fixed right-6 top-24 z-40 rounded-2xl border border-blue-400/20 bg-slate-950/85 p-3 shadow-2xl shadow-black/30 backdrop-blur-xl transition-transform duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+    class="fixed right-6 top-24 z-40 flex h-20 w-20 items-center justify-center overflow-hidden bg-transparent transition-transform duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
     aria-label="Alternar cubo Rubik"
     title="Alternar cubo Rubik"
   >
-    <div class="rubik-cube-container scale-[0.22] origin-center">
+    <div class="rubik-cube-container flex-shrink-0 scale-[0.22]">
       <div data-cube-scene class="rubik-cube animate-cube-rotate">
         {
           faces.map((face) => (
@@ -175,7 +175,7 @@ const faces = ['front', 'back', 'left', 'right', 'top', 'bottom'];
   function syncScrollState() {
     const scrolled = window.scrollY > 100;
     if (mainShell) {
-      mainShell.classList.toggle('scale-90', scrolled);
+      // mainShell.classList.toggle('scale-90', scrolled);
       mainShell.classList.toggle('opacity-0', scrolled);
       mainShell.classList.toggle('pointer-events-none', scrolled);
     }

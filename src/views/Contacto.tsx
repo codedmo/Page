@@ -215,7 +215,7 @@ export default function Contacto() {
             {/* Right column - formulario (más grande) */}
             <main className={`md:col-span-2 bg-white/6 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-2xl transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
               <div className="prose prose-invert max-w-none text-white/90">
-                <Contact />
+                <Contact showHeader={false} />
               </div>
             </main>
           </div>

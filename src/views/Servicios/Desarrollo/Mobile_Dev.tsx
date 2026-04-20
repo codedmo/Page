@@ -35,7 +35,7 @@ export default function Mobile_Dev() {
       description: 'Máximo rendimiento para iOS y Android',
       icon: Smartphone,
       features: ['Swift/Kotlin', 'Rendimiento óptimo', 'Acceso completo al hardware', 'App Store optimizado'],
-      price: 'Desde Q12,000',
+      quote: 'Cotización según alcance',
       time: '3-6 meses',
       platforms: ['iOS', 'Android']
     },
@@ -44,7 +44,7 @@ export default function Mobile_Dev() {
       description: 'Una app para iOS y Android',
       icon: Tablet,
       features: ['React Native/Flutter', 'Código compartido', 'Desarrollo más rápido', 'Menor costo'],
-      price: 'Desde Q8,000',
+      quote: 'Cotización según alcance',
       time: '2-4 meses',
       platforms: ['iOS', 'Android', 'Web']
     },
@@ -53,7 +53,7 @@ export default function Mobile_Dev() {
       description: 'Progressive Web App',
       icon: Download,
       features: ['Funciona sin conexión', 'Instalable desde navegador', 'Push notifications', 'Responsive design'],
-      price: 'Desde Q5,000',
+      quote: 'Cotización según alcance',
       time: '1-2 meses',
       platforms: ['iOS', 'Android', 'Web', 'Desktop']
     }
@@ -114,7 +114,7 @@ export default function Mobile_Dev() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center mb-12">
         <div className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${gradients.primary} text-white rounded-full text-sm font-medium mb-6`}>
@@ -157,8 +157,8 @@ export default function Mobile_Dev() {
                 ))}
               </ul>
               <div className="border-t border-white/10 pt-4 space-y-2 mb-4">
-                <div className="text-purple-400 font-bold text-lg">{type.price}</div>
-                <div className="text-gray-400 text-sm">Tiempo: {type.time}</div>
+                <div className="text-purple-300 font-semibold">{type.quote}</div>
+                <div className="text-gray-400 text-sm">Tiempo estimado: {type.time}</div>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {type.platforms.map((platform, pIndex) => (
                     <span key={pIndex} className="px-2 py-1 bg-purple-500/20 text-purple-300 text-xs rounded-full">

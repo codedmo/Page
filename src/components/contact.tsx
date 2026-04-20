@@ -19,7 +19,11 @@ interface ApiResponse {
   data?: unknown;
 }
 
-export default function Contact() {
+interface ContactProps {
+  showHeader?: boolean;
+}
+
+export default function Contact({ showHeader = true }: ContactProps) {
   const [formData, setFormData] = useState<FormData>({
     nombre: '',
     email: '',
@@ -557,16 +561,16 @@ export default function Contact() {
 
   return (
     <div className="container mx-auto px-6 max-w-2xl">
-      
-      {/* Título */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4">
-          Contáctanos
-        </h1>
-        <p className="text-xl text-gray-300">
-          Cuéntanos sobre tu proyecto y te ayudaremos a hacerlo realidad
-        </p>
-      </div>
+      {showHeader && (
+        <div className="text-center mb-12">
+          <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+            Contáctanos
+          </h1>
+          <p className="text-xl text-gray-300">
+            Cuéntanos sobre tu proyecto y te ayudaremos a hacerlo realidad
+          </p>
+        </div>
+      )}
 
       {/* Formulario */}
       <form onSubmit={handleSubmit} className="space-y-4">
