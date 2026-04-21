@@ -8,18 +8,18 @@ import HeroRubik from './HeroRubik.astro';
   <div class="absolute bottom-10 right-1/4 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" aria-hidden="true"></div>
 
   <div class="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl items-center gap-14 px-4 py-14 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-10">
-    <div class="space-y-7">
+    <div class="order-2 lg:order-1 space-y-7">
       <div class="inline-flex items-center rounded-full border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-sm font-medium text-cyan-100">
         Desarrollo web, software e infraestructura para equipos que necesitan ejecutar mejor
       </div>
 
       <div class="space-y-4">
-        <h1 class="max-w-3xl text-4xl font-black leading-tight text-white sm:text-5xl lg:text-7xl">
+        <h1 class="max-w-3xl text-[40px] font-black leading-tight text-white sm:text-[52px] lg:text-[60px]">
           <span class="bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text text-transparent">
             Desarrollo Web
           </span>
           <br />
-          <span class="text-white">& Software</span>
+          <span class="text-white">Y Software</span>
           <br />
           <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
             Profesional
@@ -64,7 +64,7 @@ import HeroRubik from './HeroRubik.astro';
       </div>
     </div>
 
-    <div class="flex justify-center lg:justify-end">
+    <div class="order-1 lg:order-2 flex justify-center pt-10 lg:justify-end lg:pt-0">
       <HeroRubik />
     </div>
   </div>

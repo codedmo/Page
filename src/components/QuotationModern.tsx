@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Calculator, CheckCircle, Clock, DollarSign, FileText, Download, Phone, Settings, Eye, EyeOff, X, Save, Loader2 } from 'lucide-react';
 import { gradients } from '@/config/theme-colors';
 import { PDFDocument, rgb, StandardFonts, PDFPage } from 'pdf-lib';
@@ -26,876 +26,872 @@ interface AdminSettings {
 }
 
 // Configuración de administración temporal
-const ADMIN_PASSWORD = 'CODEDMO2025';
+const ADMIN_PASSWORD = '@Programacion256';
 const DEFAULT_SETTINGS: AdminSettings = {
-  hourlyRate: 25,
+  hourlyRate: 30,
   currency: 'Q',
   hoursPerDay: 5,
   billingPercentage: 5,
   isAuthenticated: false
 };
 
-// Datos expandidos para la cotización con componentes técnicos específicos
+// Datos de cotización — cada ítem es específico, sin duplicados ni englobaciones
 const systemElements: QuotationItem[] = [
+  // ── UI/UX ──
   {
     id: '1',
-    name: 'Diseño UI/UX',
+    name: 'Wireframes y Prototipo Clickeable (Figma)',
     category: 'UI/UX',
     hours: 20,
     complexity: 'Media',
-    description: 'Wireframes, mockups y prototipo interactivo'
+    description: 'Bocetos de pantallas, flujos de usuario y prototipo interactivo en Figma con hasta 15 pantallas'
   },
   {
     id: '2',
-    name: 'Sistema de Componentes',
+    name: 'Guía de Estilos (Tipografía, Colores y Tokens)',
     category: 'UI/UX',
-    hours: 25,
+    hours: 24,
     complexity: 'Media',
-    description: 'Design System con componentes reutilizables'
+    description: 'Paleta de colores, escalas tipográficas, espaciados y tokens CSS/Tailwind documentados'
   },
   {
     id: '3',
-    name: 'Responsive Design',
+    name: 'Librería de Componentes UI Reutilizables',
     category: 'UI/UX',
-    hours: 20,
-    complexity: 'Baja',
-    description: 'Adaptación móvil, tablet y desktop'
+    hours: 26,
+    complexity: 'Media',
+    description: 'Botones, inputs, cards, modals y tablas como componentes codificados con variantes y props'
   },
   {
     id: '4',
-    name: 'Animaciones y Transiciones',
+    name: 'Maquetación Responsive (Mobile + Tablet + Desktop)',
     category: 'UI/UX',
-    hours: 25,
-    complexity: 'Media',
-    description: 'Micro-interacciones y animaciones CSS/JS'
+    hours: 26,
+    complexity: 'Baja',
+    description: 'CSS Grid/Flexbox adaptado a 3 breakpoints (360 px, 768 px, 1280 px) con pruebas en dispositivos'
   },
   {
     id: '5',
-    name: 'Testing de Usabilidad',
+    name: 'Animaciones de Scroll, Hover y Carga (CSS/JS)',
     category: 'UI/UX',
-    hours: 10,
+    hours: 30,
     complexity: 'Media',
-    description: 'Pruebas de usuario y optimización UX'
+    description: 'Scroll reveal, efectos hover en cards, loaders animados y transiciones entre vistas'
   },
-  {
-    id: '89',
-    name: 'Ícono/Branding de la App',
-    category: 'UI/UX',
-    hours: 8,
-    complexity: 'Baja',
-    description: 'Ícono, splash y adaptativos por plataforma'
-  },
-
   {
     id: '6',
-    name: 'Estructuración Frontend',
-    category: 'Frontend',
-    hours: 10,
-    complexity: 'Baja',
-    description: 'Arquitectura de carpetas y componentes React/Vue'
+    name: 'Pruebas de Usabilidad con 5 Usuarios Reales',
+    category: 'UI/UX',
+    hours: 14,
+    complexity: 'Media',
+    description: '5 sesiones grabadas con tareas definidas, métricas de éxito/error y reporte de hallazgos'
   },
   {
     id: '7',
-    name: 'State Management',
-    category: 'Frontend',
-    hours: 25,
-    complexity: 'Media',
-    description: 'Redux, Zustand o Context API'
+    name: 'Ícono de App, Splash Screen y Favicon',
+    category: 'UI/UX',
+    hours: 10,
+    complexity: 'Baja',
+    description: 'Ícono adaptativo iOS/Android, pantalla de carga y favicon en tamaños 16/32/180/512 px'
   },
+
+  // ── Frontend ──
   {
     id: '8',
-    name: 'Formularios Avanzados',
+    name: 'Scaffold del Proyecto (Vite/Next/Nuxt)',
     category: 'Frontend',
-    hours: 25,
-    complexity: 'Media',
-    description: 'Validaciones, campos dinámicos y file uploads'
+    hours: 15,
+    complexity: 'Baja',
+    description: 'Inicialización del proyecto, estructura de carpetas, aliases de importación y linter configurado'
   },
   {
     id: '9',
-    name: 'Routing y Navegación',
+    name: 'Estado Global con Redux/Zustand/Pinia',
     category: 'Frontend',
-    hours: 25,
-    complexity: 'Baja',
-    description: 'React Router o Vue Router con guards'
+    hours: 28,
+    complexity: 'Media',
+    description: 'Store centralizado con slices/módulos, acciones asíncronas y persistencia en localStorage'
   },
   {
     id: '10',
-    name: 'Optimización Performance',
+    name: 'Formulario de hasta 10 Campos con Validación (Zod/Yup)',
+    category: 'Frontend',
+    hours: 18,
+    complexity: 'Baja',
+    description: 'Inputs, selects, checkboxes con validación en tiempo real, mensajes de error y submit'
+  },
+  {
+    id: '11',
+    name: 'Formulario Multi-Paso (3+ Pasos) con Barra de Progreso',
     category: 'Frontend',
     hours: 20,
     complexity: 'Media',
-    description: 'Lazy loading, code splitting, bundle optimization'
-  },
-
-  {
-    id: '11',
-    name: 'Arquitectura MVC',
-    category: 'Backend',
-    hours: 25,
-    complexity: 'Media',
-    description: 'Estructura Model-View-Controller'
+    description: 'Wizard con navegación entre pasos, validación por paso, resumen final y envío'
   },
   {
     id: '12',
-    name: 'Creación de API REST',
-    category: 'Backend',
-    hours: 35,
-    complexity: 'Alta',
-    description: 'Endpoints RESTful con documentación OpenAPI'
+    name: 'Router con Layouts Anidados y Rutas Protegidas',
+    category: 'Frontend',
+    hours: 26,
+    complexity: 'Baja',
+    description: 'React Router/Vue Router con layouts, guards de autenticación, redirecciones y 404'
   },
   {
     id: '13',
-    name: 'Integración de APIs',
-    category: 'Backend',
+    name: 'Lazy Loading de Rutas y Code Splitting por Chunk',
+    category: 'Frontend',
     hours: 20,
     complexity: 'Media',
-    description: 'Consumo de APIs externas y webhooks'
+    description: 'Carga diferida por ruta, chunks separados, prefetch de rutas frecuentes y bundle < 200 KB inicial'
   },
+
+  // ── Backend ──
   {
     id: '14',
-    name: 'Middleware y Guards',
+    name: 'Arquitectura de Capas (MVC/Clean) en Node/Django/Laravel',
     category: 'Backend',
-    hours: 15,
+    hours: 16,
     complexity: 'Media',
-    description: 'Interceptores, validaciones y protección de rutas'
+    description: 'Separación de controllers, services y repositories con inyección de dependencias'
   },
   {
     id: '15',
-    name: 'Manejo de Errores',
+    name: 'API REST (CRUD + Paginación + Filtros) con Swagger',
     category: 'Backend',
-    hours: 15,
-    complexity: 'Baja',
-    description: 'Try-catch, logs y respuestas de error estándar'
+    hours: 30,
+    complexity: 'Alta',
+    description: 'Endpoints RESTful, paginación cursor/offset, filtros por query params y documentación OpenAPI'
   },
-
   {
     id: '16',
-    name: 'Diseño de Base de Datos',
-    category: 'Database',
-    hours: 10,
+    name: 'Consumo de 1 API Externa con Retry y Cache',
+    category: 'Backend',
+    hours: 16,
     complexity: 'Media',
-    description: 'ERD, normalización y optimización'
+    description: 'Integración con 1 servicio externo: autenticación, reintentos exponenciales y cache de respuestas'
   },
   {
     id: '17',
-    name: 'Estructuración de DB',
-    category: 'Database',
-    hours: 15,
-    complexity: 'Baja',
-    description: 'Tablas, relaciones y constraints'
+    name: 'Middleware de Autenticación y Verificación de Roles',
+    category: 'Backend',
+    hours: 10,
+    complexity: 'Media',
+    description: 'Interceptor que valida token JWT, extrae el rol del usuario y bloquea rutas no autorizadas'
   },
   {
     id: '18',
-    name: 'Migrations y Seeds',
-    category: 'Database',
-    hours: 15,
+    name: 'Manejo Centralizado de Errores con Logging Estructurado',
+    category: 'Backend',
+    hours: 4,
     complexity: 'Baja',
-    description: 'Versionado de DB y datos de prueba'
+    description: 'Try-catch global, códigos HTTP estándar, mensajes descriptivos y logs JSON (Winston/Pino)'
   },
+
+  // ── Database ──
   {
     id: '19',
-    name: 'Índices y Optimización',
+    name: 'Diagrama Entidad-Relación (10–20 Tablas) y Normalización',
     category: 'Database',
-    hours: 20,
+    hours: 12,
     complexity: 'Media',
-    description: 'Performance queries y indexación'
+    description: 'ERD documentado con relaciones, claves foráneas, constraints y normalización hasta 3NF'
   },
   {
     id: '20',
-    name: 'Backup y Recuperación',
+    name: 'Migraciones Versionadas y Datos Semilla (Seeders)',
     category: 'Database',
-    hours: 15,
+    hours: 8,
     complexity: 'Baja',
-    description: 'Estrategias de respaldo automatizado'
+    description: 'Scripts de migración con rollback, datos de prueba por ambiente y ejecución automatizada'
   },
-
   {
     id: '21',
-    name: 'CRUD de Usuarios',
-    category: 'Users',
-    hours: 20,
+    name: 'Índices Compuestos y Optimización de Queries (EXPLAIN)',
+    category: 'Database',
+    hours: 10,
     complexity: 'Media',
-    description: 'Crear, leer, actualizar y eliminar usuarios'
+    description: 'Análisis de queries lentas con EXPLAIN, creación de índices y vistas materializadas'
   },
   {
     id: '22',
-    name: 'Sistema de Roles',
+    name: 'Backup Diario Automático con Retención de 30 Días',
+    category: 'Database',
+    hours: 8,
+    complexity: 'Baja',
+    description: 'Cron de respaldo a S3/almacenamiento externo, rotación de archivos y restauración verificada'
+  },
+
+  // ── Users ──
+  {
+    id: '23',
+    name: 'Registro, Edición y Desactivación de Cuenta',
     category: 'Users',
-    hours: 25,
+    hours: 16,
     complexity: 'Media',
-    description: 'RBAC con permisos granulares'
+    description: 'Crear cuenta con verificación, editar datos personales, desactivar y eliminar con confirmación'
   },
   {
     id: '24',
-    name: 'Perfiles de Usuario',
+    name: 'Roles y Permisos por Recurso/Acción (RBAC)',
     category: 'Users',
-    hours: 15,
-    complexity: 'Baja',
-    description: 'Gestión de perfil y configuraciones'
-  },
-  {
-    id: '43',
-    name: 'Administración de Usuarios (Backoffice)',
-    category: 'Users',
-    hours: 22,
-    complexity: 'Media',
-    description: 'Alta/baja, suspensión, restablecer contraseñas, auditoría'
-  },
-
-  {
-    id: '41',
-    name: 'Acceso con Email/Password',
-    category: 'Auth',
     hours: 16,
     complexity: 'Media',
-    description: 'Registro, login, verificación por correo y cierre de sesión'
-  },
-  {
-    id: '42',
-    name: 'Acceso con Redes Sociales (OAuth)',
-    category: 'Auth',
-    hours: 20,
-    complexity: 'Media',
-    description: 'Google, Facebook, Apple, GitHub con enlace a cuentas'
-  },
-  {
-    id: '23',
-    name: 'Autenticación JWT',
-    category: 'Auth',
-    hours: 25,
-    complexity: 'Alta',
-    description: 'JSON Web Tokens con refresh tokens'
+    description: 'Tabla de roles (admin/editor/viewer), permisos por recurso y acción, UI para asignar roles'
   },
   {
     id: '25',
-    name: 'Recuperación de Contraseña',
-    category: 'Auth',
-    hours: 20,
-    complexity: 'Media',
-    description: 'Reset password con email verification'
+    name: 'Página de Perfil con Avatar, Idioma y Notificaciones',
+    category: 'Users',
+    hours: 16,
+    complexity: 'Baja',
+    description: 'Datos personales editables, subida de foto de perfil, selector de idioma y toggles de notificación'
   },
-
   {
     id: '26',
-    name: 'Encriptación de Datos',
-    category: 'Security',
-    hours: 20,
+    name: 'Panel Admin: Listado, Suspensión y Auditoría de Usuarios',
+    category: 'Users',
+    hours: 14,
     complexity: 'Media',
-    description: 'Bcrypt, hashing y datos sensibles'
+    description: 'Tabla paginada con filtros, acciones de suspender/restaurar, reset de contraseña y log de cambios'
+  },
+
+  // ── Auth ──
+  {
+    id: '27',
+    name: 'Login y Registro con Email/Contraseña + Verificación por Correo',
+    category: 'Auth',
+    hours: 10,
+    complexity: 'Media',
+    description: 'Formularios de login/registro, envío de email de verificación, activación de cuenta y logout'
   },
   {
     id: '28',
-    name: 'Validación de Datos',
-    category: 'Security',
-    hours: 15,
-    complexity: 'Baja',
-    description: 'Sanitización y validación de inputs'
+    name: 'Login con Google, Facebook o Apple (OAuth 2.0)',
+    category: 'Auth',
+    hours: 16,
+    complexity: 'Media',
+    description: 'Botones de login social, flujo OAuth 2.0, enlace a cuenta existente y manejo de permisos'
   },
   {
     id: '29',
-    name: 'Rate Limiting',
-    category: 'Security',
-    hours: 15,
-    complexity: 'Media',
-    description: 'Protección contra ataques DDoS'
+    name: 'Tokens JWT con Refresh Token Rotativo y Blacklist',
+    category: 'Auth',
+    hours: 14,
+    complexity: 'Alta',
+    description: 'Access token de 15 min, refresh token rotativo con expiración de 7 días y lista negra en DB'
   },
   {
     id: '30',
-    name: 'CORS y Headers',
-    category: 'Security',
+    name: 'Recuperación de Contraseña por Email (Token Temporal)',
+    category: 'Auth',
     hours: 10,
-    complexity: 'Baja',
-    description: 'Configuración de seguridad HTTP'
-  },
-  {
-    id: '55',
-    name: 'Certificados de Seguridad (SSL/TLS)',
-    category: 'Security',
-    hours: 8,
-    complexity: 'Baja',
-    description: 'HTTPS, renovación automática y HSTS'
-  },
-  {
-    id: '56',
-    name: 'Configuraciones de Privacidad',
-    category: 'Security',
-    hours: 14,
     complexity: 'Media',
-    description: 'Controles de visibilidad, consentimientos y data export'
-  },
-  {
-    id: '57',
-    name: 'Moderación de Actividad (Seguridad)',
-    category: 'Security',
-    hours: 18,
-    complexity: 'Media',
-    description: 'Reportes, bloqueo de usuarios y filtros de contenido'
+    description: 'Formulario de solicitud, email con enlace temporal de 1 hora, nuevo password y confirmación'
   },
 
-  {
-    id: '27',
-    name: 'Pasarela de Pago',
-    category: 'Payments',
-    hours: 25,
-    complexity: 'Alta',
-    description: 'Stripe/PayPal integration con webhooks'
-  },
-  {
-    id: '53',
-    name: 'Pagos en la App',
-    category: 'Payments',
-    hours: 20,
-    complexity: 'Media',
-    description: 'Checkout con pasarela y conciliación básica'
-  },
-  {
-    id: '54',
-    name: 'Suscripciones/Recurrentes',
-    category: 'Payments',
-    hours: 24,
-    complexity: 'Alta',
-    description: 'Planes, renovación, prorrateos y webhooks de estado'
-  },
-  {
-    id: '97',
-    name: 'Reservas con Pagos',
-    category: 'Payments',
-    hours: 26,
-    complexity: 'Alta',
-    description: 'Reserva de slots con cobro y reembolso'
-  },
-
+  // ── Security ──
   {
     id: '31',
-    name: 'SEO On-Page',
-    category: 'SEO',
-    hours: 15,
-    complexity: 'Baja',
-    description: 'Meta tags, schema markup y sitemap'
+    name: 'Hash de Contraseñas (Bcrypt) y Cifrado AES de Campos PII',
+    category: 'Security',
+    hours: 10,
+    complexity: 'Media',
+    description: 'Bcrypt con salt rounds para passwords, AES-256 para datos sensibles (tarjetas, documentos)'
   },
   {
     id: '32',
-    name: 'Core Web Vitals',
-    category: 'SEO',
-    hours: 15,
-    complexity: 'Media',
-    description: 'Optimización LCP, FID y CLS'
+    name: 'Sanitización de Inputs contra XSS e Inyección SQL',
+    category: 'Security',
+    hours: 8,
+    complexity: 'Baja',
+    description: 'Escape de HTML en frontend, queries parametrizadas en backend y validación de tipos con schema'
   },
   {
     id: '33',
-    name: 'Analytics Integration',
-    category: 'SEO',
-    hours: 10,
-    complexity: 'Baja',
-    description: 'Google Analytics y Search Console'
+    name: 'Rate Limiting: 100 req/min por IP con Respuesta 429',
+    category: 'Security',
+    hours: 5,
+    complexity: 'Media',
+    description: 'Throttle configurable por endpoint, respuesta 429 con header Retry-After y almacenamiento en Redis'
   },
   {
     id: '34',
-    name: 'Open Graph & Twitter Cards',
-    category: 'SEO',
-    hours: 10,
+    name: 'CORS Restringido, CSP y Security Headers (Helmet)',
+    category: 'Security',
+    hours: 5,
     complexity: 'Baja',
-    description: 'Metadatos para redes sociales'
+    description: 'Whitelist de orígenes, Content-Security-Policy, X-Frame-Options y HSTS con Helmet/headers manuales'
   },
-  {
-    id: '87',
-    name: 'Soporte Open Graph',
-    category: 'SEO',
-    hours: 8,
-    complexity: 'Baja',
-    description: 'OG tags por tipo de contenido'
-  },
-
   {
     id: '35',
-    name: 'App Android Nativa',
-    category: 'Mobile',
-    hours: 120,
-    complexity: 'Alta',
-    description: 'Desarrollo en Kotlin/Java'
+    name: "Certificado SSL/TLS con Renovación Automática (Let's Encrypt)",
+    category: 'Security',
+    hours: 4,
+    complexity: 'Baja',
+    description: "HTTPS forzado, certificado Let's Encrypt, renovación por cron y cabecera Strict-Transport-Security"
   },
   {
     id: '36',
-    name: 'App iOS Nativa',
-    category: 'Mobile',
-    hours: 120,
-    complexity: 'Alta',
-    description: 'Desarrollo en Swift/SwiftUI'
+    name: 'Controles de Privacidad: Perfil Público/Privado y Descarga de Datos',
+    category: 'Security',
+    hours: 10,
+    complexity: 'Media',
+    description: 'Toggle de visibilidad de perfil, descarga de datos personales en JSON y solicitud de eliminación'
   },
+
+  // ── Payments ──
   {
     id: '37',
-    name: 'React Native App (Híbrida)',
-    category: 'Mobile',
-    hours: 80,
-    complexity: 'Alta',
-    description: 'App híbrida multiplataforma'
-  },
-  {
-    id: '39',
-    name: 'Integración Play Store',
-    category: 'Mobile',
-    hours: 15,
-    complexity: 'Baja',
-    description: 'Publicación y configuración en Google Play'
-  },
-  {
-    id: '40',
-    name: 'Integración App Store',
-    category: 'Mobile',
-    hours: 15,
-    complexity: 'Baja',
-    description: 'Publicación y review en Apple App Store'
-  },
-
-  {
-    id: '44',
-    name: 'Sitio Web 5–8 páginas',
-    category: 'Web',
-    hours: 35,
-    complexity: 'Media',
-    description: 'Home, About, Servicios, Portafolio, Blog, Contacto, Políticas'
-  },
-  {
-    id: '107',
-    name: 'Páginas de Campaña/Landing',
-    category: 'Web',
-    hours: 14,
-    complexity: 'Baja',
-    description: 'Landing para campañas con conversión y A/B testing básico'
-  },
-  {
-    id: '108',
-    name: 'Formulario de Contacto + Captcha',
-    category: 'Web',
-    hours: 10,
-    complexity: 'Baja',
-    description: 'Formulario, validación, reCAPTCHA y envío a email/CRM'
-  },
-
-  {
-    id: '45',
-    name: 'Sistema para Administrar Contenido (CMS)',
-    category: 'Content',
-    hours: 28,
-    complexity: 'Media',
-    description: 'CRUD de posts, páginas, categorías y publicación programada'
-  },
-  {
-    id: '46',
-    name: 'Soporte para Comentarios',
-    category: 'Content',
-    hours: 14,
-    complexity: 'Baja',
-    description: 'Comentarios con moderación y notificaciones'
-  },
-  {
-    id: '47',
-    name: 'Clasificación por TAGS',
-    category: 'Content',
+    name: 'Checkout con Stripe o PayPal (Pago Único)',
+    category: 'Payments',
     hours: 20,
-    complexity: 'Media',
-    description: 'Etiquetado de contenido y filtrado por taxonomías'
-  },
-
-  {
-    id: '48',
-    name: 'Texto libre de búsqueda (Full-Text)',
-    category: 'Search',
-    hours: 18,
-    complexity: 'Media',
-    description: 'Búsqueda con índices, sugerencias y resaltado'
-  },
-  {
-    id: '101',
-    name: 'Búsqueda por Filtros/Facetas',
-    category: 'Search',
-    hours: 16,
-    complexity: 'Media',
-    description: 'Facetas por categoría, precio, fecha y ordenamiento'
-  },
-
-  {
-    id: '49',
-    name: 'Carga de Archivos',
-    category: 'Files & Media',
-    hours: 20,
-    complexity: 'Media',
-    description: 'Subida segura, tamaños máximos, virus scan y previews'
-  },
-  {
-    id: '50',
-    name: 'Edición Básica de Imágenes',
-    category: 'Files & Media',
-    hours: 24,
-    complexity: 'Media',
-    description: 'Crop, resize, compresión, thumbnails, conversión de formato'
-  },
-  {
-    id: '51',
-    name: 'Procesamiento de Video/Audio (server-side)',
-    category: 'Files & Media',
-    hours: 28,
     complexity: 'Alta',
-    description: 'Transcodificación, metadatos y streaming adaptativo básico'
-  },
-  {
-    id: '85',
-    name: 'Música y Audio',
-    category: 'Files & Media',
-    hours: 16,
-    complexity: 'Media',
-    description: 'Reproductor, playlists y control en background'
-  },
-
-  {
-    id: '52',
-    name: 'Carrito de Compras',
-    category: 'Ecommerce',
-    hours: 35,
-    complexity: 'Media',
-    description: 'Carrito persistente, cupones y cálculo de totales'
-  },
-  {
-    id: '102',
-    name: 'Wishlist/Favoritos',
-    category: 'Ecommerce',
-    hours: 15,
-    complexity: 'Baja',
-    description: 'Listas de deseos por usuario y sincronización'
-  },
-
-  {
-    id: '59',
-    name: 'Envío de Correos',
-    category: 'Comms',
-    hours: 15,
-    complexity: 'Baja',
-    description: 'Plantillas transaccionales y reputación (SPF/DKIM/DMARC)'
-  },
-  {
-    id: '60',
-    name: 'Integración SMS',
-    category: 'Comms',
-    hours: 14,
-    complexity: 'Media',
-    description: 'OTP, recordatorios y webhooks de entrega'
-  },
-  {
-    id: '61',
-    name: 'Chat en Tiempo Real',
-    category: 'Comms',
-    hours: 30,
-    complexity: 'Media',
-    description: 'Canales, presencia y lectura/entrega'
+    description: 'SDK de Stripe/PayPal, formulario de pago embebido, webhooks de confirmación y recibo por email'
   },
   {
     id: '38',
-    name: 'Notificaciones Push',
-    category: 'Comms',
-    hours: 25,
-    complexity: 'Media',
-    description: 'FCM/APNS integration'
+    name: 'Suscripciones Mensuales/Anuales con Cambio de Plan',
+    category: 'Payments',
+    hours: 20,
+    complexity: 'Alta',
+    description: 'Planes recurrentes, upgrade/downgrade con prorrateo, cancelación y webhooks de estado'
   },
   {
-    id: '88',
-    name: 'Plantillas de Email',
-    category: 'Comms',
-    hours: 15,
-    complexity: 'Baja',
-    description: 'Motores de plantillas y variables'
+    id: '39',
+    name: 'Reservas con Cobro Anticipado y Política de Reembolso',
+    category: 'Payments',
+    hours: 20,
+    complexity: 'Alta',
+    description: 'Selección de slot + cobro inmediato, cancelación con reembolso parcial/total según política'
   },
 
+  // ── SEO ──
   {
-    id: '62',
-    name: 'Funcionalidad Offline',
-    category: 'Offline & Realtime',
+    id: '40',
+    name: 'Meta Tags, Schema.org (JSON-LD) y Sitemap XML Dinámico',
+    category: 'SEO',
+    hours: 6,
+    complexity: 'Baja',
+    description: 'Title y description por página, JSON-LD (Organization, Product, Article) y sitemap auto-generado'
+  },
+  {
+    id: '41',
+    name: 'Optimización Core Web Vitals (LCP < 2.5 s, CLS < 0.1)',
+    category: 'SEO',
     hours: 18,
     complexity: 'Media',
-    description: 'Cache, cola local y reintentos (PWA/SQLite móvil)'
+    description: 'Auditoría Lighthouse, lazy images, font-display:swap, layout reservado y bundle optimizado'
   },
   {
-    id: '63',
-    name: 'Sincronización Multi-Dispositivo',
-    category: 'Offline & Realtime',
-    hours: 30,
-    complexity: 'Media',
-    description: 'Conflictos, merges y timestamping'
-  },
-  {
-    id: '64',
-    name: 'Usuarios Concurrentes en Tiempo Real',
-    category: 'Offline & Realtime',
-    hours: 16,
-    complexity: 'Media',
-    description: 'WS/Webhooks para conteo de presencia'
-  },
-
-  {
-    id: '65',
-    name: 'Geo-Localización',
-    category: 'Device & Sensors',
-    hours: 14,
-    complexity: 'Baja',
-    description: 'Permisos, precisión y reverse-geocoding'
-  },
-  {
-    id: '66',
-    name: 'Mapas',
-    category: 'Device & Sensors',
-    hours: 15,
-    complexity: 'Media',
-    description: 'Map SDK, marcadores, rutas y clustering básico'
-  },
-  {
-    id: '67',
-    name: 'Brújula / Sensor de Orientación',
-    category: 'Device & Sensors',
-    hours: 10,
-    complexity: 'Baja',
-    description: 'Lectura de sensores y smoothing'
-  },
-  {
-    id: '68',
-    name: 'Códigos QR',
-    category: 'Device & Sensors',
+    id: '42',
+    name: 'Google Analytics 4 + Search Console + Eventos Personalizados',
+    category: 'SEO',
     hours: 8,
     complexity: 'Baja',
-    description: 'Generación y escaneo en móvil'
+    description: 'Tag de GA4, verificación en Search Console y hasta 10 eventos custom (clics CTA, scroll, form submit)'
   },
   {
-    id: '69',
-    name: 'Códigos de Barra',
-    category: 'Device & Sensors',
-    hours: 14,
-    complexity: 'Media',
-    description: 'Escaneo multi-formato y validación'
-  },
-  {
-    id: '70',
-    name: 'Cámara y Fotografías',
-    category: 'Device & Sensors',
-    hours: 16,
-    complexity: 'Media',
-    description: 'Captura, permisos y metadatos EXIF'
-  },
-  {
-    id: '71',
-    name: 'Cámara y Video',
-    category: 'Device & Sensors',
-    hours: 18,
-    complexity: 'Media',
-    description: 'Grabación, compresión y subida'
+    id: '43',
+    name: 'Open Graph y Twitter Cards por Página/Ruta',
+    category: 'SEO',
+    hours: 4,
+    complexity: 'Baja',
+    description: 'OG image, title y description dinámicos por ruta, Twitter card type large/summary y preview social'
   },
 
+  // ── Mobile ──
   {
-    id: '72',
-    name: 'Integración Calendario',
-    category: 'Integrations',
-    hours: 16,
-    complexity: 'Media',
-    description: 'Eventos, recordatorios y permisos'
+    id: '44',
+    name: 'App Android Nativa en Kotlin (UI + Navegación + Permisos)',
+    category: 'Mobile',
+    hours: 170,
+    complexity: 'Alta',
+    description: 'Jetpack Compose, navegación entre pantallas, solicitud de permisos y build release firmado'
   },
   {
-    id: '73',
-    name: 'Integración con Terceros (API)',
-    category: 'Integrations',
+    id: '45',
+    name: 'App iOS Nativa en Swift/SwiftUI (UI + Navegación + Permisos)',
+    category: 'Mobile',
+    hours: 170,
+    complexity: 'Alta',
+    description: 'SwiftUI, NavigationStack, permisos de cámara/ubicación y build release con certificados'
+  },
+  {
+    id: '46',
+    name: 'App Híbrida React Native para iOS y Android',
+    category: 'Mobile',
+    hours: 110,
+    complexity: 'Alta',
+    description: 'Código compartido, React Navigation, permisos nativos y builds para ambas plataformas'
+  },
+  {
+    id: '47',
+    name: 'Publicación en Google Play Store (Ficha + Firma + Review)',
+    category: 'Mobile',
+    hours: 15,
+    complexity: 'Baja',
+    description: 'Ficha de la app, screenshots, clasificación de contenido, firma AAB y envío a revisión'
+  },
+  {
+    id: '48',
+    name: 'Publicación en Apple App Store (Ficha + Certificados + Review)',
+    category: 'Mobile',
+    hours: 15,
+    complexity: 'Baja',
+    description: 'App Store Connect, screenshots por dispositivo, certificados de distribución y proceso de review'
+  },
+
+  // ── Web ──
+  {
+    id: '49',
+    name: 'Sitio Informativo de 5–8 Páginas Estáticas',
+    category: 'Web',
+    hours: 45,
+    complexity: 'Media',
+    description: 'Home, About, Servicios, Portafolio, Contacto y Políticas con contenido estático y SEO básico'
+  },
+  {
+    id: '50',
+    name: 'Landing Page de Campaña con CTA y Formulario',
+    category: 'Web',
+    hours: 16,
+    complexity: 'Baja',
+    description: 'Página única: hero, beneficios, testimonios, CTA prominente y formulario de captura de leads'
+  },
+  {
+    id: '51',
+    name: 'Formulario de Contacto (5 Campos) + reCAPTCHA + Envío a Email',
+    category: 'Web',
+    hours: 10,
+    complexity: 'Baja',
+    description: 'Nombre, email, teléfono, asunto y mensaje con validación, reCAPTCHA v3 y notificación por correo'
+  },
+
+  // ── Content ──
+  {
+    id: '52',
+    name: 'CMS: Editor WYSIWYG, Borradores y Publicación Programada',
+    category: 'Content',
     hours: 20,
     complexity: 'Media',
-    description: 'OAuth2, rate limits y firma de peticiones'
+    description: 'Editor rich-text, estados (borrador/publicado/programado), categorías y fecha de publicación'
   },
   {
-    id: '106',
-    name: 'SSO Enterprise (SAML/OIDC)',
-    category: 'Integrations',
-    hours: 25,
-    complexity: 'Alta',
-    description: 'Integración con proveedores SSO (Okta, Azure AD, ADFS)'
-  },
-
-  {
-    id: '74',
-    name: 'Compartir en Redes Sociales',
-    category: 'Social',
-    hours: 8,
-    complexity: 'Baja',
-    description: 'Share intents y deep-links'
-  },
-  {
-    id: '76',
-    name: 'Sistema de Calificaciones',
-    category: 'Social',
-    hours: 12,
-    complexity: 'Baja',
-    description: 'Estrellas, ‘likes’ y ranking'
-  },
-  {
-    id: '77',
-    name: 'Sistema de Retroalimentación',
-    category: 'Social',
+    id: '53',
+    name: 'Hilo de Comentarios con Aprobación Manual y Notificación',
+    category: 'Content',
     hours: 10,
     complexity: 'Baja',
-    description: 'NPS, encuestas y formularios in-app'
-  },
-
-  {
-    id: '78',
-    name: 'Reservas/Booking',
-    category: 'Business & Productivity',
-    hours: 22,
-    complexity: 'Media',
-    description: 'Slots, disponibilidad, cancelaciones y recordatorios'
+    description: 'Comentarios anidados, estado pendiente/aprobado, email al autor y opción de eliminar'
   },
   {
-    id: '79',
-    name: 'Listas de Tareas',
-    category: 'Business & Productivity',
-    hours: 10,
-    complexity: 'Baja',
-    description: 'CRUD, recordatorios y prioridades'
-  },
-
-  {
-    id: '80',
-    name: 'Múltiples Lenguajes (i18n)',
-    category: 'Internationalization & Accessibility',
-    hours: 25,
-    complexity: 'Media',
-    description: 'Traducciones, fechas/moneda y RTL'
-  },
-  {
-    id: '81',
-    name: 'Accesibilidad (a11y)',
-    category: 'Internationalization & Accessibility',
-    hours: 14,
-    complexity: 'Media',
-    description: 'Teclado, ARIA, contraste y lectores de pantalla'
-  },
-
-  {
-    id: '82',
-    name: 'Panel de Configuración',
-    category: 'Admin & Moderation',
+    id: '54',
+    name: 'Etiquetas y Categorías Jerárquicas con Filtrado en Listados',
+    category: 'Content',
     hours: 12,
-    complexity: 'Baja',
-    description: 'Flags, parámetros del sistema y toggles'
+    complexity: 'Media',
+    description: 'Taxonomías padre/hijo, asignación múltiple por contenido y filtros en listados públicos'
   },
+
+  // ── Search ──
   {
-    id: '90',
-    name: 'Capacidad de Moderar Actividad',
-    category: 'Admin & Moderation',
+    id: '55',
+    name: 'Búsqueda Full-Text con Autocompletado y Resaltado',
+    category: 'Search',
     hours: 16,
     complexity: 'Media',
-    description: 'Herramientas de revisión, baneo y auditoría'
+    description: 'Índice de texto completo (PostgreSQL/Elasticsearch), sugerencias mientras escribe y highlight'
   },
   {
-    id: '99',
-    name: 'Panel de Moderación Avanzado',
-    category: 'Admin & Moderation',
-    hours: 22,
-    complexity: 'Alta',
-    description: 'Cola de revisión, reglas y métricas'
+    id: '56',
+    name: 'Sidebar de Filtros: Categoría, Rango de Precio, Fecha y Orden',
+    category: 'Search',
+    hours: 20,
+    complexity: 'Media',
+    description: 'Checkboxes de categoría, slider de precio, selector de fecha y dropdown de ordenamiento'
   },
 
+  // ── Files & Media ──
   {
-    id: '83',
-    name: 'Reportes de Estadísticas',
-    category: 'Analytics & Quality',
-    hours: 18,
+    id: '57',
+    name: 'Subida de Archivos (Imágenes/PDF/Docs) hasta 10 MB a S3',
+    category: 'Files & Media',
+    hours: 14,
     complexity: 'Media',
-    description: 'Dashboards, exportables y KPIs'
+    description: 'Drag & drop, validación de tipo y tamaño, barra de progreso y almacenamiento en S3 o local'
   },
   {
     id: '58',
-    name: 'Reporte de Errores',
-    category: 'Analytics & Quality',
-    hours: 10,
-    complexity: 'Baja',
-    description: 'Sentry/LogRocket, alertas y trazabilidad'
-  },
-
-  {
-    id: '84',
-    name: 'Realidad Aumentada Básica',
-    category: 'R&D',
-    hours: 32,
-    complexity: 'Alta',
-    description: 'ARKit/ARCore o WebAR para overlays simples'
-  },
-  {
-    id: '103',
-    name: 'Generación de Imágenes con IA',
-    category: 'R&D',
+    name: 'Recorte Interactivo, Thumbnails y Compresión WebP de Imágenes',
+    category: 'Files & Media',
     hours: 24,
+    complexity: 'Media',
+    description: 'Crop con proporción fija, generación automática de thumbnails (150 px, 600 px) y conversión a WebP'
+  },
+  {
+    id: '59',
+    name: 'Transcodificación de Video a MP4/HLS con FFmpeg (Server)',
+    category: 'Files & Media',
+    hours: 16,
     complexity: 'Alta',
-    description: 'Prompts, estilos y post-procesado automático'
-  },
-
-  {
-    id: '100',
-    name: 'Exportación de Datos (CSV/JSON)',
-    category: 'Data',
-    hours: 10,
-    complexity: 'Baja',
-    description: 'Descarga de listados y backups manuales'
+    description: 'Cola de transcodificación FFmpeg, resoluciones 480p/720p/1080p y streaming adaptativo HLS'
   },
   {
-    id: '105',
-    name: 'Importación de Datos (CSV/Excel)',
-    category: 'Data',
+    id: '60',
+    name: 'Reproductor de Audio con Playlist y Reproducción en Background',
+    category: 'Files & Media',
     hours: 20,
     complexity: 'Media',
-    description: 'Validación, mapeo de columnas y vista previa'
+    description: 'Controles play/pause/skip, cola de reproducción, progreso y audio en segundo plano (móvil)'
   },
 
+  // ── Ecommerce ──
   {
-    id: '91',
-    name: 'Cola de Trabajos/Background Jobs',
-    category: 'Ops & Infra',
+    id: '61',
+    name: 'Carrito Persistente con Cantidades y Códigos de Descuento',
+    category: 'Ecommerce',
+    hours: 30,
+    complexity: 'Media',
+    description: 'Agregar/quitar items, editar cantidades, aplicar cupones, resumen con subtotal e impuestos'
+  },
+  {
+    id: '62',
+    name: 'Lista de Deseos por Usuario con Sincronización',
+    category: 'Ecommerce',
+    hours: 16,
+    complexity: 'Baja',
+    description: 'Botón de favorito por producto, listado personal y sincronización entre dispositivos logueados'
+  },
+
+  // ── Comms ──
+  {
+    id: '63',
+    name: 'Emails Transaccionales (Bienvenida, Reset, Confirmación) con SPF/DKIM',
+    category: 'Comms',
+    hours: 10,
+    complexity: 'Baja',
+    description: 'Plantillas HTML con variables, envío vía SMTP/API (SendGrid/Resend), configuración SPF y DKIM'
+  },
+  {
+    id: '64',
+    name: 'SMS de Verificación OTP y Recordatorios (Twilio)',
+    category: 'Comms',
+    hours: 8,
+    complexity: 'Media',
+    description: 'Código OTP de 6 dígitos con expiración de 5 min, SMS de recordatorio y confirmación de entrega'
+  },
+  {
+    id: '65',
+    name: 'Chat 1-a-1 en Tiempo Real con Indicador de Lectura',
+    category: 'Comms',
+    hours: 22,
+    complexity: 'Media',
+    description: 'WebSockets, mensajes con timestamps, indicador enviado/leído y estado de presencia online'
+  },
+  {
+    id: '66',
+    name: 'Notificaciones Push: FCM (Android) y APNS (iOS)',
+    category: 'Comms',
+    hours: 14,
+    complexity: 'Media',
+    description: 'Registro de dispositivo, envío segmentado por tema/usuario y deep linking al abrir'
+  },
+
+  // ── Offline & Realtime ──
+  {
+    id: '67',
+    name: 'Modo Offline con Service Worker y Cola de Reintentos',
+    category: 'Offline & Realtime',
+    hours: 25,
+    complexity: 'Media',
+    description: 'Cache de assets con Service Worker, cola de peticiones fallidas y sync automático al reconectar'
+  },
+  {
+    id: '68',
+    name: 'Sincronización Multi-Dispositivo con Resolución de Conflictos',
+    category: 'Offline & Realtime',
+    hours: 30,
+    complexity: 'Alta',
+    description: 'Timestamps de modificación, merge automático de cambios y UI de resolución manual de conflictos'
+  },
+  {
+    id: '69',
+    name: 'Indicador de Usuarios Conectados en Tiempo Real (WebSocket)',
+    category: 'Offline & Realtime',
+    hours: 8,
+    complexity: 'Media',
+    description: 'Heartbeat por WebSocket, conteo de usuarios online y lista de quién está conectado ahora'
+  },
+
+  // ── Device & Sensors ──
+  {
+    id: '70',
+    name: 'Geolocalización con Permisos y Dirección Legible',
+    category: 'Device & Sensors',
+    hours: 14,
+    complexity: 'Baja',
+    description: 'Solicitud de permisos, coordenadas GPS, reverse geocoding a dirección y fallback por IP'
+  },
+  {
+    id: '71',
+    name: 'Mapa Interactivo con Pins, Clusters y Rutas (Google Maps/Mapbox)',
+    category: 'Device & Sensors',
+    hours: 20,
+    complexity: 'Media',
+    description: 'Mapa embebido, marcadores custom, agrupación por zoom y trazado de rutas entre 2 puntos'
+  },
+  {
+    id: '72',
+    name: 'Lectura de Brújula y Sensor de Orientación del Dispositivo',
+    category: 'Device & Sensors',
+    hours: 12,
+    complexity: 'Baja',
+    description: 'DeviceOrientation API, smoothing de lecturas y visualización de dirección en UI'
+  },
+  {
+    id: '73',
+    name: 'Escaneo y Generación de Códigos QR con Cámara',
+    category: 'Device & Sensors',
+    hours: 10,
+    complexity: 'Baja',
+    description: 'Lectura de QR desde cámara, decodificación de datos y generación de QR con contenido embebido'
+  },
+  {
+    id: '74',
+    name: 'Escaneo de Códigos de Barras Multi-Formato (EAN/UPC/Code128)',
+    category: 'Device & Sensors',
+    hours: 18,
+    complexity: 'Media',
+    description: 'Lectura desde cámara de formatos EAN-13, UPC-A, Code128, validación y búsqueda de producto'
+  },
+  {
+    id: '75',
+    name: 'Captura de Fotos con Permisos y Metadatos EXIF',
+    category: 'Device & Sensors',
     hours: 16,
     complexity: 'Media',
-    description: 'Workers para emails, pagos y procesamientos'
+    description: 'Solicitud de permiso de cámara, captura de foto, lectura de EXIF (ubicación, fecha) y subida'
+  },
+  {
+    id: '76',
+    name: 'Grabación de Video con Compresión Client-Side y Upload',
+    category: 'Device & Sensors',
+    hours: 22,
+    complexity: 'Media',
+    description: 'Permiso de cámara, grabación, compresión en el navegador/app y upload progresivo al servidor'
+  },
+
+  // ── Integrations ──
+  {
+    id: '77',
+    name: 'Sincronización con Google Calendar u Outlook',
+    category: 'Integrations',
+    hours: 12,
+    complexity: 'Media',
+    description: 'Crear/editar eventos vía API, recordatorios y sincronización bidireccional de cambios'
+  },
+  {
+    id: '78',
+    name: 'Conexión con 1 API Externa (OAuth2 + Rate Limits)',
+    category: 'Integrations',
+    hours: 16,
+    complexity: 'Media',
+    description: 'Autenticación OAuth2/API Key, manejo de cuotas, reintentos y firma de peticiones'
+  },
+  {
+    id: '79',
+    name: 'SSO Empresarial con Okta o Azure AD (SAML/OIDC)',
+    category: 'Integrations',
+    hours: 26,
+    complexity: 'Alta',
+    description: 'Configuración de Identity Provider, mapeo de claims a roles y logout federado'
+  },
+
+  // ── Social ──
+  {
+    id: '80',
+    name: 'Botones de Compartir (WhatsApp, Twitter, Facebook)',
+    category: 'Social',
+    hours: 5,
+    complexity: 'Baja',
+    description: 'Share intents nativos y web con URL + texto predefinido y deep links por plataforma'
+  },
+  {
+    id: '81',
+    name: 'Rating de 1–5 Estrellas con Promedio y Ordenamiento',
+    category: 'Social',
+    hours: 15,
+    complexity: 'Baja',
+    description: 'Componente de estrellas clickeables, cálculo de promedio, conteo de votos y sort por rating'
+  },
+  {
+    id: '82',
+    name: 'Encuesta In-App: NPS (0–10) con Reporte de Resultados',
+    category: 'Social',
+    hours: 12,
+    complexity: 'Baja',
+    description: 'Pregunta emergente con escala 0–10, campo de comentario opcional y dashboard de resultados'
+  },
+
+  // ── Business & Productivity ──
+  {
+    id: '83',
+    name: 'Reservas con Calendario de Disponibilidad y Recordatorio',
+    category: 'Business & Productivity',
+    hours: 16,
+    complexity: 'Media',
+    description: 'Slots por hora, bloqueo al reservar, cancelación con política y recordatorio por email 24 h antes'
+  },
+  {
+    id: '84',
+    name: 'Lista de Tareas con Drag & Drop, Prioridades y Fechas Límite',
+    category: 'Business & Productivity',
+    hours: 18,
+    complexity: 'Baja',
+    description: 'CRUD de tareas, arrastrar para reordenar, prioridad (alta/media/baja), fecha límite y check de completado'
+  },
+
+  // ── Internationalization & Accessibility ──
+  {
+    id: '85',
+    name: 'Internacionalización (2+ Idiomas) con Formatos de Fecha y Moneda',
+    category: 'Internationalization & Accessibility',
+    hours: 28,
+    complexity: 'Media',
+    description: 'Archivos JSON de traducción, selector de idioma, formateo de fechas/moneda por locale'
+  },
+  {
+    id: '86',
+    name: 'Accesibilidad WCAG 2.1 AA (Teclado, ARIA, Contraste 4.5:1)',
+    category: 'Internationalization & Accessibility',
+    hours: 18,
+    complexity: 'Media',
+    description: 'Navegación completa por teclado, roles ARIA, ratio de contraste 4.5:1 y prueba con lector de pantalla'
+  },
+
+  // ── Admin & Moderation ──
+  {
+    id: '87',
+    name: 'Panel de Feature Flags y Parámetros del Sistema',
+    category: 'Admin & Moderation',
+    hours: 20,
+    complexity: 'Baja',
+    description: 'Toggles on/off por funcionalidad, parámetros editables (límites, textos) y persistencia en DB'
+  },
+  {
+    id: '88',
+    name: 'Cola de Moderación: Reportes, Aprobar/Rechazar y Métricas',
+    category: 'Admin & Moderation',
+    hours: 16,
+    complexity: 'Media',
+    description: 'Listado de contenido reportado, acciones aprobar/rechazar/banear, historial y métricas de respuesta'
+  },
+
+  // ── Analytics & Quality ──
+  {
+    id: '89',
+    name: 'Dashboard de KPIs con Gráficas y Descarga CSV',
+    category: 'Analytics & Quality',
+    hours: 28,
+    complexity: 'Media',
+    description: 'Métricas clave en cards, gráficas de líneas/barras (Chart.js/Recharts), filtro de fecha y export CSV'
+  },
+  {
+    id: '90',
+    name: 'Monitoreo de Errores con Sentry y Alertas por Slack/Email',
+    category: 'Analytics & Quality',
+    hours: 6,
+    complexity: 'Baja',
+    description: 'SDK de Sentry integrado, agrupación de errores, stack traces y notificación por Slack o email'
+  },
+
+  // ── R&D ──
+  {
+    id: '91',
+    name: 'Overlay de Realidad Aumentada (ARKit/ARCore/WebAR)',
+    category: 'R&D',
+    hours: 60,
+    complexity: 'Alta',
+    description: 'Detección de superficie plana, colocación de objeto 3D, rotación/escalado y captura de pantalla'
   },
   {
     id: '92',
-    name: 'Cache de Aplicación',
-    category: 'Ops & Infra',
-    hours: 12,
-    complexity: 'Media',
-    description: 'Cacheo en memoria/Redis y políticas de expiración'
+    name: 'Generación de Imágenes con IA (DALL-E/Stable Diffusion API)',
+    category: 'R&D',
+    hours: 15,
+    complexity: 'Alta',
+    description: 'Campo de prompt, selección de estilo, llamada a API, vista previa y guardado en galería'
+  },
+
+  // ── Data ──
+  {
+    id: '93',
+    name: 'Descarga de Listados en CSV y JSON con Selección de Columnas',
+    category: 'Data',
+    hours: 8,
+    complexity: 'Baja',
+    description: 'Botón de exportar, checkboxes de columnas, encoding UTF-8 y descarga inmediata'
   },
   {
     id: '94',
-    name: 'CI/CD Básico',
-    category: 'Ops & Infra',
+    name: 'Importación desde CSV/Excel con Mapeo, Preview y Errores por Fila',
+    category: 'Data',
     hours: 12,
     complexity: 'Media',
-    description: 'Builds automatizados, tests y despliegue'
-  },
-  {
-    id: '95',
-    name: 'Testing E2E/Unitario',
-    category: 'Ops & Infra',
-    hours: 20,
-    complexity: 'Media',
-    description: 'Cobertura mínima y pruebas de flujo crítico'
+    description: 'Subida de archivo, mapeo de columnas a campos, vista previa de 10 filas, errores detallados y confirmación'
   },
 
+  // ── Ops & Infra ──
   {
-    id: '96',
-    name: 'Políticas y Términos',
-    category: 'Compliance & Legal',
-    hours: 8,
-    complexity: 'Baja',
-    description: 'Privacidad, Términos y manejo de cookies'
+    id: '95',
+    name: 'Workers en Background con Redis/Bull (Emails, Procesamientos)',
+    category: 'Ops & Infra',
+    hours: 10,
+    complexity: 'Media',
+    description: 'Cola de trabajos con Redis/Bull, reintentos configurables, prioridad y dashboard de estado'
   },
   {
-    id: '104',
-    name: 'Gestión de Consentimiento de Cookies',
-    category: 'Compliance & Legal',
+    id: '96',
+    name: 'Cache con Redis: TTL Configurable e Invalidación Selectiva',
+    category: 'Ops & Infra',
     hours: 8,
+    complexity: 'Media',
+    description: 'Cacheo de queries frecuentes y sesiones, TTL por tipo de dato y flush por clave/patrón'
+  },
+  {
+    id: '97',
+    name: 'Pipeline CI/CD en GitHub Actions (Build + Test + Deploy)',
+    category: 'Ops & Infra',
+    hours: 8,
+    complexity: 'Media',
+    description: 'Workflow en push a main: instalar deps, lint, tests, build y deploy automático a staging/producción'
+  },
+  {
+    id: '98',
+    name: 'Tests Unitarios (Jest) + E2E (Cypress/Playwright) al 60 %',
+    category: 'Ops & Infra',
+    hours: 22,
+    complexity: 'Media',
+    description: 'Tests unitarios de funciones críticas, tests E2E de flujos principales y reporte de cobertura mínima 60 %'
+  },
+
+  // ── Compliance & Legal ──
+  {
+    id: '99',
+    name: 'Páginas de Políticas de Privacidad y Términos de Uso',
+    category: 'Compliance & Legal',
+    hours: 6,
     complexity: 'Baja',
-    description: 'Banner, preferencias granulares y log de consentimientos'
-  }
+    description: 'Contenido legal redactado, enlaces en footer, fecha de última actualización y aceptación en registro'
+  },
+  {
+    id: '100',
+    name: 'Banner de Cookies con Categorías (Necesarias/Analíticas/Marketing)',
+    category: 'Compliance & Legal',
+    hours: 6,
+    complexity: 'Baja',
+    description: 'Aviso emergente, toggles por categoría, botón aceptar/rechazar y log de consentimiento en DB'
+  },
 ];
 
 export default function QuotationModern() {
