@@ -3,6 +3,12 @@ export interface NavItem {
   label: string;
 }
 
+export interface ContactSocialLink {
+  href: string;
+  label: string;
+  shortLabel: string;
+}
+
 export interface ServiceLink {
   href: string;
   label: string;
@@ -34,6 +40,33 @@ export const navigation: NavItem[] = [
   { href: '/portafolio', label: 'Portafolio' },
   { href: '/about', label: 'Nosotros' },
   { href: '/contacto', label: 'Contacto' },
+];
+
+export const contactInfo = {
+  email: 'info@codedmo.dev',
+  legalEmail: 'legal@codedmo.dev',
+  phoneDisplay: '+502 3792-3612',
+  phoneHref: 'tel:+50237923612',
+  whatsappHref:
+    'https://wa.me/50237923612?text=Hola%20CODEDMO%2C%20quiero%20hablar%20sobre%20mi%20proyecto.',
+  whatsappLabel: 'Chatear por WhatsApp',
+  facebookHref: 'https://www.facebook.com/profile.php?id=61578671524932',
+  instagramHref: 'https://www.instagram.com/codedmo.dev',
+  location: 'Guatemala, Guatemala',
+  legalLocation: 'Ciudad de Guatemala, Guatemala',
+} as const;
+
+export const contactSocialLinks: ContactSocialLink[] = [
+  {
+    href: contactInfo.facebookHref,
+    label: 'Facebook CODEDMO',
+    shortLabel: 'Facebook',
+  },
+  {
+    href: contactInfo.instagramHref,
+    label: 'Instagram @codedmo.dev',
+    shortLabel: 'Instagram',
+  },
 ];
 
 export const serviceCategories: ServiceCategory[] = [

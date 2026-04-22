@@ -1,6 +1,6 @@
 ---
-import { ArrowUp, Facebook, Github, Instagram, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
-import { footerLegalLinks, featuredServices, navigation } from '../../data/site';
+import { ArrowUp, Facebook, Github, Instagram, Mail, MapPin, Phone } from 'lucide-react';
+import { contactInfo, footerLegalLinks, featuredServices, navigation } from '../../data/site';
 
 const currentYear = new Date().getFullYear();
 
@@ -11,19 +11,14 @@ const socialLinks = [
     icon: Github,
   },
   {
-    href: 'https://www.facebook.com/profile.php?id=61578671524932',
+    href: contactInfo.facebookHref,
     label: 'Facebook',
     icon: Facebook,
   },
   {
-    href: 'https://instagram.com/codedmo.dev',
+    href: contactInfo.instagramHref,
     label: 'Instagram',
     icon: Instagram,
-  },
-  {
-    href: 'https://wa.me/50237923612',
-    label: 'WhatsApp',
-    icon: MessageCircle,
   },
 ];
 ---
@@ -51,17 +46,17 @@ const socialLinks = [
         </p>
 
         <div class="mt-6 space-y-3 text-sm text-slate-300">
-          <a href="mailto:info@codedmo.dev" class="flex items-center gap-3 transition-colors hover:text-white">
+          <a href={`mailto:${contactInfo.email}`} class="flex items-center gap-3 transition-colors hover:text-white">
             <Mail class="h-4 w-4 text-blue-400" />
-            <span>info@codedmo.dev</span>
+            <span>{contactInfo.email}</span>
           </a>
-          <a href="tel:+50237923612" class="flex items-center gap-3 transition-colors hover:text-white">
+          <a href={contactInfo.phoneHref} class="flex items-center gap-3 transition-colors hover:text-white">
             <Phone class="h-4 w-4 text-cyan-400" />
-            <span>+502 3792-3612</span>
+            <span>{contactInfo.phoneDisplay}</span>
           </a>
           <div class="flex items-center gap-3">
             <MapPin class="h-4 w-4 text-teal-400" />
-            <span>Guatemala, Guatemala</span>
+            <span>{contactInfo.location}</span>
           </div>
         </div>
 

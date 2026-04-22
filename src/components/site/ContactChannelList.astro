@@ -1,0 +1,87 @@
+---
+import { Facebook, Instagram, Mail, MessageCircle, Phone } from 'lucide-react';
+import { contactInfo } from '../../data/site';
+
+const channels = [
+  {
+    href: contactInfo.whatsappHref,
+    label: 'WhatsApp',
+    detail: contactInfo.phoneDisplay,
+    icon: MessageCircle,
+    className:
+      'border-emerald-400/25 bg-emerald-950/55 text-emerald-50 hover:border-emerald-300/40 hover:bg-emerald-900/65',
+    iconClass: 'text-emerald-300',
+    external: true,
+  },
+  {
+    href: contactInfo.facebookHref,
+    label: 'Facebook',
+    detail: 'Perfil oficial',
+    icon: Facebook,
+    className:
+      'border-blue-400/20 bg-blue-950/35 text-slate-100 hover:border-blue-300/35 hover:bg-blue-900/40',
+    iconClass: 'text-blue-300',
+    external: true,
+  },
+  {
+    href: contactInfo.instagramHref,
+    label: 'Instagram',
+    detail: '@codedmo.dev',
+    icon: Instagram,
+    className:
+      'border-pink-400/20 bg-pink-950/30 text-slate-100 hover:border-pink-300/35 hover:bg-pink-900/40',
+    iconClass: 'text-pink-300',
+    external: true,
+  },
+  {
+    href: `mailto:${contactInfo.email}`,
+    label: 'Correo',
+    detail: contactInfo.email,
+    icon: Mail,
+    className:
+      'border-white/10 bg-white/5 text-slate-100 hover:border-white/20 hover:bg-white/10',
+    iconClass: 'text-slate-200',
+    external: false,
+  },
+  {
+    href: contactInfo.phoneHref,
+    label: 'Teléfono',
+    detail: contactInfo.phoneDisplay,
+    icon: Phone,
+    className:
+      'border-white/10 bg-white/5 text-slate-100 hover:border-white/20 hover:bg-white/10',
+    iconClass: 'text-slate-200',
+    external: false,
+  },
+];
+---
+
+<aside class="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm sm:p-8">
+  <h3 class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-300">Canales</h3>
+
+  <ul class="mt-5 space-y-3">
+    {
+      channels.map((channel) => (
+        <li>
+          <a
+            href={channel.href}
+            target={channel.external ? '_blank' : undefined}
+            rel={channel.external ? 'noreferrer' : undefined}
+            class:list={[
+              'flex items-center gap-3 rounded-2xl border px-4 py-3 transition-all duration-300',
+              channel.className,
+            ]}
+          >
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/5">
+              <channel.icon class:list={['h-5 w-5', channel.iconClass]} />
+            </span>
+            <span class="min-w-0">
+              <span class="block text-sm font-semibold">{channel.label}</span>
+              <span class="mt-0.5 block truncate text-xs text-slate-300">{channel.detail}</span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</aside>

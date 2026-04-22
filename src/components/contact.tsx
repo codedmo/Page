@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Mail, Phone, User, MessageSquare, CheckCircle, AlertCircle } from 'lucide-react';
+import { contactInfo } from '@/data/site';
 
 interface FormData {
   nombre: string;
@@ -702,10 +703,20 @@ export default function Contact({ showHeader = true }: ContactProps) {
       {/* Información adicional */}
       <div className="mt-12 text-center">
         <p className="text-gray-400 text-sm">
-          También puedes escribirnos directamente a{' '}
-          <a href="mailto:info@codedmo.com" className="text-blue-400 hover:text-blue-300 transition-colors">
-            info@codedmo.com
+          También puedes escribirnos a{' '}
+          <a href={`mailto:${contactInfo.email}`} className="text-blue-400 hover:text-blue-300 transition-colors">
+            {contactInfo.email}
           </a>
+          {' '}o abrir nuestro{' '}
+          <a
+            href={contactInfo.whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-emerald-400 hover:text-emerald-300 transition-colors"
+          >
+            chat de WhatsApp
+          </a>
+          .
         </p>
       </div>
 

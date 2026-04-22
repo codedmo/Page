@@ -1,5 +1,6 @@
 ---
 import Contact from '../components/contact';
+import ContactChannelList from '../components/site/ContactChannelList.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const canonical = 'https://codedmo.dev/contacto';
@@ -33,8 +34,11 @@ const canonical = 'https://codedmo.dev/contacto';
         </p>
       </div>
 
-      <div class="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm sm:p-10">
-        <Contact client:load showHeader={false} />
+      <div class="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+        <ContactChannelList />
+        <div class="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm sm:p-10">
+          <Contact client:load showHeader={false} />
+        </div>
       </div>
     </div>
   </section>

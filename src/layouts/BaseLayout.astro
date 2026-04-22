@@ -1,5 +1,7 @@
 ---
 import '../index.css';
+import SpeedInsights from '@vercel/speed-insights/astro';
+import FloatingWhatsApp from '../components/site/FloatingWhatsApp.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
 import SiteHeader from '../components/site/SiteHeader.astro';
 
@@ -72,9 +74,11 @@ const schemaItems = structuredData ? (Array.isArray(structuredData) ? structured
   <body class="bg-slate-950 text-white antialiased">
     <div id="top"></div>
     <SiteHeader currentPath={currentPath} />
+    <FloatingWhatsApp />
     <main class="min-h-screen pt-16">
       <slot />
     </main>
     <SiteFooter />
+    <SpeedInsights />
   </body>
 </html>

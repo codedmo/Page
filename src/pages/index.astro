@@ -3,6 +3,7 @@ import Contact from '../components/contact';
 import HomeAbout from '../components/home/HomeAbout.astro';
 import HomeHero from '../components/home/HomeHero.astro';
 import HomeServices from '../components/home/HomeServices.astro';
+import ContactChannelList from '../components/site/ContactChannelList.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const canonical = 'https://codedmo.dev';
@@ -63,8 +64,11 @@ const structuredData = [
           Cuéntanos el contexto de tu proyecto y armamos el siguiente paso con criterio técnico.
         </p>
       </div>
-      <div class="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm sm:p-10">
-        <Contact client:load showHeader={false} />
+      <div class="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+        <ContactChannelList />
+        <div class="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm sm:p-10">
+          <Contact client:load showHeader={false} />
+        </div>
       </div>
     </div>
   </section>
