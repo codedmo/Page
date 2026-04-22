@@ -401,7 +401,7 @@ export default function Contact({ showHeader = true }: ContactProps) {
                     </div>` : ''}
                     <div class="info-item">
                         <span class="info-label">Origen:</span>
-                        <span class="info-value">${import.meta.env.VITE_WEBSITE_ORIGIN || 'codedmo.dev'}</span>
+                        <span class="info-value">${__FORM_WEBSITE_ORIGIN__ || 'codedmo.dev'}</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Fecha:</span>
@@ -470,10 +470,10 @@ export default function Contact({ showHeader = true }: ContactProps) {
     setStatusMessage('');
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const apiKey = import.meta.env.VITE_API_KEY;
-      const bearerToken = import.meta.env.VITE_BEARER_TOKEN;
-      const websiteOrigin = import.meta.env.VITE_WEBSITE_ORIGIN;
+      const apiUrl = __FORM_API_URL__;
+      const apiKey = __FORM_API_KEY__;
+      const bearerToken = __FORM_BEARER_TOKEN__;
+      const websiteOrigin = __FORM_WEBSITE_ORIGIN__;
 
       if (!apiUrl || !apiKey || !bearerToken) {
         throw new Error('Configuración de API faltante. Verifica las variables de entorno.');
@@ -497,7 +497,7 @@ export default function Contact({ showHeader = true }: ContactProps) {
           message: formData.mensaje,
           website: websiteOrigin || 'codedmo.dev',
           customTemplate: emailTemplate,
-          templateType: import.meta.env.VITE_EMAIL_TEMPLATE_TYPE || 'custom'
+          templateType: __FORM_EMAIL_TEMPLATE_TYPE__ || 'custom'
         })
       });
 
