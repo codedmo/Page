@@ -1,7 +1,13 @@
 /// <reference types="astro/client" />
 
-declare const __FORM_API_URL__: string;
-declare const __FORM_API_KEY__: string;
-declare const __FORM_BEARER_TOKEN__: string;
-declare const __FORM_WEBSITE_ORIGIN__: string;
-declare const __FORM_EMAIL_TEMPLATE_TYPE__: string;
+interface ImportMetaEnv {
+  readonly VITE_API_URL?: string;
+  readonly VITE_API_KEY?: string;
+  readonly VITE_BEARER_TOKEN?: string;
+  readonly VITE_WEBSITE_ORIGIN?: string;
+  readonly VITE_EMAIL_TEMPLATE_TYPE?: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
