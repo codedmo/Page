@@ -30,6 +30,23 @@ const services = [
   description="Hosting administrado, servicios cloud y gestión de dominios para proyectos con foco en estabilidad."
   canonical={canonical}
   keywords={['hosting profesional', 'cloud', 'dominios', 'infraestructura web']}
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Hosting y Cloud CODEDMO',
+    url: canonical,
+    description: 'Servicios de hosting administrado, cloud y dominios.',
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: services.map((service, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `https://codedmo.dev${service.href}`,
+        name: service.title,
+        description: service.description,
+      })),
+    },
+  }}
 >
   <section class="page-fill page-fill-shell relative overflow-hidden bg-slate-950 py-20">
     <div class="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:32px_32px]" aria-hidden="true"></div>

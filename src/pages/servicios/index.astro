@@ -13,10 +13,20 @@ const canonical = 'https://codedmo.dev/servicios';
   keywords={['servicios tecnológicos', 'desarrollo web', 'software a medida', 'hosting', 'workspace', 'microsoft 365']}
   structuredData={{
     '@context': 'https://schema.org',
-    '@type': 'Service',
+    '@type': 'CollectionPage',
     name: 'Servicios CODEDMO',
     url: canonical,
     description: 'Catálogo de servicios de CODEDMO.',
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: serviceCategories.map((category, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `https://codedmo.dev${category.href}`,
+        name: category.label,
+        description: category.description,
+      })),
+    },
   }}
 >
   <section class="page-fill page-fill-shell relative overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 py-20">

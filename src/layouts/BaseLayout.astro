@@ -4,6 +4,12 @@ import SpeedInsights from '@vercel/speed-insights/astro';
 import FloatingWhatsApp from '../components/site/FloatingWhatsApp.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
 import SiteHeader from '../components/site/SiteHeader.astro';
+import {
+  buildBreadcrumbSchema,
+  buildOrganizationSchema,
+  buildWebPageSchema,
+  buildWebsiteSchema,
+} from '../lib/seo';
 
 interface Props {
   title: string;
@@ -21,7 +27,7 @@ const {
   description,
   canonical,
   keywords = [],
-  ogImage = '/favicon.ico',
+  ogImage = '/images/Hero.png',
   noIndex = false,
   currentPath = '/',
   structuredData,
@@ -29,8 +35,39 @@ const {
 
 const siteUrl = 'https://codedmo.dev';
 const resolvedOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
-const robots = noIndex ? 'noindex, nofollow' : 'index, follow';
-const schemaItems = structuredData ? (Array.isArray(structuredData) ? structuredData : [structuredData]) : [];
+const robots = noIndex
+  ? 'noindex, nofollow'
+  : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
+const baseSchemas = [
+  buildWebsiteSchema(),
+  buildOrganizationSchema(),
+  buildWebPageSchema({
+    pathname: currentPath,
+    canonical,
+    title,
+    description,
+  }),
+  buildBreadcrumbSchema(currentPath, canonical),
+];
+const customSchemas = structuredData ? (Array.isArray(structuredData) ? structuredData : [structuredData]) : [];
+const schemaItems = [...baseSchemas, ...customSchemas].filter((item, index, all) => {
+  const itemRecord = item as Record<string, unknown>;
+  const key =
+    (typeof itemRecord['@id'] === 'string' && itemRecord['@id']) ||
+    `${String(itemRecord['@type'] || 'Schema')}:${String(itemRecord.name || itemRecord.url || index)}`;
+
+  return (
+    all.findIndex((candidate) => {
+      const candidateRecord = candidate as Record<string, unknown>;
+      const candidateKey =
+        (typeof candidateRecord['@id'] === 'string' && candidateRecord['@id']) ||
+        `${String(candidateRecord['@type'] || 'Schema')}:${String(candidateRecord.name || candidateRecord.url || index)}`;
+
+      return candidateKey === key;
+    }) === index
+  );
+});
+const alternateHref = canonical || `${siteUrl}${currentPath}`;
 ---
 
 <!doctype html>
@@ -53,14 +90,24 @@ const schemaItems = structuredData ? (Array.isArray(structuredData) ? structured
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={resolvedOgImage} />
+    <meta property="og:image:alt" content={title} />
     <meta property="og:site_name" content="CODEDMO" />
     <meta property="og:locale" content="es_GT" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={resolvedOgImage} />
+    <meta name="twitter:image:alt" content={title} />
+    <meta name="twitter:site" content="@codedmo" />
+    <meta name="googlebot" content={robots} />
+    <meta name="application-name" content="CODEDMO" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="es" href={alternateHref} />
+    <link rel="alternate" hreflang="es-GT" href={alternateHref} />
+    <link rel="alternate" hreflang="x-default" href={alternateHref} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />

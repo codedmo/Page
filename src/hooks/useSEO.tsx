@@ -363,11 +363,6 @@ export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' |
         name: 'CODEDMO - Desarrollo de Software Profesional',
         description: 'Empresa líder en desarrollo de software, aplicaciones web y móviles en Guatemala',
         url: baseCanonical,
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: `${baseCanonical}/search?q={search_term_string}`,
-          'query-input': 'required name=search_term_string'
-        },
         mainEntity: {
           '@type': 'Organization',
           name: 'CODEDMO Solutions',
@@ -375,12 +370,7 @@ export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' |
           url: baseCanonical,
           logo: `${baseCanonical}/favicon.ico`,
           foundingDate: '2022',
-          numberOfEmployees: '5-10',
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: '4.9',
-            reviewCount: '47'
-          }
+          numberOfEmployees: '5-10'
         }
       },
       breadcrumbs: [
@@ -407,7 +397,7 @@ export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' |
         'consultoría IT Guatemala'
       ],
       canonical: `${baseCanonical}/servicios`,
-      ogImage: `${baseCanonical}/images/services-hero.png`,
+      ogImage: `${baseCanonical}/images/Hero.png`,
       structuredData: {
         '@context': 'https://schema.org',
         '@type': 'WebPage',
@@ -513,7 +503,7 @@ export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' |
         'hosting optimizado',
         'hosting empresarial'
       ],
-      canonical: `${baseCanonical}/hosting`,
+      canonical: `${baseCanonical}/servicios/hosting&cloud`,
       structuredData: {
         '@context': 'https://schema.org',
         '@type': 'Service',
@@ -533,7 +523,8 @@ export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' |
       },
       breadcrumbs: [
         { name: 'Inicio', url: baseCanonical },
-        { name: 'Hosting', url: `${baseCanonical}/hosting` }
+        { name: 'Servicios', url: `${baseCanonical}/servicios` },
+        { name: 'Hosting & Cloud', url: `${baseCanonical}/servicios/hosting&cloud` }
       ]
     },
     desarrollo: {
@@ -552,7 +543,7 @@ export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' |
         'desarrollo tecnológico Guatemala'
       ],
       canonical: `${baseCanonical}/servicios/desarrollo`,
-      ogImage: `${baseCanonical}/images/desarrollo-hero.png`,
+      ogImage: `${baseCanonical}/images/Hero.png`,
       structuredData: {
         '@context': 'https://schema.org',
         '@type': 'Service',
@@ -578,13 +569,6 @@ export const usePageSEO = (pageType: 'home' | 'services' | 'about' | 'contact' |
             addressCountry: 'GT',
             addressRegion: 'Guatemala',
             addressLocality: 'Guatemala'
-          },
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: '4.9',
-            reviewCount: '47',
-            bestRating: '5',
-            worstRating: '1'
           }
         },
         serviceType: 'Software Development',
