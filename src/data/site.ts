@@ -214,12 +214,12 @@ export const portfolioProjects: PortfolioProject[] = [
   {
     title      : 'Global Paper Source',
     description: 'Empresa Guatemalteca dedicada a la fabricación y distribución de papel higiénico y servilletas personalizadas para terceros y marcas propias así como mantenimiento de maquinaria relacionada.',
-    image      : '/images/previews/GlobalPaperSource-preview.png',
+    image      : '/images/previews/GPS-preview.png',
     tags       : ['Astro', 'PyMes', 'Industria Papelera'],
     type       : 'PyMes',
     link       : 'https://globalpapersource.com',
     demo       : false,
-    featured   : true
+    featured   : true 
   ,
   },
 ];
