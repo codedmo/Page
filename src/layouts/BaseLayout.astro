@@ -71,12 +71,14 @@ const schemaItems = structuredData ? (Array.isArray(structuredData) ? structured
       ))
     }
   </head>
-  <body class="bg-slate-950 text-white antialiased">
+  <body class="site-shell bg-slate-950 text-white antialiased">
     <div id="top"></div>
     <SiteHeader currentPath={currentPath} />
     <FloatingWhatsApp />
-    <main class="min-h-screen pt-16">
-      <slot />
+    <main class="site-main flex-1 pt-16">
+      <div class="layout-slot flex min-h-full flex-1 flex-col">
+        <slot />
+      </div>
     </main>
     <SiteFooter />
     <SpeedInsights />

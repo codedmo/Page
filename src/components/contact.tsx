@@ -90,7 +90,7 @@ export default function Contact({ showHeader = true }: ContactProps) {
   };
 
   return (
-    <div className="container mx-auto max-w-2xl px-6">
+    <div className="mx-auto flex h-full w-full max-w-none flex-col">
       {showHeader && (
         <div className="mb-12 text-center">
           <h1 className="mb-4 text-4xl font-bold text-white lg:text-5xl">Contáctanos</h1>
@@ -100,8 +100,8 @@ export default function Contact({ showHeader = true }: ContactProps) {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <form onSubmit={handleSubmit} className="flex flex-1 flex-col gap-6">
+        <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="nombre" className="flex items-center gap-2 text-white">
               <User className="h-4 w-4" />
@@ -115,7 +115,7 @@ export default function Contact({ showHeader = true }: ContactProps) {
               onChange={handleInputChange}
               placeholder="Tu nombre completo"
               required
-              className="border-white/20 bg-white/10 text-white placeholder:text-gray-400 focus:border-blue-500"
+              className="h-12 rounded-xl border-white/20 bg-white/10 px-4 text-base text-white placeholder:text-gray-400 focus:border-blue-500"
             />
           </div>
 
@@ -132,12 +132,12 @@ export default function Contact({ showHeader = true }: ContactProps) {
               onChange={handleInputChange}
               placeholder="tu@email.com"
               required
-              className="border-white/20 bg-white/10 text-white placeholder:text-gray-400 focus:border-blue-500"
+              className="h-12 rounded-xl border-white/20 bg-white/10 px-4 text-base text-white placeholder:text-gray-400 focus:border-blue-500"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="telefono" className="flex items-center gap-2 text-white">
               <Phone className="h-4 w-4" />
@@ -150,7 +150,7 @@ export default function Contact({ showHeader = true }: ContactProps) {
               value={formData.telefono}
               onChange={handleInputChange}
               placeholder="+502 0000-0000"
-              className="border-white/20 bg-white/10 text-white placeholder:text-gray-400 focus:border-blue-500"
+              className="h-12 rounded-xl border-white/20 bg-white/10 px-4 text-base text-white placeholder:text-gray-400 focus:border-blue-500"
             />
           </div>
 
@@ -166,7 +166,7 @@ export default function Contact({ showHeader = true }: ContactProps) {
               value={formData.empresa}
               onChange={handleInputChange}
               placeholder="Nombre de tu empresa"
-              className="border-white/20 bg-white/10 text-white placeholder:text-gray-400 focus:border-blue-500"
+              className="h-12 rounded-xl border-white/20 bg-white/10 px-4 text-base text-white placeholder:text-gray-400 focus:border-blue-500"
             />
           </div>
         </div>
@@ -183,14 +183,14 @@ export default function Contact({ showHeader = true }: ContactProps) {
             onChange={handleInputChange}
             placeholder="Cuéntanos sobre tu proyecto..."
             required
-            rows={5}
-            className="w-full resize-y rounded-md border border-white/20 bg-white/10 px-3 py-2 text-white placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            rows={9}
+            className="min-h-56 w-full flex-1 resize-y rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-base text-white placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 xl:min-h-72"
           />
         </div>
 
         {submitStatus !== 'idle' && (
           <div
-            className={`flex items-center gap-3 rounded-lg border p-4 ${
+            className={`flex items-center gap-3 rounded-2xl border p-4 ${
               submitStatus === 'success'
                 ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-300'
                 : 'border-red-500/30 bg-red-500/15 text-red-300'
@@ -208,7 +208,7 @@ export default function Contact({ showHeader = true }: ContactProps) {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-3 font-semibold text-white transition-all duration-300 hover:scale-[1.01] hover:from-blue-700 hover:to-cyan-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="mt-auto h-12 w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-3 text-base font-semibold text-white transition-all duration-300 hover:scale-[1.01] hover:from-blue-700 hover:to-cyan-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isSubmitting ? (
             <div className="flex items-center justify-center gap-2">
@@ -221,8 +221,8 @@ export default function Contact({ showHeader = true }: ContactProps) {
         </Button>
       </form>
 
-      <div className="mt-12 text-center">
-        <p className="text-sm text-gray-400">
+      <div className="mt-8 text-center xl:mt-10">
+        <p className="text-sm leading-7 text-gray-400 sm:text-base">
           También puedes escribirnos a{' '}
           <a href={`mailto:${contactInfo.email}`} className="text-blue-400 transition-colors hover:text-blue-300">
             {contactInfo.email}

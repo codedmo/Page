@@ -16,6 +16,7 @@
 }
 
 :root {
+  --site-header-height: 4rem;
   --font-codedmo: "Codedmo", "Trebuchet MS", "Segoe UI", sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -124,17 +125,52 @@
 }
 
 @layer base {
+  html {
+    min-height: 100%;
+  }
+
   * {
     border-color: var(--color-border);
     outline-color: var(--color-ring);
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    min-height: 100vh;
+    min-height: 100dvh;
   }
+}
+
+@layer components {
+  .site-shell {
+    display: flex;
+    flex-direction: column;
   }
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+
+  .site-main {
+    display: flex;
+    min-height: calc(100vh - var(--site-header-height));
+    min-height: calc(100dvh - var(--site-header-height));
+    flex-direction: column;
+  }
+
+  .layout-slot > .page-fill {
+    min-height: 100%;
+    flex: 1 1 auto;
+  }
+
+  .page-fill-shell {
+    display: flex;
+    align-items: center;
+  }
+
+  .page-fill-container {
+    display: flex;
+    width: 100%;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: center;
   }
 }
 

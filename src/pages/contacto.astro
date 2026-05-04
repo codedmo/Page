@@ -20,23 +20,23 @@ const canonical = 'https://codedmo.dev/contacto';
     description: 'Página de contacto de CODEDMO.',
   }}
 >
-  <section class="relative overflow-hidden bg-slate-900 py-20">
+  <section class="page-fill page-fill-shell relative overflow-hidden bg-slate-900 py-10 sm:py-14 xl:py-16">
     <div class="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:30px_30px]" aria-hidden="true"></div>
     <div class="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl" aria-hidden="true"></div>
     <div class="absolute bottom-0 right-1/4 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" aria-hidden="true"></div>
 
-    <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-      <div class="mb-10 text-center">
-        <h1 class="text-4xl font-black text-white sm:text-6xl">Conversemos</h1>
-        <p class="mx-auto mt-4 max-w-2xl text-lg leading-8 text-slate-300">
+    <div class="page-fill-container relative mx-auto max-w-[96rem] px-4 sm:px-6 lg:px-8">
+      <div class="mb-8 text-center lg:mb-10">
+        <h1 class="text-4xl font-black text-white sm:text-6xl xl:text-7xl">Conversemos</h1>
+        <p class="mx-auto mt-4 max-w-3xl text-lg leading-8 text-slate-300 sm:text-xl">
           Comparte contexto, objetivos y restricciones. Te respondemos con criterio técnico, no con
           una plantilla genérica.
         </p>
       </div>
 
-      <div class="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+      <div class="grid flex-1 items-stretch gap-6 xl:min-h-[clamp(42rem,72vh,58rem)] xl:grid-cols-[340px_minmax(0,1fr)]">
         <ContactChannelList />
-        <div class="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm sm:p-10">
+        <div class="flex h-full flex-col rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm sm:p-8 lg:p-10 xl:p-12 2xl:p-14">
           <Contact client:load showHeader={false} />
         </div>
       </div>
