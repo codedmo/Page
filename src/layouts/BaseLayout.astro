@@ -27,7 +27,7 @@ const {
   description,
   canonical,
   keywords = [],
-  ogImage = '/images/Hero.png',
+  ogImage = '/codedmo-logo-blue-horizontal.svg',
   noIndex = false,
   currentPath = '/',
   structuredData,
@@ -93,8 +93,6 @@ const alternateHref = canonical || `${siteUrl}${currentPath}`;
     <meta property="og:image:alt" content={title} />
     <meta property="og:site_name" content="CODEDMO" />
     <meta property="og:locale" content="es_GT" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
