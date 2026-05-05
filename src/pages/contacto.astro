@@ -25,21 +25,55 @@ const canonical = 'https://codedmo.dev/contacto';
     <div class="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl" aria-hidden="true"></div>
     <div class="absolute bottom-0 right-1/4 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" aria-hidden="true"></div>
 
-    <div class="page-fill-container relative mx-auto max-w-[96rem] px-4 sm:px-6 lg:px-8">
-      <div class="mb-8 text-center lg:mb-10">
-        <h1 class="text-4xl font-black text-white sm:text-6xl xl:text-7xl">Conversemos</h1>
-        <p class="mx-auto mt-4 max-w-3xl text-lg leading-8 text-slate-300 sm:text-xl">
-          Comparte contexto, objetivos y restricciones. Te respondemos con criterio técnico, no con
-          una plantilla genérica.
-        </p>
-      </div>
+    <div class="page-fill-container relative mx-auto w-full max-w-[96rem] px-4 sm:px-6 lg:px-8">
+      <div class="viewport-scale-shell">
+        <div
+          class="viewport-scale-frame"
+          data-contact-scale-frame
+          style="--viewport-scale: 1; --viewport-scale-width: 96rem;"
+        >
+          <div class="mb-8 text-center lg:mb-10">
+            <h1 class="text-4xl font-black text-white sm:text-6xl xl:text-7xl">Conversemos</h1>
+            <p class="mx-auto mt-4 max-w-3xl text-lg leading-8 text-slate-300 sm:text-xl">
+              Comparte contexto, objetivos y restricciones. Te respondemos con criterio técnico, no con
+              una plantilla genérica.
+            </p>
+          </div>
 
-      <div class="grid flex-1 items-stretch gap-6 xl:min-h-[clamp(42rem,72vh,58rem)] xl:grid-cols-[340px_minmax(0,1fr)]">
-        <ContactChannelList />
-        <div class="flex h-full flex-col rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm sm:p-8 lg:p-10 xl:p-12 2xl:p-14">
-          <Contact client:load showHeader={false} />
+          <div class="grid gap-6 md:min-h-[clamp(34rem,68vh,52rem)] xl:grid-cols-[340px_minmax(0,1fr)]">
+            <ContactChannelList />
+            <div class="flex h-full flex-col rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm sm:p-8 lg:p-10 xl:p-12 2xl:p-14">
+              <Contact client:load showHeader={false} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
+
+  <script>
+    const frame = document.querySelector('[data-contact-scale-frame]');
+
+    const updateContactScale = () => {
+      if (!(frame instanceof HTMLElement)) return;
+
+      if (window.innerWidth < 768) {
+        frame.style.setProperty('--viewport-scale', '1');
+        frame.style.setProperty('--viewport-scale-width', '96rem');
+        return;
+      }
+
+      const headerOffset = 64;
+      const sectionChrome = window.innerHeight >= 1280 ? 128 : 112;
+      const designHeight = 920;
+      const availableHeight = window.innerHeight - headerOffset - sectionChrome;
+      const nextScale = Math.max(0.74, Math.min(1, availableHeight / designHeight));
+
+      frame.style.setProperty('--viewport-scale', String(nextScale));
+      frame.style.setProperty('--viewport-scale-width', '96rem');
+    };
+
+    updateContactScale();
+    window.addEventListener('resize', updateContactScale, { passive: true });
+  </script>
 </BaseLayout>
